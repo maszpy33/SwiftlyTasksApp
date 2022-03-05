@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 struct User: Identifiable, Equatable {
@@ -14,4 +15,7 @@ struct User: Identifiable, Equatable {
 //    var userProfilImage: BinaryInteger
     let taskOverdueLimit: Int16
     let themeColor: String
+    let profileImage: UIImage
+    // just cast the profileImage variable name when it's saved to core data.
+    // here it should be fine to cast it as UIImage
 }

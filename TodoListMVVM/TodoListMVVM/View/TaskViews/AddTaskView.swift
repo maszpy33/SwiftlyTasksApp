@@ -31,11 +31,9 @@ struct AddTaskView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                Section(header: Text("Enter Task Details:")) {
-                    // one view for edit and add task, so UI changes only have to be done in one view
-                    ChangeView(taskVM: taskVM, taskTitleTextField: $taskTitleTextField, taskDetailsTextField: $taskDetailsTextField, taskCategory: $taskCategory, taskCategroySymbol: $taskCategorySymbole, taskDueDate: $taskDueDate, taskPriority: $taskPriority, taskStatus: $taskStatus)
-                }
+            Form {
+                // one view for edit and add task, so UI changes only have to be done in one view
+                ChangeView(taskVM: taskVM, taskTitleTextField: $taskTitleTextField, taskDetailsTextField: $taskDetailsTextField, taskCategory: $taskCategory, taskCategroySymbol: $taskCategorySymbole, taskDueDate: $taskDueDate, taskPriority: $taskPriority, taskStatus: $taskStatus)
                 
                 // SAVE BUTTON
                 Button(action: {

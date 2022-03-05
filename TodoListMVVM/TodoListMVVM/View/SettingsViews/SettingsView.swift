@@ -16,7 +16,7 @@ struct SettingsView: View {
     @State private var newThemeColor: String = "yellwo"
     @State private var newTaskOverdueLimit: String = "100"
     
-    var user = User(userName: "", taskOverdueLimit: 3, themeColor: "")
+    var user = User(userName: "", taskOverdueLimit: 3, themeColor: "", profileImage: UIImage(named: "JokerCodeProfile")!)
     
     // ERROR VARIABLES
     @State private var showAlert = false
@@ -63,7 +63,6 @@ struct SettingsView: View {
                         }
                     }
                     
-                    
                     TextField("\(newUserName)", text: $newUserName)
                         .multilineTextAlignment(.center)
                         .font(.title2)
@@ -74,21 +73,28 @@ struct SettingsView: View {
                         .cornerRadius(10)
                         .padding(.horizontal, 10)
                     
-                    TextField("\(newTaskOverdueLimit)", text: $newTaskOverdueLimit)
-                        .multilineTextAlignment(.center)
-                        .font(.title2)
-                        .frame(height: 55)
-                        .background(Color.secondary)
-                        .foregroundColor(.primary)
-                        .cornerRadius(10)
-                        .padding(.horizontal, 10)
-                        .keyboardType(.numberPad)
-                        .onReceive(Just(newTaskOverdueLimit)) { newValue in
-                            let filtered = newValue.filter { "0123456789".contains($0) }
-                            if filtered != newValue {
-                                self.newTaskOverdueLimit = filtered
-                            }
+                    Picker("Task Overdue Days", selection: $newTaskOverdueLimit) {
+                        ForEach(1 ..< 100) {
+                            Text("\($0) days")
                         }
+                    }
+                    .pickerStyle(WheelPickerStyle())
+                    
+//                    TextField("\(newTaskOverdueLimit)", text: $newTaskOverdueLimit)
+//                        .multilineTextAlignment(.center)
+//                        .font(.title2)
+//                        .frame(height: 55)
+//                        .background(Color.secondary)
+//                        .foregroundColor(.primary)
+//                        .cornerRadius(10)
+//                        .padding(.horizontal, 10)
+//                        .keyboardType(.numberPad)
+//                        .onReceive(Just(newTaskOverdueLimit)) { newValue in
+//                            let filtered = newValue.filter { "0123456789".contains($0) }
+//                            if filtered != newValue {
+//                                self.newTaskOverdueLimit = filtered
+//                            }
+//                        }
                     
                     // SAVE BUTTON
                     Button(action: {

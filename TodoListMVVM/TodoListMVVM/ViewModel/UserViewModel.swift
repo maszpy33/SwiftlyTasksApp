@@ -12,7 +12,7 @@ import SwiftUI
 
 class UserViewModel: Identifiable, ObservableObject {
     
-    @Published var user = User(userName: "DefaultName", taskOverdueLimit: 3, themeColor: "yellow") {
+    @Published var user = User(userName: "DefaultName", taskOverdueLimit: 3, themeColor: "yellow", profileImage: UIImage(named: "JokerCodeProfile")!) {
         didSet {
             saveData()
         }
@@ -61,6 +61,8 @@ class UserViewModel: Identifiable, ObservableObject {
     }
     
     func updateUserEntity(userName: String, taskOverdueLimit: Int16, themeColor: String) {
+//        let pickedImage = profileImage.jpegData(compressionQuality: 0.70)
+        
         if !savedUserData.isEmpty {
             for userData in savedUserData {
                 container.viewContext.delete(userData)
@@ -71,6 +73,7 @@ class UserViewModel: Identifiable, ObservableObject {
         updatedUser.userName = userName
         updatedUser.taskOverdueLimit = taskOverdueLimit
         updatedUser.themeColor = themeColor
+//        updatedUser.profileImage = pickedImage
         saveData()
     }
 }
