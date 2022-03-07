@@ -31,7 +31,6 @@ class TaskViewModel: Identifiable, ObservableObject {
 //    @Published var isPresented = false
 //    @Published var searched = ""
     
-    
     // Settings choice arrays for adding or edditing a task
     let taskCategoryOptions = ["private","computer science", "university", "art", "sport", "other"]
     let taskCategorySymboleOptions = ["swift", "pencil", "clock", "alarm", "heart.circle", "brain.head.profile", "bed.double.circle", "star","keyboard", "laptopcomputer", "iphone", "ipad", "applewatch", "airpodspro", "gamecontroller.fill", "airplane", "car", "bus", "tram", "figure.walk", "person", "person.3", "globe.europe.africa.fill", "flame", "drop", "bolt", "pawprint", "leaf", "message", "quote.bubble", "cart", "giftcard.fill", "creditcard", "eurosign.circle", "x.squareroot", "number.square"]

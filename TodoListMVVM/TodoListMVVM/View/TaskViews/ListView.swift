@@ -22,7 +22,7 @@ struct ListView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
+//            VStack {
                 List {
                     ForEach(taskVM.savedTasks) { taskEntity in
                         NavigationLink(destination: EditView(taskVM: taskVM, task: taskEntity), label: {
@@ -70,7 +70,7 @@ struct ListView: View {
                 //                Text("Enter Search Bar here")
                 //                SortPickerView(taskVM: taskVM)
                 //                TaskListView(taskVM: taskVM)
-            }
+//            }
             .navigationTitle("SwiftlyTasks")
             .background(NavigationConfigurator { nc in
                 nc.navigationBar.barTintColor = UIColor(.primary)
@@ -105,6 +105,7 @@ struct ListView: View {
             }
         }
         .onAppear {
+            // update user name
             currentUserName = userVM.savedUserData.first!.userName ?? "UserName"
         }
         .introspectNavigationController { nav in

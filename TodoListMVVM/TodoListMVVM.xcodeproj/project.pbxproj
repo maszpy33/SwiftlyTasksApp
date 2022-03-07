@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		9F169D1627CEBC2E00BD6192 /* NavigaitonBarColorModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F169D1527CEBC2E00BD6192 /* NavigaitonBarColorModifier.swift */; };
 		9F169D1927CEBD7400BD6192 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 9F169D1827CEBD7400BD6192 /* Introspect */; };
+		9F2CF69427D6BC290057FAD2 /* IsEmojiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2CF69327D6BC290057FAD2 /* IsEmojiExtension.swift */; };
 		9F30BE2B27CE532700B749CD /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F30BE2A27CE532600B749CD /* ImagePicker.swift */; };
 		9F30BE2D27CE58E200B749CD /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F30BE2C27CE58E200B749CD /* UserViewModel.swift */; };
 		9F30BE2F27CE593700B749CD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F30BE2E27CE593700B749CD /* User.swift */; };
@@ -41,6 +42,7 @@
 
 /* Begin PBXFileReference section */
 		9F169D1527CEBC2E00BD6192 /* NavigaitonBarColorModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigaitonBarColorModifier.swift; sourceTree = "<group>"; };
+		9F2CF69327D6BC290057FAD2 /* IsEmojiExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsEmojiExtension.swift; sourceTree = "<group>"; };
 		9F30BE2A27CE532600B749CD /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		9F30BE2C27CE58E200B749CD /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		9F30BE2E27CE593700B749CD /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				9FD9850627B7E2E4005BF23F /* SortPickerView.swift */,
+				9F2CF69327D6BC290057FAD2 /* IsEmojiExtension.swift */,
 				9FCD970827BD6F510079FEA0 /* ToggleCheckExtension.swift */,
 				9F6D04AD27B7E4F900283669 /* MainViewModifier.swift */,
 				9F169D1527CEBC2E00BD6192 /* NavigaitonBarColorModifier.swift */,
@@ -314,6 +317,7 @@
 				9FDD831127CE86E8002ADC9F /* TaskItemEntity+CoreDataClass.swift in Sources */,
 				9F6D04B027B7E52E00283669 /* AddTaskView.swift in Sources */,
 				9F30BE2D27CE58E200B749CD /* UserViewModel.swift in Sources */,
+				9F2CF69427D6BC290057FAD2 /* IsEmojiExtension.swift in Sources */,
 				9FD9850727B7E2E4005BF23F /* SortPickerView.swift in Sources */,
 				9FD9850127B7E0E5005BF23F /* TaskViewModel.swift in Sources */,
 				9FD9850527B7E1FE005BF23F /* TaskView.swift in Sources */,
