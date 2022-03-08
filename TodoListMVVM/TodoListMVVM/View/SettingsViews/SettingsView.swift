@@ -14,7 +14,7 @@ struct SettingsView: View {
     
     @State private var newUserName: String = "UserName"
     @State private var newThemeColor: String = "yellwo"
-    @State private var newTaskOverdueLimit: String = "100"
+    @State private var newTaskOverdueLimit: String = "99"
     
     var user = User(userName: "", taskOverdueLimit: 3, themeColor: "", profileImage: UIImage(named: "JokerCodeProfile")!)
     
@@ -23,111 +23,106 @@ struct SettingsView: View {
     @State private var errorTitle = ""
     @State private var errorMessage = ""
     
+    
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack {
-                    HStack {
-                        VStack {
+                    VStack {
+                        HStack {
                             Image(systemName: "person.fill")
-                                .font(.title2)
-                                .foregroundColor(.primary)
-                            Text("User Name:")
-                                .font(.title2)
-                                .bold()
-                                .foregroundColor(.primary)
-                                .padding(.top, 15)
-                                .labelStyle(.titleOnly)
-
-                            Text("\(newUserName)")
-                                .font(.title2)
+                                .font(.title3)
                                 .foregroundColor(.accentColor)
-                                .padding()
-                        }
-                        
-                        VStack {
-                            Image(systemName: "123.rectangle")
-                                .font(.title2)
-                                .foregroundColor(.primary)
-                            Text("Overdue Limit:")
-                                .font(.title2)
-                                .bold()
-                                .foregroundColor(.primary)
-                                .padding(.top, 15)
                             
-                            Text("\(newTaskOverdueLimit)")
-                                .font(.title2)
-                                .bold()
+                            Text("User Name:")
+                                .font(.title3)
+                                .foregroundColor(.primary)
+                                .labelStyle(.titleOnly)
+                            
+                            Spacer()
+                            
+                            TextField("\(newUserName)", text: $newUserName)
+                                .multilineTextAlignment(.center)
+                                .font(.title3)
+                                .foregroundColor(.primary)
+                        }
+                        .padding(.bottom, 10)
+                        
+                        
+                        Divider()
+                        
+                        HStack {
+                            Image(systemName: "123.rectangle")
+                                .font(.title3)
                                 .foregroundColor(.accentColor)
-                                .padding()
+                            
+                            Text("Overdue Limit:")
+                                .font(.title3)
+                                .foregroundColor(.primary)
+                            
+                            TextField("\(newTaskOverdueLimit)", text: $newTaskOverdueLimit)
+                                .multilineTextAlignment(.center)
+                                .font(.title3)
+                                .onReceive(Just(self.newTaskOverdueLimit)) { inputNumber in
+                                    
+                                    self.newTaskOverdueLimit = inputNumber.filter { "0123456789".contains($0) }
+                                    
+                                    if inputNumber.count > 2 {
+                                        self.newTaskOverdueLimit.removeLast()
+                                    }
+                                    if Int(inputNumber) ?? 0 < 0 {
+                                        self.newTaskOverdueLimit = "0"
+                                    }
+                                }
                         }
+                        .padding(.bottom, 10)
                     }
-                    
-                    TextField("\(newUserName)", text: $newUserName)
-                        .multilineTextAlignment(.center)
-                        .font(.title2)
-                    //                        .padding(.leading)
-                        .frame(height: 55)
-                        .background(Color.secondary)
-                        .foregroundColor(.primary)
-                        .cornerRadius(10)
-                        .padding(.horizontal, 10)
-                    
-                    Picker("Task Overdue Days", selection: $newTaskOverdueLimit) {
-                        ForEach(1 ..< 100) {
-                            Text("\($0) days")
-                        }
-                    }
-                    .pickerStyle(WheelPickerStyle())
-                    
-//                    TextField("\(newTaskOverdueLimit)", text: $newTaskOverdueLimit)
-//                        .multilineTextAlignment(.center)
-//                        .font(.title2)
-//                        .frame(height: 55)
-//                        .background(Color.secondary)
-//                        .foregroundColor(.primary)
-//                        .cornerRadius(10)
-//                        .padding(.horizontal, 10)
-//                        .keyboardType(.numberPad)
-//                        .onReceive(Just(newTaskOverdueLimit)) { newValue in
-//                            let filtered = newValue.filter { "0123456789".contains($0) }
-//                            if filtered != newValue {
-//                                self.newTaskOverdueLimit = filtered
-//                            }
-//                        }
-                    
-                    // SAVE BUTTON
-                    Button(action: {
-                        // check if input is valid
-                        guard !newUserName.isEmpty else {
-                            self.errorTitle = "input error"
-                            self.errorMessage = "Pleace enter a user name"
-                            self.showAlert = true
-                            return
-                        }
-                        
-                        // ADD NEW TASK
-                        userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 14, themeColor: newThemeColor)
-                        
-                    }, label: {
-                        Text("Save")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(height: 55)
-                            .frame(maxWidth: .infinity)
-                            .background(Color.accentColor.opacity(0.2))
-                            .cornerRadius(10)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                    .stroke(Color.accentColor, lineWidth: 2))
-                            .cornerRadius(10)
-                        //                            .padding(10)
-                    })
-                        .padding()
+                    .padding(.horizontal, 10)
                 }
-                .padding(.horizontal, 10)
+                
+                // SAVE BUTTON
+                Button(action: {
+                    // check if input is valid
+                    guard !newUserName.isEmpty else {
+                        self.errorTitle = "input error"
+                        self.errorMessage = "Pleace enter a user name"
+                        self.showAlert = true
+                        return
+                    }
+                    
+                    if newTaskOverdueLimit == "" {
+                        self.newTaskOverdueLimit = "99"
+                    }
+                    
+                    // ADD NEW TASK
+                    userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor)
+                    
+                }, label: {
+                    Text("Save")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(height: 55)
+                        .frame(maxWidth: .infinity)
+                        .background(Color.accentColor.opacity(0.2))
+                        .cornerRadius(10)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                .stroke(Color.accentColor, lineWidth: 2))
+                        .cornerRadius(10)
+                })
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 25)
+                
+                Spacer()
             }
-            .navigationTitle("⚙️ Settings")
+            .padding(.top, 20)
+//            .navigationTitle("⚙️")
+            .navigationBarItems(leading:
+                HStack {
+                    Image(systemName: "gear")
+                    Text("User Settings")
+            }
+            )
         }
         .onAppear {
             if !userVM.savedUserData.isEmpty {
@@ -145,6 +140,7 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView(userVM: UserViewModel()).preferredColorScheme(.dark)
+        SettingsView(userVM: UserViewModel())
+            .preferredColorScheme(.dark)
     }
 }

@@ -33,185 +33,145 @@ struct EditView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                Section(header: Text("Edit Task Details:")) {
-                    // one view for edit and add task, so UI changes only have to be done in one view
-                    //                    ChangeView(taskVM: taskVM, taskTitleTextField: $taskTitleTextField, taskDetailsTextField: $taskDetailsTextField, taskCategory: $taskCategory, taskCategroySymbol: $taskCategorySymbole, taskDueDate: $taskDueDate, taskPriority: $taskPriority, taskStatus: $taskStatus)
+            VStack {
+                HStack {
+                    // STATUS TOGGLE
+                    Image(systemName: taskStatus ? "checkmark.square.fill" : "square")
+                        .resizable()
+                        .frame(width: 24, height: 24)
+                        .foregroundColor(taskStatus ? .green : .gray)
+                        .font(.system(size: 20, weight: .bold, design: .default))
+                        .onTapGesture {
+                            withAnimation(.linear) {
+                                taskStatus.toggle()
+                            }
+                        }
+                    
+                    Spacer()
+                    
+                    // DUEDATE
+                    DatePicker("no label", selection: $taskDueDate, in: Date()..., displayedComponents: .date)
+                        .foregroundColor(.accentColor)
+                        .frame(height: 55)
+                        .cornerRadius(10)
+                        .pickerStyle(.menu)
+                        .labelsHidden()
+                    
+                    Spacer()
+                    
+                    // PRIORITY
+                    Menu {
+                        Picker("", selection: $taskPriority) {
+                            ForEach(taskVM.taskPriorityOptions, id: \.self) {
+                                Text($0.capitalized)
+                            }
+                        }
+                        .font(.headline)
+                    } label: {
+                        Image(systemName: "flag.fill")
+                            .font(.title2)
+                            .foregroundColor(taskVM.styleForPriority(taskPriority: taskPriority))
+                    }
+                }
+                .padding(.horizontal, 15)
+                
+                ScrollView {
                     VStack {
-                        Section {
+                        HStack {
+                            // Emoji input
+                            TextField("🤷🏻‍♂️", text: $taskCategorySymbole)
+                                .font(.title)
+                                .frame(width: 55, height: 55)
+                                .cornerRadius(10)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                        .stroke(Color.accentColor, lineWidth: 4))
+                                .cornerRadius(10)
+                                .multilineTextAlignment(.center)
+                                .onReceive(Just(self.taskCategorySymbole)) { inputValue in
+                                    if inputValue.emojis.count > 1 {
+                                        self.taskCategorySymbole.removeFirst()
+                                    } else if inputValue != "" {
+                                        if !inputValue.isSingleEmoji {
+                                            self.taskCategorySymbole = "🤷🏻‍♂️"
+                                        }
+                                    } else {
+                                        self.taskCategorySymbole = inputValue
+                                    }
+                                }
+                            
                             // TITLE
                             TextField("Add new task...", text: $taskTitleTextField)
                                 .font(.headline)
-                                .padding(.leading)
-                                .frame(height: 55)
-                                .background(Color.gray)
+                                .padding(10)
                                 .cornerRadius(10)
-                            //                        .padding()
-                            
-                            // DETAILS
-                            TextField("Add new task description...", text: $taskDetailsTextField)
-                                .font(.headline)
-                                .padding(.leading)
-                                .frame(height: 55)
-                                .background(Color.gray)
-                                .cornerRadius(10)
-                            //                        .padding()
-                            
-                            HStack {
-                                // CATEGORY
-                                //                                Picker(selection: $taskCategory,
-                                //                                       label:
-                                //                                        Text("\(taskCategory)")
-                                //                                        .font(.system(size: 18, weight: .bold))
-                                //                                        .foregroundColor(.white)
-                                //                                ) {
-                                //                                    ForEach(taskVM.taskCategoryOptions, id: \.self) {
-                                //                                        Text($0.capitalized)
-                                //                                    }
-                                //                                }
-                                //                                .foregroundColor(.white)
-                                //                                .frame(height: 55)
-                                //                                .frame(maxWidth: .infinity)
-                                //                                .background(Color(red: 0.2, green: 0.2, blue: 0.2))
-                                //                                .cornerRadius(10)
-                                //                                //                        .padding(5)
-                                //                                .pickerStyle(.menu)
-                                
-                                
-                                // CATEGORY SYMBOL
-                                //                                Picker(selection: $taskCategorySymbole,
-                                //                                       label:
-                                //                                        Text("\(taskCategory)")
-                                //                                        .font(.system(size: 18, weight: .bold))
-                                //                                        .foregroundColor(.white)
-                                //                                ) {
-                                //                                    ForEach(taskVM.taskCategorySymboleOptions.reversed(), id: \.self) {
-                                //                                        Image(systemName: $0)
-                                //                                    }
-                                //                                }
-                                //                                .foregroundColor(.white)
-                                //                                .frame(height: 55)
-                                //                                .frame(maxWidth: .infinity)
-                                //                                .background(Color(red: 0.2, green: 0.2, blue: 0.2))
-                                //                                .cornerRadius(10)
-                                //                                //                        .padding(5)
-                                //                                .pickerStyle(.menu)
-                            }
-                            
-                            HStack {
-                                // DUEDATE
-                                DatePicker("no label", selection: $taskDueDate, in: Date()..., displayedComponents: .date)
-                                    .foregroundColor(.white)
-                                    .padding(.horizontal, 15)
-                                    .frame(height: 55)
-                                    .frame(maxWidth: .infinity)
-                                    .background(Color(red: 0.2, green: 0.2, blue: 0.2))
-                                    .cornerRadius(10)
-                                //                            .padding(5)
-                                    .pickerStyle(.menu)
-                                    .labelsHidden()
-                                
-                                // Emoji input
-                                TextField("🤷🏻‍♂️", text: $taskCategorySymbole)
-                                    .frame(width: 55, height: 55)
-                                    .background(Color(red: 0.2, green: 0.2, blue: 0.2))
-                                    .cornerRadius(10)
-                                    .multilineTextAlignment(.center)
-                                    .onReceive(Just(self.taskCategorySymbole)) { inputValue in
-                                        if inputValue.emojis.count > 1 {
-                                            self.taskCategorySymbole.removeFirst()
-                                            //                                        var currentEmojis = inputValue.emojis
-                                            //                                        self.taskCategorySymbole =
-                                        } else if inputValue != "" {
-                                            if !inputValue.isSingleEmoji {
-                                                self.taskCategorySymbole = "🤷🏻‍♂️"
-                                            }
-                                        } else {
-                                            self.taskCategorySymbole = inputValue
-                                        }
-                                    }
-                            }
-                            
                         }
+                        .padding(.horizontal, 15)
+                        .padding(.vertical, 5)
                         
-                        Section {
-                            // PRIORITY
-                            Picker("", selection: $taskPriority) {
-                                ForEach(taskVM.taskPriorityOptions, id: \.self) {
-                                    Text($0)
-                                }
+                        //                    // DETAILS
+                        //                    TextField("Add new task description...", text: $taskDetailsTextField)
+                        //                        .font(.headline)
+                        //                        .padding(.leading)
+                        //                        .frame(height: 55)
+                        //                        .background(Color.gray)
+                        //                        .cornerRadius(10)
+                        
+                        // CATEGORY
+                        //                                Picker(selection: $taskCategory,
+                        //                                       label:
+                        //                                        Text("\(taskCategory)")
+                        //                                        .font(.system(size: 18, weight: .bold))
+                        //                                        .foregroundColor(.white)
+                        //                                ) {
+                        //                                    ForEach(taskVM.taskCategoryOptions, id: \.self) {
+                        //                                        Text($0.capitalized)
+                        //                                    }
+                        //                                }
+                        //                                .foregroundColor(.white)
+                        //                                .frame(height: 55)
+                        //                                .frame(maxWidth: .infinity)
+                        //                                .background(Color(red: 0.2, green: 0.2, blue: 0.2))
+                        //                                .cornerRadius(10)
+                        //                                //                        .padding(5)
+                        //                                .pickerStyle(.menu)
+                        
+                        // SAVE BUTTON
+                        Button(action: {
+                            // check if input is valid
+                            guard !taskTitleTextField.isEmpty else {
+                                self.errorTitle = "input error"
+                                self.errorMessage = "pleace enter a title to save the task"
+                                self.showAlert = true
+                                return
                             }
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                    .stroke(taskVM.styleForPriority(taskPriority: taskPriority), lineWidth: 4)
-                            )
-                            .cornerRadius(10)
-                            //                    .padding(10)
-                            .pickerStyle(.segmented)
-                        }
+                            
+                            // SAVE CHANGES
+                            taskVM.updateTaskEntity(taskEntity: task, newTitle: taskTitleTextField, newDetails: taskDetailsTextField, newCategory: taskCategory, newCategorySymbol: taskCategorySymbole, newPriority: taskPriority, newDueDate: taskDueDate, newStatus: taskStatus, newUIDelete: taskUIDeleted)
+                            
+                            taskTitleTextField = ""
+                            self.presentationMode.wrappedValue.dismiss()
+                            
+                        }, label: {
+                            Text("Save")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .frame(height: 55)
+                                .frame(maxWidth: .infinity)
+                                .background(Color.accentColor.opacity(0.2))
+                                .cornerRadius(10)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                        .stroke(Color.accentColor, lineWidth: 4))
+                                .cornerRadius(10)
+                        })
+                            .padding(15)
+                        
+                        Spacer()
                     }
-                    //        .padding(.vertical, 15)
-                    .padding(10)
-                    //        .background(Color.accentColor.opacity(0.2))
-                    //        .cornerRadius(10)
-                    //        .background(
-                    //            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    //                .stroke(Color.accentColor, lineWidth: 0.7)
-                    //        )
                 }
-                
-                // STATUS TOGGLE
-                Toggle("Task Status Toggle:", isOn: $taskStatus)
-                    .padding()
-                    .toggleStyle(CheckboxStyle())
-                
-                // SAVE BUTTON
-                Button(action: {
-                    // check if input is valid
-                    guard !taskTitleTextField.isEmpty else {
-                        self.errorTitle = "input error"
-                        self.errorMessage = "pleace enter a title to save the task"
-                        self.showAlert = true
-                        return
-                    }
-                    
-                    // SAVE CHANGES
-                    taskVM.updateTaskEntity(taskEntity: task, newTitle: taskTitleTextField, newDetails: taskDetailsTextField, newCategory: taskCategory, newCategorySymbol: taskCategorySymbole, newPriority: taskPriority, newDueDate: taskDueDate, newStatus: taskStatus, newUIDelete: taskUIDeleted)
-                    
-                    taskTitleTextField = ""
-                    self.presentationMode.wrappedValue.dismiss()
-                    
-                }, label: {
-                    Text("Save")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(height: 55)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.accentColor.opacity(0.2))
-                        .cornerRadius(10)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .stroke(Color.accentColor, lineWidth: 4))
-                        .cornerRadius(10)
-                        .padding(10)
-                })
-                    .padding()
             }
-            //            .ignoresSafeArea()
-            .navigationTitle("🃏 Edit Task")
-            .onAppear {
-                // assigen values of task to temporary variables
-                taskTitleTextField = task.title ?? "no title"
-                taskDetailsTextField = task.details ?? "no details"
-                taskCategory = task.category ?? "private"
-                taskDueDate = task.dueDate ?? Date()
-                taskPriority = task.priority ?? "normal"
-                taskStatus = task.status
-                taskUIDeleted = task.uiDeleted
-            }
+            .navigationBarHidden(true)
         }
         .alert(isPresented: $showAlert) {
             Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
@@ -225,5 +185,6 @@ struct EditView_Previews: PreviewProvider {
     
     static var previews: some View {
         EditView(taskVM: TaskViewModel(), task: TaskItemEntity())
+            .preferredColorScheme(.dark)
     }
 }
