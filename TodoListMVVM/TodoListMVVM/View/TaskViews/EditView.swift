@@ -172,6 +172,15 @@ struct EditView: View {
                 }
             }
             .navigationBarHidden(true)
+            .onAppear {
+                self.taskTitleTextField = task.title ?? "No Title"
+                self.taskDetailsTextField = task.details ?? "description..."
+                self.taskCategory = task.category ?? "private"
+                self.taskCategorySymbole = task.categorySymbol ?? "🤷🏻‍♂️"
+                self.taskDueDate = task.dueDate ?? Date()
+                self.taskPriority = task.priority ?? "non"
+                self.taskStatus = task.status
+            }
         }
         .alert(isPresented: $showAlert) {
             Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))

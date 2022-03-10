@@ -15,8 +15,11 @@ struct SettingsView: View {
     @State private var newUserName: String = "UserName"
     @State private var newThemeColor: String = "yellwo"
     @State private var newTaskOverdueLimit: String = "99"
+    @State private var newTimerDuration: Int16 = 25
+    @State private var newTimerBreakDuration: Int16 = 5
+    @State private var newTimerRounds: Int16 = 5
     
-    var user = User(userName: "", taskOverdueLimit: 3, themeColor: "", profileImage: UIImage(named: "JokerCodeProfile")!)
+    var user = User(userName: "", taskOverdueLimit: 3, themeColor: "", profileImage: UIImage(named: "JokerCodeProfile")!, timerDuration: 25, timerBreakDuration: 5, timerRounds: 5)
     
     // ERROR VARIABLES
     @State private var showAlert = false
@@ -29,6 +32,10 @@ struct SettingsView: View {
             ScrollView {
                 VStack {
                     VStack {
+                        
+                        
+                        Divider()
+                        
                         HStack {
                             Image(systemName: "person.fill")
                                 .font(.title3)
@@ -44,10 +51,12 @@ struct SettingsView: View {
                             TextField("\(newUserName)", text: $newUserName)
                                 .multilineTextAlignment(.center)
                                 .font(.title3)
-                                .foregroundColor(.primary)
+                                .frame(width: 70, height: 40)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.blue, lineWidth: 2))
                         }
-                        .padding(.bottom, 10)
-                        
+                        .padding(10)
                         
                         Divider()
                         
@@ -63,6 +72,10 @@ struct SettingsView: View {
                             TextField("\(newTaskOverdueLimit)", text: $newTaskOverdueLimit)
                                 .multilineTextAlignment(.center)
                                 .font(.title3)
+                                .frame(width: 70, height: 40)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.blue, lineWidth: 2))
                                 .onReceive(Just(self.newTaskOverdueLimit)) { inputNumber in
                                     
                                     self.newTaskOverdueLimit = inputNumber.filter { "0123456789".contains($0) }
@@ -75,9 +88,8 @@ struct SettingsView: View {
                                     }
                                 }
                         }
-                        .padding(.bottom, 10)
+                        .padding(10)
                     }
-                    .padding(.horizontal, 10)
                 }
                 
                 // SAVE BUTTON
@@ -94,8 +106,12 @@ struct SettingsView: View {
                         self.newTaskOverdueLimit = "99"
                     }
                     
-                    // ADD NEW TASK
-                    userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor)
+                    // SAVE USER SETTINGS
+                    userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor, duration: Int16(newTimerDuration), breakDuration: Int16(newTimerBreakDuration), rounds: Int16(newTimerRounds))
+                    
+                    self.errorTitle = "✅ Settings Saved"
+                    self.errorMessage = "your data hase been updated"
+                    self.showAlert = true
                     
                 }, label: {
                     Text("Save")
@@ -116,20 +132,28 @@ struct SettingsView: View {
                 Spacer()
             }
             .padding(.top, 20)
-//            .navigationTitle("⚙️")
             .navigationBarItems(leading:
-                HStack {
-                    Image(systemName: "gear")
-                    Text("User Settings")
+                                    HStack {
+                Image(systemName: "gear")
+                Text("User Settings")
+                
+                Spacer()
             }
+                                    .font(.headline)
+                                    .foregroundColor(.accentColor)
+                                    .padding(.bottom, 10)
+                                    .padding(.horizontal, 10)
             )
         }
         .onAppear {
             if !userVM.savedUserData.isEmpty {
-                let currentUser = userVM.savedUserData[0]
+                let currentUser = userVM.savedUserData.first!
                 newUserName = currentUser.userName ?? "No Name"
                 newTaskOverdueLimit = String(currentUser.taskOverdueLimit)
                 newThemeColor = currentUser.themeColor ?? "yellow"
+                newTimerDuration = currentUser.timerDuration
+                newTimerBreakDuration = currentUser.timerBreakDuration
+                newTimerRounds = currentUser.timerRounds
             }
         }
         .alert(isPresented: $showAlert) {

@@ -14,9 +14,13 @@ struct TimerSettingsView: View {
     
     @ObservedObject var userVM: UserViewModel
     
-    @State private var duration: String = "25"
-    @State private var breakDuration: String = "10"
-    @State private var rounds: String = "5"
+    @State private var newDuration: String = "25"
+    @State private var newBreakDuration: String = "10"
+    @State private var newRounds: String = "5"
+    
+    @State private var newUserName = "No Name"
+    @State private var newTaskOverdueLimit = "14"
+    @State private var newThemeColor = "blue"
     
     // ERROR VARIABLES
     @State private var showAlert = false
@@ -26,26 +30,57 @@ struct TimerSettingsView: View {
     var body: some View {
         NavigationView {
             ScrollView {
-                VStack {
                     VStack {
+                        HStack {
+                            Image(systemName: "gear")
+                            Text("User Settings")
+                            
+                            Spacer()
+                        }
+                        .font(.headline)
+                        .foregroundColor(.accentColor)
+                        .padding(.bottom, 10)
+                        .padding(.horizontal, 10)
+                        
+                        Divider()
+                        
                         HStack {
                             Image(systemName: "clock")
                                 .font(.title3)
                                 .foregroundColor(.accentColor)
                             
-                            Text("Focus duration:")
-                                .font(.title3)
+                            Text("Focus Duration:")
+                                .font(.headline)
                                 .foregroundColor(.primary)
                                 .labelStyle(.titleOnly)
                             
                             Spacer()
                             
-                            TextField("\(duration)min", text: $duration)
+                            TextField("", text: $newDuration)
                                 .multilineTextAlignment(.center)
                                 .font(.title3)
-                                .foregroundColor(.primary)
+                                .frame(width: 70, height: 40)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.blue, lineWidth: 2))
+                                .onReceive(Just(self.newDuration)) { inputNumber in
+                                    
+                                    self.newDuration = inputNumber.filter { "0123456789".contains($0) }
+                                    
+                                    if inputNumber.count > 3 {
+                                        self.newDuration.removeFirst()
+                                    }
+                                    
+                                    if Int(inputNumber) ?? 0 < 0 {
+                                        self.newDuration = "1"
+                                    }
+                                }
+                            
+                            Text("minutes")
+                                .font(.title3)
                         }
-                        .padding(.bottom, 10)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 3)
                         
                         
                         Divider()
@@ -55,27 +90,37 @@ struct TimerSettingsView: View {
                                 .font(.title3)
                                 .foregroundColor(.accentColor)
                             
-                            Text("Break duration:")
-                                .font(.title3)
+                            Text("Break Duration:")
+                                .font(.headline)
                                 .foregroundColor(.primary)
                             
-                            TextField("\(breakDuration)min", text: $breakDuration)
+                            Spacer()
+                            
+                            TextField("", text: $newBreakDuration)
                                 .multilineTextAlignment(.center)
                                 .font(.title3)
-                                .onReceive(Just(self.breakDuration)) { inputNumber in
+                                .frame(width: 70, height: 40)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.blue, lineWidth: 2))
+                                .onReceive(Just(self.newBreakDuration)) { inputNumber in
                                     
-                                    self.breakDuration = inputNumber.filter { "0123456789".contains($0) }
+                                    self.newBreakDuration = inputNumber.filter { "0123456789".contains($0) }
                                     
-                                    if inputNumber.count > 2 {
-                                        self.breakDuration.removeLast()
+                                    if inputNumber.count > 3 {
+                                        self.newBreakDuration.removeFirst()
                                     }
                                     
                                     if Int(inputNumber) ?? 0 < 0 {
-                                        self.breakDuration = "1"
+                                        self.newBreakDuration = "1"
                                     }
                                 }
+                            
+                            Text("minutes")
+                                .font(.title3)
                         }
-                        .padding(.bottom, 10)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 3)
                         
                         Divider()
                         
@@ -85,51 +130,58 @@ struct TimerSettingsView: View {
                                 .foregroundColor(.accentColor)
                             
                             Text("Rounds:")
-                                .font(.title3)
+                                .font(.headline)
                                 .foregroundColor(.primary)
                             
-                            TextField("\(rounds)", text: $rounds)
+                            Spacer()
+                            
+                            TextField("", text: $newRounds)
                                 .multilineTextAlignment(.center)
                                 .font(.title3)
-                                .onReceive(Just(self.rounds)) { inputNumber in
+                                .frame(width: 70, height: 40)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.blue, lineWidth: 2))
+                                .onReceive(Just(self.newRounds)) { inputNumber in
                                     
-                                    self.rounds = inputNumber.filter { "0123456789".contains($0) }
+                                    self.newRounds = inputNumber.filter { "0123456789".contains($0) }
                                     
-                                    if inputNumber.count > 2 {
-                                        self.rounds.removeLast()
+                                    if inputNumber.count > 3 {
+                                        self.newRounds.removeFirst()
                                     }
                                     
                                     if Int(inputNumber) ?? 0 < 0 {
-                                        self.rounds = "1"
+                                        self.newRounds = "1"
                                     }
                                 }
+                            
+                            Spacer(minLength: 10)
                         }
-                        .padding(.bottom, 10)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 3)
                     }
-                    .padding(.horizontal, 10)
-                }
                 
                 // SAVE BUTTON
                 Button(action: {
+                    if newDuration == "" {
+                        self.newDuration = "25"
+                    }
+                    if newBreakDuration == "" {
+                        self.newDuration = "10"
+                    }
+                    if newRounds == "" {
+                        self.newRounds = "5"
+                    }
                     
-                    if duration == "" {
-                        self.duration = "25"
-                    }
-                    if breakDuration == "" {
-                        self.duration = "10"
-                    }
-                    if rounds == "" {
-                        self.rounds = "5"
-                    }
+                    // SAVE TIMER SETTINGS
+                    userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor, duration: Int16(newDuration) ?? 25, breakDuration: Int16(newBreakDuration) ?? 5, rounds: Int16(newRounds) ?? 5)
                     
-                    // ADD NEW TASK
-                    print("SAVE TIMER SETTINGS")
-//                    userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor)
+                    self.presentationMode.wrappedValue.dismiss()
                     
                 }, label: {
                     Text("Save")
                         .font(.headline)
-                        .foregroundColor(.white)
+                        .foregroundColor(.primary)
                         .frame(height: 55)
                         .frame(maxWidth: .infinity)
                         .background(Color.accentColor.opacity(0.2))
@@ -145,30 +197,33 @@ struct TimerSettingsView: View {
                 Spacer()
             }
             .padding(.top, 20)
-//            .navigationTitle("⚙️")
-            .navigationBarItems(leading:
-                HStack {
-                    Image(systemName: "gear")
-                    Text("User Settings")
-            }
-            )
-        }
-        .onAppear {
-            if !userVM.savedUserData.isEmpty {
-                let currentUser = userVM.savedUserData[0]
-                newUserName = currentUser.userName ?? "No Name"
-                newTaskOverdueLimit = String(currentUser.taskOverdueLimit)
-                newThemeColor = currentUser.themeColor ?? "yellow"
-            }
+            .padding(.horizontal, 10)
+//            .navigationBarItems(leading:
+//
+//            )
         }
         .alert(isPresented: $showAlert) {
             Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
         }
+        .onAppear {
+            if !userVM.savedUserData.isEmpty {
+                let currentUser = userVM.savedUserData.first!
+                newUserName = currentUser.userName ?? "No Name"
+                newTaskOverdueLimit = String(currentUser.taskOverdueLimit)
+                newThemeColor = currentUser.themeColor ?? "yellow"
+                newDuration = String(currentUser.timerDuration)
+                newBreakDuration = String(currentUser.timerBreakDuration)
+                newRounds = String(currentUser.timerRounds)
+            }
+        }
+        
     }
+
 }
 
 struct TimerSettingsView_Previews: PreviewProvider {
     static var previews: some View {
         TimerSettingsView(userVM: UserViewModel())
+            .preferredColorScheme(.dark)
     }
 }

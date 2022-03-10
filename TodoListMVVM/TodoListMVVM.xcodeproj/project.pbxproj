@@ -23,6 +23,7 @@
 		9FCD970727BD64A60079FEA0 /* ChangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCD970627BD64A40079FEA0 /* ChangeView.swift */; };
 		9FCD970927BD6F510079FEA0 /* ToggleCheckExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCD970827BD6F510079FEA0 /* ToggleCheckExtension.swift */; };
 		9FCEA39527C105FE002482D3 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCEA39427C105FE002482D3 /* ProfileView.swift */; };
+		9FD44AD727D9580C003EE0E7 /* PomodoroTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD44AD627D9580C003EE0E7 /* PomodoroTimer.swift */; };
 		9FD984EE27B7DFE9005BF23F /* TodoListMVVMApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD984ED27B7DFE9005BF23F /* TodoListMVVMApp.swift */; };
 		9FD984F027B7DFE9005BF23F /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD984EF27B7DFE9005BF23F /* ListView.swift */; };
 		9FD984F227B7DFF2005BF23F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9FD984F127B7DFF2005BF23F /* Assets.xcassets */; };
@@ -56,6 +57,7 @@
 		9FCD970627BD64A40079FEA0 /* ChangeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeView.swift; sourceTree = "<group>"; };
 		9FCD970827BD6F510079FEA0 /* ToggleCheckExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleCheckExtension.swift; sourceTree = "<group>"; };
 		9FCEA39427C105FE002482D3 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		9FD44AD627D9580C003EE0E7 /* PomodoroTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodoroTimer.swift; sourceTree = "<group>"; };
 		9FD984EA27B7DFE9005BF23F /* TodoListMVVM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodoListMVVM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FD984ED27B7DFE9005BF23F /* TodoListMVVMApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListMVVMApp.swift; sourceTree = "<group>"; };
 		9FD984EF27B7DFE9005BF23F /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
@@ -96,6 +98,14 @@
 				9F169D1527CEBC2E00BD6192 /* NavigaitonBarColorModifier.swift */,
 			);
 			path = CustomModifier;
+			sourceTree = "<group>";
+		};
+		9FD44AD527D957ED003EE0E7 /* PomodorTimer */ = {
+			isa = PBXGroup;
+			children = (
+				9FD44AD627D9580C003EE0E7 /* PomodoroTimer.swift */,
+			);
+			path = PomodorTimer;
 			sourceTree = "<group>";
 		};
 		9FD984E127B7DFE9005BF23F = {
@@ -165,6 +175,7 @@
 				9FDD830C27CE8651002ADC9F /* TodoListModel_CoreData.xcdatamodeld */,
 				9FDD831427CE8794002ADC9F /* Task */,
 				9FDD831327CE878C002ADC9F /* User */,
+				9FD44AD527D957ED003EE0E7 /* PomodorTimer */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -295,6 +306,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FD44AD727D9580C003EE0E7 /* PomodoroTimer.swift in Sources */,
 				9F6D04AE27B7E4F900283669 /* MainViewModifier.swift in Sources */,
 				9F9DE91F27B86FB1009418E3 /* DataManager.swift in Sources */,
 				9FCEA39527C105FE002482D3 /* ProfileView.swift in Sources */,

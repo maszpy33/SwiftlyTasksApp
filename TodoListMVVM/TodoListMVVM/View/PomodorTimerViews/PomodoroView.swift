@@ -52,6 +52,8 @@ struct PomodoroView: View {
                     }//
                     
                     HStack(spacing: 20) {
+                        
+                        // CANCEL/RESUME BUTTON
                         Button(action: {
                             self.currentTimeDuration = userTimerDuration
                             withAnimation(.default) {
@@ -63,14 +65,16 @@ struct PomodoroView: View {
                         }) {
                             HStack(spacing: 15) {
                                 Text("Cancel")
+                                    .font(.title)
                                     .foregroundColor(.accentColor)
                             }
                             .padding(.vertical)
                             .frame(width:(UIScreen.main.bounds.width / 2) - 55)
                             .background(userVM.secondaryAccentColor)
-                            .clipShape(Capsule())
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
                         }//
                         
+                        // START/PAUSE BUTTON
                         Button(action: {
                             if self.currentTimeDuration > 0 {
                                 self.currentTimeDuration -= 1
@@ -89,16 +93,18 @@ struct PomodoroView: View {
                             HStack(spacing: 15) {
                                 if !self.pausePressed {
                                     Text(self.isTimerStarted ? "Pause" : "Start")
+                                        .font(.title)
                                         .foregroundColor(self.isTimerStarted ? .accentColor : .green)
                                 } else {
                                     Text(self.pausePressed ? "Resume" : "Pause")
+                                        .font(.title)
                                         .foregroundColor(self.isTimerStarted ? .accentColor : .green)
                                 }
                             }
                             .padding(.vertical)
                             .frame(width:(UIScreen.main.bounds.width / 2) - 55)
                             .background(userVM.secondaryAccentColor)
-                            .clipShape(Capsule())
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
                         }//
                     }
                     .padding(.top, 55)
@@ -157,6 +163,9 @@ struct PomodoroView: View {
                     self.circleRange = 280
                 }
             }
+        }
+        .onAppear {
+            
         }
 
     }

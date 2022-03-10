@@ -12,7 +12,7 @@ import SwiftUI
 
 class UserViewModel: Identifiable, ObservableObject {
     
-    @Published var user = User(userName: "DefaultName", taskOverdueLimit: 3, themeColor: "yellow", profileImage: UIImage(named: "JokerCodeProfile")!) {
+    @Published var user = User(userName: "DefaultName", taskOverdueLimit: 3, themeColor: "yellow", profileImage: UIImage(named: "JokerCodeProfile")!, timerDuration: 25, timerBreakDuration: 5, timerRounds: 5) {
         didSet {
             saveData()
         }
@@ -60,7 +60,7 @@ class UserViewModel: Identifiable, ObservableObject {
         }
     }
     
-    func updateUserEntity(userName: String, taskOverdueLimit: Int16, themeColor: String) {
+    func updateUserEntity(userName: String, taskOverdueLimit: Int16, themeColor: String, duration: Int16, breakDuration: Int16, rounds: Int16) {
 //        let pickedImage = profileImage.jpegData(compressionQuality: 0.70)
         
         if !savedUserData.isEmpty {
@@ -73,7 +73,15 @@ class UserViewModel: Identifiable, ObservableObject {
         updatedUser.userName = userName
         updatedUser.taskOverdueLimit = taskOverdueLimit
         updatedUser.themeColor = themeColor
+        updatedUser.timerDuration = duration
+        updatedUser.timerBreakDuration = breakDuration
+        updatedUser.timerRounds = rounds
+        
 //        updatedUser.profileImage = pickedImage
         saveData()
+    }
+    
+    func updateTimerSettings(duration: Int16, breakDuration: Int16, rounds: Int16) {
+        
     }
 }

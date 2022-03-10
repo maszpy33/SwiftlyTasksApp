@@ -150,7 +150,9 @@ struct AddTaskView: View {
                             taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, categorySymbol: taskCategorySymbole, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, uiDeleted: taskUIDeleted)
 
                             taskTitleTextField = ""
+                            
                             self.presentationMode.wrappedValue.dismiss()
+                            
                         }, label: {
                             Text("Save")
                                 .font(.headline)

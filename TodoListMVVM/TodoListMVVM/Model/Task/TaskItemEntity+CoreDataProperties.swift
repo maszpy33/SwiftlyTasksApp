@@ -26,6 +26,13 @@ extension TaskItemEntity {
     @NSManaged public var uiDeleted: Bool
     @NSManaged public var profileImage: Data?
 
+//    public var wrappedTitle: String {
+//        title ?? "No Title"
+//    }
+//    public var wrappedCategorySymbol: String {
+//        categorySymbol ?? "No Title"
+//    }
+    
 }
 
 extension TaskItemEntity : Identifiable {
