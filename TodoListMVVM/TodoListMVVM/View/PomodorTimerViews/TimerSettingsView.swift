@@ -18,7 +18,7 @@ struct TimerSettingsView: View {
     @State private var newBreakDuration: String = "10"
     @State private var newRounds: String = "5"
     
-    @State private var newUserName = "No Name"
+    @State private var newUserName = "UserName"
     @State private var newTaskOverdueLimit = "14"
     @State private var newThemeColor = "blue"
     
@@ -32,8 +32,8 @@ struct TimerSettingsView: View {
             ScrollView {
                     VStack {
                         HStack {
-                            Image(systemName: "gear")
-                            Text("User Settings")
+                            Image(systemName: "alarm")
+                            Text("Timer Settings")
                             
                             Spacer()
                         }
@@ -208,12 +208,12 @@ struct TimerSettingsView: View {
         .onAppear {
             if !userVM.savedUserData.isEmpty {
                 let currentUser = userVM.savedUserData.first!
-                newUserName = currentUser.userName ?? "No Name"
-                newTaskOverdueLimit = String(currentUser.taskOverdueLimit)
-                newThemeColor = currentUser.themeColor ?? "yellow"
-                newDuration = String(currentUser.timerDuration)
-                newBreakDuration = String(currentUser.timerBreakDuration)
-                newRounds = String(currentUser.timerRounds)
+                self.newUserName = currentUser.wUserName
+                self.newTaskOverdueLimit = String(currentUser.taskOverdueLimit)
+                self.newThemeColor = currentUser.wThemeColor
+                self.newDuration = String(currentUser.timerDuration)
+                self.newBreakDuration = String(currentUser.timerBreakDuration)
+                self.newRounds = String(currentUser.timerRounds)
             }
         }
         

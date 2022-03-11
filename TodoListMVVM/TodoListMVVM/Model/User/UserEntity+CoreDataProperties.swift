@@ -22,7 +22,13 @@ extension UserEntity {
     @NSManaged public var timerDuration: Int16
     @NSManaged public var timerBreakDuration: Int16
     @NSManaged public var timerRounds: Int16
-
+    
+    public var wUserName: String {
+        userName ?? "UserName"
+    }
+    public var wThemeColor: String {
+        themeColor ?? "blue"
+    }
 }
 
 extension UserEntity : Identifiable {

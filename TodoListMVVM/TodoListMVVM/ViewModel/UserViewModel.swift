@@ -12,11 +12,12 @@ import SwiftUI
 
 class UserViewModel: Identifiable, ObservableObject {
     
-    @Published var user = User(userName: "DefaultName", taskOverdueLimit: 3, themeColor: "yellow", profileImage: UIImage(named: "JokerCodeProfile")!, timerDuration: 25, timerBreakDuration: 5, timerRounds: 5) {
-        didSet {
-            saveData()
-        }
-    }
+    @Published var userOne = User(userName: "DefaultName", taskOverdueLimit: 3, themeColor: "yellow", profileImage: UIImage(named: "JokerCodeProfile")!, timerDuration: 25, timerBreakDuration: 5, timerRounds: 5)
+//    {
+//        didSet {
+//            saveData()
+//        }
+//    }
     
     let secondaryAccentColor = Color("SecondaryAccentColor")
 
@@ -39,10 +40,6 @@ class UserViewModel: Identifiable, ObservableObject {
 
     func fetchTaskData() {
         let request = NSFetchRequest<UserEntity>(entityName: "UserEntity")
-//        let sortName = NSSortDescriptor(key: "userName", ascending: true)
-//        let sortDueDate = NSSortDescriptor(key: "dueDate", ascending: true)
-//        request.sortDescriptors = sortName
-        //        @FetchRequest(entity: Task.entity(), sortDescriptors: [NSSortDescriptor(key: "status", ascending: true), NSSortDescriptor(key: "dueDate", ascending: true)]) private var allTasks: FetchedResults<Task>
 
         do {
             savedUserData = try container.viewContext.fetch(request)

@@ -46,17 +46,19 @@ struct SettingsView: View {
                                 .foregroundColor(.primary)
                                 .labelStyle(.titleOnly)
                             
-                            Spacer()
+                            Spacer(minLength: 25)
                             
                             TextField("\(newUserName)", text: $newUserName)
                                 .multilineTextAlignment(.center)
                                 .font(.title3)
-                                .frame(width: 70, height: 40)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 40)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 10)
                                         .stroke(Color.blue, lineWidth: 2))
                         }
-                        .padding(10)
+                        .padding(.horizontal, 15)
+                        .padding(.vertical, 5)
                         
                         Divider()
                         
@@ -68,6 +70,8 @@ struct SettingsView: View {
                             Text("Overdue Limit:")
                                 .font(.title3)
                                 .foregroundColor(.primary)
+                            
+                            Spacer()
                             
                             TextField("\(newTaskOverdueLimit)", text: $newTaskOverdueLimit)
                                 .multilineTextAlignment(.center)
@@ -88,7 +92,10 @@ struct SettingsView: View {
                                     }
                                 }
                         }
-                        .padding(10)
+                        .padding(.horizontal, 15)
+                        .padding(.vertical, 5)
+                        
+                        Divider()
                     }
                 }
                 
@@ -131,7 +138,7 @@ struct SettingsView: View {
                 
                 Spacer()
             }
-            .padding(.top, 20)
+            .padding(.horizontal, 15)
             .navigationBarItems(leading:
                                     HStack {
                 Image(systemName: "gear")
@@ -148,9 +155,9 @@ struct SettingsView: View {
         .onAppear {
             if !userVM.savedUserData.isEmpty {
                 let currentUser = userVM.savedUserData.first!
-                newUserName = currentUser.userName ?? "No Name"
+                newUserName = currentUser.wUserName
                 newTaskOverdueLimit = String(currentUser.taskOverdueLimit)
-                newThemeColor = currentUser.themeColor ?? "yellow"
+                newThemeColor = currentUser.wThemeColor
                 newTimerDuration = currentUser.timerDuration
                 newTimerBreakDuration = currentUser.timerBreakDuration
                 newTimerRounds = currentUser.timerRounds

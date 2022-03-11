@@ -20,7 +20,6 @@
 		9FA2E38027BEEF7E009E570D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA2E37F27BEEF7E009E570D /* ContentView.swift */; };
 		9FA2E38227BEF1B5009E570D /* NoTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA2E38127BEF1B5009E570D /* NoTaskView.swift */; };
 		9FCC321727BC6E09006444C9 /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCC321627BC6E09006444C9 /* EditView.swift */; };
-		9FCD970727BD64A60079FEA0 /* ChangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCD970627BD64A40079FEA0 /* ChangeView.swift */; };
 		9FCD970927BD6F510079FEA0 /* ToggleCheckExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCD970827BD6F510079FEA0 /* ToggleCheckExtension.swift */; };
 		9FCEA39527C105FE002482D3 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCEA39427C105FE002482D3 /* ProfileView.swift */; };
 		9FD44AD727D9580C003EE0E7 /* PomodoroTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD44AD627D9580C003EE0E7 /* PomodoroTimer.swift */; };
@@ -54,7 +53,6 @@
 		9FA2E37F27BEEF7E009E570D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		9FA2E38127BEF1B5009E570D /* NoTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoTaskView.swift; sourceTree = "<group>"; };
 		9FCC321627BC6E09006444C9 /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
-		9FCD970627BD64A40079FEA0 /* ChangeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeView.swift; sourceTree = "<group>"; };
 		9FCD970827BD6F510079FEA0 /* ToggleCheckExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleCheckExtension.swift; sourceTree = "<group>"; };
 		9FCEA39427C105FE002482D3 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		9FD44AD627D9580C003EE0E7 /* PomodoroTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodoroTimer.swift; sourceTree = "<group>"; };
@@ -161,9 +159,9 @@
 		9FD984FC27B7E057005BF23F /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				9F30BE2A27CE532600B749CD /* ImagePicker.swift */,
 				9FD9850027B7E0E5005BF23F /* TaskViewModel.swift */,
 				9F30BE2C27CE58E200B749CD /* UserViewModel.swift */,
-				9F30BE2A27CE532600B749CD /* ImagePicker.swift */,
 				9F9DE91E27B86FB1009418E3 /* DataManager.swift */,
 			);
 			path = ViewModel;
@@ -207,7 +205,6 @@
 				9FD984EF27B7DFE9005BF23F /* ListView.swift */,
 				9F6D04AF27B7E52E00283669 /* AddTaskView.swift */,
 				9FCC321627BC6E09006444C9 /* EditView.swift */,
-				9FCD970627BD64A40079FEA0 /* ChangeView.swift */,
 				9FD9850427B7E1FE005BF23F /* TaskView.swift */,
 			);
 			path = TaskViews;
@@ -322,7 +319,6 @@
 				9FDD830E27CE8651002ADC9F /* TodoListModel_CoreData.xcdatamodeld in Sources */,
 				9FD984F027B7DFE9005BF23F /* ListView.swift in Sources */,
 				9FDD831227CE86E8002ADC9F /* TaskItemEntity+CoreDataProperties.swift in Sources */,
-				9FCD970727BD64A60079FEA0 /* ChangeView.swift in Sources */,
 				9FD984FF27B7E0B9005BF23F /* Task.swift in Sources */,
 				9FDD831C27CE8BA6002ADC9F /* SettingsView.swift in Sources */,
 				9FDD831A27CE8932002ADC9F /* PomodoroView.swift in Sources */,

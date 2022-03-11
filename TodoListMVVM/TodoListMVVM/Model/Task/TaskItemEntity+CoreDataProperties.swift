@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import SwiftUI
 
 
 extension TaskItemEntity {
@@ -26,13 +27,21 @@ extension TaskItemEntity {
     @NSManaged public var uiDeleted: Bool
     @NSManaged public var profileImage: Data?
 
-//    public var wrappedTitle: String {
-//        title ?? "No Title"
-//    }
-//    public var wrappedCategorySymbol: String {
-//        categorySymbol ?? "No Title"
-//    }
-    
+    public var wTitle: String {
+        title ?? "No Title"
+    }
+    public var wEmoji: String {
+        categorySymbol ?? "🤷🏻‍♂️"
+    }
+    public var wDetails: String {
+        details ?? "no description"
+    }
+    public var wDueDate: Date {
+        dueDate ?? Date()
+    }
+    public var wPriority: String {
+        priority ?? "non"
+    }
 }
 
 extension TaskItemEntity : Identifiable {
