@@ -9,12 +9,15 @@
 /* Begin PBXBuildFile section */
 		9F169D1627CEBC2E00BD6192 /* NavigaitonBarColorModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F169D1527CEBC2E00BD6192 /* NavigaitonBarColorModifier.swift */; };
 		9F169D1927CEBD7400BD6192 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 9F169D1827CEBD7400BD6192 /* Introspect */; };
+		9F23769027E7D8C900C87161 /* NotificaitonCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F23768F27E7D8C900C87161 /* NotificaitonCenterView.swift */; };
+		9F23769227E7DA8C00C87161 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F23769127E7DA8C00C87161 /* NotificationManager.swift */; };
 		9F2CF69427D6BC290057FAD2 /* IsEmojiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2CF69327D6BC290057FAD2 /* IsEmojiExtension.swift */; };
 		9F30BE2B27CE532700B749CD /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F30BE2A27CE532600B749CD /* ImagePicker.swift */; };
 		9F30BE2D27CE58E200B749CD /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F30BE2C27CE58E200B749CD /* UserViewModel.swift */; };
 		9F30BE2F27CE593700B749CD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F30BE2E27CE593700B749CD /* User.swift */; };
 		9F6D04AE27B7E4F900283669 /* MainViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6D04AD27B7E4F900283669 /* MainViewModifier.swift */; };
 		9F6D04B027B7E52E00283669 /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6D04AF27B7E52E00283669 /* AddTaskView.swift */; };
+		9F88A3DE27EBCB7B000F1BBC /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F88A3DD27EBCB7B000F1BBC /* BannerView.swift */; };
 		9F93034927D1862400E71979 /* TimerSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93034827D1862400E71979 /* TimerSettingsView.swift */; };
 		9F9DE91F27B86FB1009418E3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9DE91E27B86FB1009418E3 /* DataManager.swift */; };
 		9FA2E38027BEEF7E009E570D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA2E37F27BEEF7E009E570D /* ContentView.swift */; };
@@ -22,7 +25,6 @@
 		9FCC321727BC6E09006444C9 /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCC321627BC6E09006444C9 /* EditView.swift */; };
 		9FCD970927BD6F510079FEA0 /* ToggleCheckExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCD970827BD6F510079FEA0 /* ToggleCheckExtension.swift */; };
 		9FCEA39527C105FE002482D3 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCEA39427C105FE002482D3 /* ProfileView.swift */; };
-		9FD44AD727D9580C003EE0E7 /* PomodoroTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD44AD627D9580C003EE0E7 /* PomodoroTimer.swift */; };
 		9FD984EE27B7DFE9005BF23F /* TodoListMVVMApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD984ED27B7DFE9005BF23F /* TodoListMVVMApp.swift */; };
 		9FD984F027B7DFE9005BF23F /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD984EF27B7DFE9005BF23F /* ListView.swift */; };
 		9FD984F227B7DFF2005BF23F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9FD984F127B7DFF2005BF23F /* Assets.xcassets */; };
@@ -42,12 +44,15 @@
 
 /* Begin PBXFileReference section */
 		9F169D1527CEBC2E00BD6192 /* NavigaitonBarColorModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigaitonBarColorModifier.swift; sourceTree = "<group>"; };
+		9F23768F27E7D8C900C87161 /* NotificaitonCenterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificaitonCenterView.swift; sourceTree = "<group>"; };
+		9F23769127E7DA8C00C87161 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		9F2CF69327D6BC290057FAD2 /* IsEmojiExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsEmojiExtension.swift; sourceTree = "<group>"; };
 		9F30BE2A27CE532600B749CD /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		9F30BE2C27CE58E200B749CD /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		9F30BE2E27CE593700B749CD /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		9F6D04AD27B7E4F900283669 /* MainViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModifier.swift; sourceTree = "<group>"; };
 		9F6D04AF27B7E52E00283669 /* AddTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
+		9F88A3DD27EBCB7B000F1BBC /* BannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
 		9F93034827D1862400E71979 /* TimerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSettingsView.swift; sourceTree = "<group>"; };
 		9F9DE91E27B86FB1009418E3 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		9FA2E37F27BEEF7E009E570D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -55,7 +60,6 @@
 		9FCC321627BC6E09006444C9 /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
 		9FCD970827BD6F510079FEA0 /* ToggleCheckExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleCheckExtension.swift; sourceTree = "<group>"; };
 		9FCEA39427C105FE002482D3 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
-		9FD44AD627D9580C003EE0E7 /* PomodoroTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodoroTimer.swift; sourceTree = "<group>"; };
 		9FD984EA27B7DFE9005BF23F /* TodoListMVVM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodoListMVVM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FD984ED27B7DFE9005BF23F /* TodoListMVVMApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListMVVMApp.swift; sourceTree = "<group>"; };
 		9FD984EF27B7DFE9005BF23F /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
@@ -98,12 +102,13 @@
 			path = CustomModifier;
 			sourceTree = "<group>";
 		};
-		9FD44AD527D957ED003EE0E7 /* PomodorTimer */ = {
+		9F88A3DA27EBCA5D000F1BBC /* NotificationView */ = {
 			isa = PBXGroup;
 			children = (
-				9FD44AD627D9580C003EE0E7 /* PomodoroTimer.swift */,
+				9F23768F27E7D8C900C87161 /* NotificaitonCenterView.swift */,
+				9F88A3DD27EBCB7B000F1BBC /* BannerView.swift */,
 			);
-			path = PomodorTimer;
+			path = NotificationView;
 			sourceTree = "<group>";
 		};
 		9FD984E127B7DFE9005BF23F = {
@@ -128,6 +133,7 @@
 				9FD984FD27B7E05C005BF23F /* Model */,
 				9FD984FC27B7E057005BF23F /* ViewModel */,
 				9FD984FB27B7E052005BF23F /* View */,
+				9F88A3DA27EBCA5D000F1BBC /* NotificationView */,
 				9F6D04AC27B7E4B500283669 /* CustomModifier */,
 				9FD984ED27B7DFE9005BF23F /* TodoListMVVMApp.swift */,
 				9FD984F127B7DFF2005BF23F /* Assets.xcassets */,
@@ -163,6 +169,7 @@
 				9FD9850027B7E0E5005BF23F /* TaskViewModel.swift */,
 				9F30BE2C27CE58E200B749CD /* UserViewModel.swift */,
 				9F9DE91E27B86FB1009418E3 /* DataManager.swift */,
+				9F23769127E7DA8C00C87161 /* NotificationManager.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -173,7 +180,6 @@
 				9FDD830C27CE8651002ADC9F /* TodoListModel_CoreData.xcdatamodeld */,
 				9FDD831427CE8794002ADC9F /* Task */,
 				9FDD831327CE878C002ADC9F /* User */,
-				9FD44AD527D957ED003EE0E7 /* PomodorTimer */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -303,9 +309,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9FD44AD727D9580C003EE0E7 /* PomodoroTimer.swift in Sources */,
 				9F6D04AE27B7E4F900283669 /* MainViewModifier.swift in Sources */,
 				9F9DE91F27B86FB1009418E3 /* DataManager.swift in Sources */,
+				9F23769227E7DA8C00C87161 /* NotificationManager.swift in Sources */,
 				9FCEA39527C105FE002482D3 /* ProfileView.swift in Sources */,
 				9F30BE2B27CE532700B749CD /* ImagePicker.swift in Sources */,
 				9F93034927D1862400E71979 /* TimerSettingsView.swift in Sources */,
@@ -323,6 +329,8 @@
 				9FDD831C27CE8BA6002ADC9F /* SettingsView.swift in Sources */,
 				9FDD831A27CE8932002ADC9F /* PomodoroView.swift in Sources */,
 				9FDD831127CE86E8002ADC9F /* TaskItemEntity+CoreDataClass.swift in Sources */,
+				9F88A3DE27EBCB7B000F1BBC /* BannerView.swift in Sources */,
+				9F23769027E7D8C900C87161 /* NotificaitonCenterView.swift in Sources */,
 				9F6D04B027B7E52E00283669 /* AddTaskView.swift in Sources */,
 				9F30BE2D27CE58E200B749CD /* UserViewModel.swift in Sources */,
 				9F2CF69427D6BC290057FAD2 /* IsEmojiExtension.swift in Sources */,

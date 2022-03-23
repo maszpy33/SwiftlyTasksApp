@@ -36,26 +36,44 @@ struct EditView: View {
             VStack {
                 HStack {
                     // STATUS TOGGLE
-                    Image(systemName: taskStatus ? "checkmark.square.fill" : "square")
-                        .resizable()
-                        .frame(width: 24, height: 24)
-                        .foregroundColor(taskStatus ? .green : .gray)
-                        .font(.system(size: 20, weight: .bold, design: .default))
-                        .onTapGesture {
-                            withAnimation(.linear) {
-                                taskStatus.toggle()
-                            }
+                    ZStack {
+                        Image(systemName: "square")
+                            .resizable()
+                            .frame(width: 26, height: 26)
+                            .foregroundColor(taskStatus ? .gray : taskVM.styleForPriority(taskPriority: taskPriority))
+                            .opacity(taskStatus ? 0.8 : 1)
+                        
+                        Image(systemName: "checkmark.square.fill")
+                            .resizable()
+                            .frame(width: 26, height: 26)
+                            .foregroundColor(.gray)
+                            .font(.system(size: 22, weight: .bold, design: .default))
+                            .opacity(taskStatus ? 1 : 0)
+                    }
+                    .onTapGesture {
+                        withAnimation(.linear) {
+                            taskStatus.toggle()
                         }
+                    }
                     
                     Spacer()
                     
                     // DUEDATE
-                    DatePicker("no label", selection: $taskDueDate, in: Date()..., displayedComponents: .date)
-                        .foregroundColor(.accentColor)
-                        .frame(height: 55)
-                        .cornerRadius(10)
-                        .pickerStyle(.menu)
-                        .labelsHidden()
+                    HStack {
+//                        Image(systemName: "calendar.badge.plus")
+//                            .resizable()
+//                            .frame(width: 32, height: 32)
+//                            .foregroundColor(taskVM.secondaryAccentColor)
+//                            .font(.system(size: 22, weight: .bold, design: .default))
+//                            .opacity(taskStatus ? 0.7 : 1)
+                        
+                        DatePicker("no label", selection: $taskDueDate, in: Date()..., displayedComponents: .date)
+                            .foregroundColor(.accentColor)
+                            .frame(height: 55)
+                            .cornerRadius(10)
+                            .pickerStyle(.menu)
+                            .labelsHidden()
+                    }
                     
                     Spacer()
                     

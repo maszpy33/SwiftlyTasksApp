@@ -19,69 +19,74 @@ struct TaskView: View {
     @State private var onlyOneDayLeft = false
     
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Text("\(task.categorySymbol ?? "🤷🏻‍♂️")")
-                    .font(.title2)
-//                Image(systemName: task.categorySymbol ?? "person")
-//                    .resizable()
-//                    .scaledToFit()
-//                    .frame(width: 22, height: 22)
-//                    .foregroundColor(.primary)
-                
-                VStack(alignment: .leading) {
-                    Text("Title:")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    Text(task.title ?? "no title")
-                        .font(.system(size: 15, weight: .bold))
-                        .italic()
-                }
-                
-                Spacer()
-                
-                VStack(alignment: .leading) {
-                    Text("Days Left:")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+        ZStack {
+//            Color(red: 0.1, green: 0.1, blue: 0.1)
+//                .edgesIgnoringSafeArea(.all)
+            
+            VStack(alignment: .leading) {
+                HStack {
+                    Text("\(task.categorySymbol ?? "🤷🏻‍♂️")")
+                        .font(.title)
+    //                Image(systemName: task.categorySymbol ?? "person")
+    //                    .resizable()
+    //                    .scaledToFit()
+    //                    .frame(width: 22, height: 22)
+    //                    .foregroundColor(.primary)
                     
-                    HStack {
-                        Text("\(daysLeft)")
-                            .font(.system(size: 18, weight: .bold))
+                    VStack(alignment: .leading) {
+                        Text("Title:")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Text(task.title ?? "no title")
+                            .font(.system(size: 15, weight: .bold))
                             .italic()
-                            .foregroundColor(self.onlyOneDayLeft ? .red : .primary)
-                        Text(" Days")
+                    }
+                    
+                    Spacer()
+                    
+                    VStack(alignment: .leading) {
+                        Text("Days Left:")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        
+                        HStack {
+                            Text("\(daysLeft)")
+                                .font(.system(size: 18, weight: .bold))
+                                .italic()
+                                .foregroundColor(self.onlyOneDayLeft ? .red : .primary)
+                            Text(" Days")
+                        }
                     }
                 }
-            }
-            
-            HStack {
-                VStack(alignment: .leading) {
-                    Text("Due Date:")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    Text(task.dueDate ?? Date(), style: .date)
+                
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text("Due Date:")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Text(task.dueDate ?? Date(), style: .date)
+                    }
+                    
+                    Spacer()
+                    
+                    VStack(alignment: .leading) {
+                        Image(systemName: task.status ? "checkmark.square" : "xmark.square")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 22, height: 22)
+                            .foregroundColor(task.status ? .green : .gray)
+                    }
+                    
                 }
-                
-                Spacer()
-                
-                VStack(alignment: .leading) {
-                    Image(systemName: task.status ? "checkmark.square" : "xmark.square")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 22, height: 22)
-                        .foregroundColor(task.status ? .green : .gray)
-                }
-                
             }
+            .padding(10)
+            .background(taskVM.styleForPriority(taskPriority: task.priority ?? "normal").opacity(0.2))
+            .cornerRadius(10)
+            .background(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .stroke(taskVM.styleForPriority(taskPriority: task.wPriority), lineWidth: 0.7))
+            .opacity(task.status ? 0.7 : 1)
         }
-        .padding(10)
-        .background(taskVM.styleForPriority(taskPriority: task.priority ?? "normal").opacity(0.2))
-        .cornerRadius(10)
-        .background(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .stroke(taskVM.styleForPriority(taskPriority: task.priority ?? "normal"), lineWidth: 0.7))
-        .opacity(task.status ? 0.7 : 1)
         .onAppear {
             self.daysLeft = taskVM.daysLeft(dueDate: task.dueDate ?? Date())
             self.overdueLimit = userVM.savedUserData.first?.taskOverdueLimit ?? 100

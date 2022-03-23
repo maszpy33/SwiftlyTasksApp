@@ -7,6 +7,8 @@
 
 import SwiftUI
 import Combine
+import UserNotifications
+
 
 struct SettingsView: View {
     
@@ -26,119 +28,141 @@ struct SettingsView: View {
     @State private var errorTitle = ""
     @State private var errorMessage = ""
     
+    //NOTIVICATION BANNER
+    @State var showBanner = false
+    let bannerViewOffset: CGFloat = -300.0
+    let bannerViewDefaultPos: CGFloat = -10.0
+    
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack {
+            ZStack {
+                Color(red: 0.1, green: 0.1, blue: 0.1)
+                    .edgesIgnoringSafeArea(.all)
+
+                ScrollView {
                     VStack {
-                        
-                        
-                        Divider()
-                        
-                        HStack {
-                            Image(systemName: "person.fill")
-                                .font(.title3)
-                                .foregroundColor(.accentColor)
+                        VStack {
+                            Divider()
                             
-                            Text("User Name:")
-                                .font(.title3)
-                                .foregroundColor(.primary)
-                                .labelStyle(.titleOnly)
+                            HStack {
+                                Image(systemName: "person.fill")
+                                    .font(.title3)
+                                    .foregroundColor(.accentColor)
+                                
+                                Text("User Name:")
+                                    .font(.title3)
+                                    .foregroundColor(.primary)
+                                    .labelStyle(.titleOnly)
+                                
+                                Spacer(minLength: 25)
+                                
+                                TextField("\(newUserName)", text: $newUserName)
+                                    .multilineTextAlignment(.center)
+                                    .font(.title3)
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 40)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(Color.blue, lineWidth: 2))
+                            }
+                            .padding(.horizontal, 15)
+                            .padding(.vertical, 5)
                             
-                            Spacer(minLength: 25)
+                            Divider()
                             
-                            TextField("\(newUserName)", text: $newUserName)
-                                .multilineTextAlignment(.center)
-                                .font(.title3)
+                            HStack {
+                                Image(systemName: "123.rectangle")
+                                    .font(.title3)
+                                    .foregroundColor(.accentColor)
+                                
+                                Text("Overdue Limit:")
+                                    .font(.title3)
+                                    .foregroundColor(.primary)
+                                
+                                Spacer()
+                                
+                                TextField("\(newTaskOverdueLimit)", text: $newTaskOverdueLimit)
+                                    .multilineTextAlignment(.center)
+                                    .font(.title3)
+                                    .frame(width: 70, height: 40)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(Color.blue, lineWidth: 2))
+                                    .onReceive(Just(self.newTaskOverdueLimit)) { inputNumber in
+                                        
+                                        self.newTaskOverdueLimit = inputNumber.filter { "0123456789".contains($0) }
+                                        
+                                        if inputNumber.count > 2 {
+                                            self.newTaskOverdueLimit.removeLast()
+                                        }
+                                        if Int(inputNumber) ?? 0 < 0 {
+                                            self.newTaskOverdueLimit = "0"
+                                        }
+                                    }
+                            }
+                            .padding(.horizontal, 15)
+                            .padding(.vertical, 5)
+                            
+                            Divider()
+                            
+                            NotificationView()
+                            
+                            Divider()
+                        }
+                        
+                        // SAVE BUTTON
+                        Button(action: {
+                            // check if input is valid
+                            guard !newUserName.isEmpty else {
+                                self.errorTitle = "input error"
+                                self.errorMessage = "Pleace enter a user name"
+                                self.showAlert = true
+                                return
+                            }
+                            
+                            if newTaskOverdueLimit == "" {
+                                self.newTaskOverdueLimit = "99"
+                            }
+                            
+                            // SAVE USER SETTINGS
+                            userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor, duration: Int16(newTimerDuration), breakDuration: Int16(newTimerBreakDuration), rounds: Int16(newTimerRounds))
+                            
+//                            self.errorTitle = "✅ Settings Saved"
+//                            self.errorMessage = "your data hase been updated"
+//                            self.showAlert = true
+                            
+                            withAnimation(.default) {
+                                self.showBanner = true
+                                self.dismissBanner()
+                            }
+                            
+                        }, label: {
+                            Text("Save")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .frame(height: 55)
                                 .frame(maxWidth: .infinity)
-                                .frame(height: 40)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.blue, lineWidth: 2))
-                        }
-                        .padding(.horizontal, 15)
-                        .padding(.vertical, 5)
+                                .background(Color.accentColor.opacity(0.2))
+                                .cornerRadius(10)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                        .stroke(Color.accentColor, lineWidth: 2))
+                                .cornerRadius(10)
+                        })
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 25)
                         
-                        Divider()
-                        
-                        HStack {
-                            Image(systemName: "123.rectangle")
-                                .font(.title3)
-                                .foregroundColor(.accentColor)
-                            
-                            Text("Overdue Limit:")
-                                .font(.title3)
-                                .foregroundColor(.primary)
-                            
-                            Spacer()
-                            
-                            TextField("\(newTaskOverdueLimit)", text: $newTaskOverdueLimit)
-                                .multilineTextAlignment(.center)
-                                .font(.title3)
-                                .frame(width: 70, height: 40)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.blue, lineWidth: 2))
-                                .onReceive(Just(self.newTaskOverdueLimit)) { inputNumber in
-                                    
-                                    self.newTaskOverdueLimit = inputNumber.filter { "0123456789".contains($0) }
-                                    
-                                    if inputNumber.count > 2 {
-                                        self.newTaskOverdueLimit.removeLast()
-                                    }
-                                    if Int(inputNumber) ?? 0 < 0 {
-                                        self.newTaskOverdueLimit = "0"
-                                    }
-                                }
-                        }
-                        .padding(.horizontal, 15)
-                        .padding(.vertical, 5)
-                        
-                        Divider()
+                        Spacer()
                     }
                 }
+                .padding(.horizontal, 15)
                 
-                // SAVE BUTTON
-                Button(action: {
-                    // check if input is valid
-                    guard !newUserName.isEmpty else {
-                        self.errorTitle = "input error"
-                        self.errorMessage = "Pleace enter a user name"
-                        self.showAlert = true
-                        return
-                    }
-                    
-                    if newTaskOverdueLimit == "" {
-                        self.newTaskOverdueLimit = "99"
-                    }
-                    
-                    // SAVE USER SETTINGS
-                    userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor, duration: Int16(newTimerDuration), breakDuration: Int16(newTimerBreakDuration), rounds: Int16(newTimerRounds))
-                    
-                    self.errorTitle = "✅ Settings Saved"
-                    self.errorMessage = "your data hase been updated"
-                    self.showAlert = true
-                    
-                }, label: {
-                    Text("Save")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(height: 55)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.accentColor.opacity(0.2))
-                        .cornerRadius(10)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .stroke(Color.accentColor, lineWidth: 2))
-                        .cornerRadius(10)
-                })
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 25)
+                // BANNERVIEW
+                BannerView()
+                    .offset(x: 0, y: showBanner ? bannerViewDefaultPos : bannerViewOffset)
                 
-                Spacer()
             }
-            .padding(.horizontal, 15)
             .navigationBarItems(leading:
                                     HStack {
                 Image(systemName: "gear")
@@ -165,6 +189,14 @@ struct SettingsView: View {
         }
         .alert(isPresented: $showAlert) {
             Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
+        }
+    }
+    
+    private func dismissBanner() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+            withAnimation(.default) {
+                showBanner = false
+            }
         }
     }
 }

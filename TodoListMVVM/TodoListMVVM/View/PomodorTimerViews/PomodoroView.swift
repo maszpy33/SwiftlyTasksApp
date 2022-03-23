@@ -18,7 +18,6 @@ struct DefaultButtonStyle: ButtonStyle {
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
                     .stroke(Color.accentColor, lineWidth: 0.7)
                 )
-//            .opacity(0.7)
     }
 }
 
@@ -48,7 +47,7 @@ struct PomodoroView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color(red: 0.2, green: 0.2, blue: 0.2)
+                Color(red: 0.1, green: 0.1, blue: 0.1)
                     .edgesIgnoringSafeArea(.all)
                 
                 VStack {
@@ -239,7 +238,6 @@ struct PomodoroView: View {
                 userTimerDuration = Int(currentUser.timerDuration) * 60
                 pauseDuration = Int(currentUser.timerBreakDuration) * 60
                 rounds = Int(currentUser.timerRounds)
-//                currentTimeDuration = userTimerDuration
             }
         }
     }
