@@ -43,6 +43,17 @@ struct ContentView: View {
                     Text("Settings")
                 }
         }
+        .onAppear {
+            NotificationManager.instance.requestAuthorization()
+            let options: UNAuthorizationOptions = [.alert, .sound, .badge]
+            UNUserNotificationCenter.current().requestAuthorization(options: options) { success, error in
+                if let error = error {
+                    print("ERROR \(error)")
+                } else {
+                    print("NOTIFICATION PERMISSION SUCCESS")
+                }
+            }
+        }
     }
 }
 

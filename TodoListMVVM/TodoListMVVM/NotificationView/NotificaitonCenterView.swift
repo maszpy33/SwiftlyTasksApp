@@ -13,7 +13,7 @@ struct NotificationView: View {
     var body: some View {
         VStack(spacing: 40) {
             Button("Request permission") {
-//                NotificationManager.instance.requestAuthorization()
+                NotificationManager.instance.requestAuthorization()
                 let options: UNAuthorizationOptions = [.alert, .sound, .badge]
                 UNUserNotificationCenter.current().requestAuthorization(options: options) { success, error in
                     if let error = error {

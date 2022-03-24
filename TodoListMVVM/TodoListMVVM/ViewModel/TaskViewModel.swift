@@ -151,14 +151,16 @@ class TaskViewModel: Identifiable, ObservableObject {
         }
     }
     
-    func daysLeft(dueDate: Date) -> Int {
+    func daysLeft(dueDate: Date) -> (Int, String) {
         dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .none
+        dateFormatter.timeStyle = .short
         let today = dateFormatter.string(from: Date())
         let dueDateFormatted = dateFormatter.string(from: dueDate)
         
+        print(dueDateFormatted)
+        
         guard dueDateFormatted != today else {
-            return 0
+            return (0, "Days")
         }
         
         let taskDueDate = Calendar.current.dateComponents([.day, .month, .year], from: dueDate)
@@ -166,9 +168,57 @@ class TaskViewModel: Identifiable, ObservableObject {
         let taskDueDateComponents = DateComponents(calendar: Calendar.current, year: taskDueDate.year!, month: taskDueDate.month!, day: taskDueDate.day!).date!
         
         let diffs = Calendar.current.dateComponents([.day], from: Date(), to: taskDueDateComponents)
-        let daysUntil = diffs.day
         
-        return daysUntil! + 1
+        let daysUntil = diffs.day ?? 0 + 1
+        
+        guard daysUntil != 1 else {
+            return (daysUntil, "Day")
+        }
+                    
+        return (daysUntil, "Days")
+    }
+    
+    
+    func daysHoursLeft(dueDate: Date) -> (Int, String) {
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .short
+        let today = dateFormatter.string(from: Date())
+        let dueDateFormatted = dateFormatter.string(from: dueDate)
+        
+        print(dueDateFormatted)
+        
+        guard dueDateFormatted != today else {
+            return (0, "Hours")
+        }
+        
+        let taskDueDate = Calendar.current.dateComponents([.hour, .day, .month, .year], from: dueDate)
+        
+        let taskDueDateComponents = DateComponents(calendar: Calendar.current, year: taskDueDate.year!, month: taskDueDate.month!, day: taskDueDate.day!, hour: taskDueDate.hour!).date!
+        
+        let diffs = Calendar.current.dateComponents([.day, .hour], from: Date(), to: taskDueDateComponents)
+        
+        print(diffs)
+        
+        let daysUntil = diffs.day ?? 0 + 1
+        let hoursLeft = diffs.hour ?? 0 + 1
+        
+        // if days is not 0 return days
+        guard daysUntil == 0 else {
+            return (daysUntil, "Days")
+        }
+        
+        // if days is 1 return days with Day string
+        guard daysUntil != 1 else {
+            return (daysUntil, "Day")
+        }
+        
+        // if hours != 1 return hours with hour string
+        guard hoursLeft != 1 else {
+            return (hoursLeft, "hour")
+        }
+        
+        // else return hours left
+        return (hoursLeft, "Hours")
     }
     
     

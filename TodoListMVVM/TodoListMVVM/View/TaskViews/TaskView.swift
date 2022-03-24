@@ -14,7 +14,8 @@ struct TaskView: View {
     @ObservedObject var taskVM: TaskViewModel
     var task: TaskItemEntity
     
-    @State private var daysLeft: Int = 0
+    @State private var daysHoursLeft: Int = 0
+    @State private var daysHoursString: String = ""
     @State private var overdueLimit: Int16 = 100
     @State private var onlyOneDayLeft = false
     
@@ -45,16 +46,16 @@ struct TaskView: View {
                     Spacer()
                     
                     VStack(alignment: .leading) {
-                        Text("Days Left:")
+                        Text("\(daysHoursString) Left:")
                             .font(.caption)
                             .foregroundColor(.secondary)
                         
                         HStack {
-                            Text("\(daysLeft)")
+                            Text("\(daysHoursLeft)")
                                 .font(.system(size: 18, weight: .bold))
                                 .italic()
                                 .foregroundColor(self.onlyOneDayLeft ? .red : .primary)
-                            Text(" Days")
+                            Text(" \(daysHoursString)")
                         }
                     }
                 }
@@ -64,7 +65,11 @@ struct TaskView: View {
                         Text("Due Date:")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        Text(task.dueDate ?? Date(), style: .date)
+                        HStack {
+                            Text(task.dueDate ?? Date(), style: .date)
+                            Text(task.dueDate ?? Date(), style: .time)
+                                .opacity(task.uiDeleted ? 1 : 0)
+                        }
                     }
                     
                     Spacer()
@@ -88,14 +93,17 @@ struct TaskView: View {
             .opacity(task.status ? 0.7 : 1)
         }
         .onAppear {
-            self.daysLeft = taskVM.daysLeft(dueDate: task.dueDate ?? Date())
+            if task.uiDeleted {
+                (self.daysHoursLeft, self.daysHoursString) = taskVM.daysHoursLeft(dueDate: task.dueDate ?? Date())
+            } else {
+                (self.daysHoursLeft, self.daysHoursString) = taskVM.daysLeft(dueDate: task.dueDate ?? Date())
+            }
+            
             self.overdueLimit = userVM.savedUserData.first?.taskOverdueLimit ?? 100
             
             self.checkIfOnlyOneDayLeft()
-            
-            // taskoverduelimit is implemented in TaskViewModel to have centrall acces
-//            Int(userVM.savedUserData.first!.taskOverdueLimit)
-            if self.daysLeft <= -overdueLimit {
+
+            if self.daysHoursLeft <= -overdueLimit {
                 deleteOverdueTasks(overdueLimit: overdueLimit)
             }
         }
@@ -110,7 +118,7 @@ struct TaskView: View {
             return
         }
         
-        guard daysLeft + Int(overdueLimit) == 1 else {
+        guard daysHoursLeft + Int(overdueLimit) == 1 else {
             return
         }
         

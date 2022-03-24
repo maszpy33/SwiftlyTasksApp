@@ -15,6 +15,7 @@ struct AddTaskView: View {
     
     @ObservedObject var taskVM: TaskViewModel
 //    var task: TaskItemEntity
+    @State private var addTime: Bool = false
     
     // Model Variables
     @State var taskTitleTextField: String = ""
@@ -61,12 +62,22 @@ struct AddTaskView: View {
                     Spacer()
                     
                     // DUEDATE
-                    DatePicker("no label", selection: $taskDueDate, in: Date()..., displayedComponents: .date)
-                        .foregroundColor(.accentColor)
-                        .frame(height: 55)
-                        .cornerRadius(10)
-                        .pickerStyle(.menu)
-                        .labelsHidden()
+                    if taskUIDeleted {
+                        DatePicker("no label", selection: $taskDueDate, in: Date()...)
+                            .foregroundColor(.accentColor)
+                            .frame(height: 55)
+                            .cornerRadius(10)
+                            .pickerStyle(.menu)
+                            .labelsHidden()
+                    } else {
+                        DatePicker("no label", selection: $taskDueDate, in: Date()..., displayedComponents: .date)
+                            .foregroundColor(.accentColor)
+                            .frame(height: 55)
+                            .cornerRadius(10)
+                            .pickerStyle(.menu)
+                            .labelsHidden()
+                    }
+                    
                     
                     Spacer()
                     
@@ -86,8 +97,23 @@ struct AddTaskView: View {
                 }
                 .padding(.horizontal, 15)
                 
-                ScrollView {
+//                ScrollView {
                     VStack {
+                        // DATE TIME TOGGLE
+                        HStack{
+                            Image(systemName: "clock.fill")
+                                .font(.title3)
+                            Text("Add Time")
+                                .font(.headline)
+                                .bold()
+                                .foregroundColor(.accentColor)
+                            Spacer()
+                            Toggle("no label", isOn: $taskUIDeleted)
+                                .tint(Color.accentColor)
+                                .labelsHidden()
+                        }
+                        .padding(.horizontal, 20)
+                                                
                         HStack {
                             // Emoji input
                             TextField("🤷🏻‍♂️", text: $taskCategorySymbole)
@@ -119,6 +145,7 @@ struct AddTaskView: View {
                         }
                         .padding(.horizontal, 15)
                         .padding(.vertical, 5)
+                        
                         
                         //                    // DETAILS
                         //                    TextField("Add new task description...", text: $taskDetailsTextField)
@@ -181,7 +208,7 @@ struct AddTaskView: View {
                         
                         Spacer()
                     }
-                }
+//                }
             }
             .navigationBarHidden(true)
         }

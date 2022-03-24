@@ -58,7 +58,7 @@ struct BannerView: View {
             .cornerRadius(20)
             .background(
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .stroke(Color.accentColor, lineWidth: 1.5))
+                    .stroke(Color.accentColor, lineWidth: 3))
             .padding(.horizontal)
             
             
