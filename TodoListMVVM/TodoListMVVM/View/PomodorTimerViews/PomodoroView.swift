@@ -18,7 +18,7 @@ struct DefaultButtonStyle: ButtonStyle {
             .background(
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
                     .stroke(Color.accentColor, lineWidth: 0.7)
-                )
+            )
     }
 }
 
@@ -72,7 +72,7 @@ struct PomodoroView: View {
                                 Text("Paused")
                                     .font(.custom("Avenir", size: 65))
                                     .fontWeight(.bold)
-
+                                
                                 Text("\(self.currentTimeDuration, specifier: formatTime())")
                                     .font(.custom("Avenir", size: 25))
                                     .fontWeight(.bold)
@@ -150,7 +150,7 @@ struct PomodoroView: View {
                         
                         // START BUTTON
                         Button(action: {
-
+                            
                             self.isTimerStarted = true
                             
                         }) {
@@ -178,7 +178,7 @@ struct PomodoroView: View {
                     }
                     .padding(.bottom, 15)
                 }
-
+                
             }
             .onReceive(self.time, perform: { _ in
                 
@@ -246,8 +246,25 @@ struct PomodoroView: View {
     func formatTime() -> String {
         let minutes = Int(currentTimeDuration) / 60 % 60
         let seconds = Int(currentTimeDuration) % 60
-
+        
         return String(format: "%02i:%02i", minutes, seconds)
+    }
+    
+    private func timerNotification(focusTime: Int) {
+        NotificationManager.instance.scheduleNotification()
+        let content = UNMutableNotificationContent()
+        content.title = "☑️ Focus Done"
+        content.subtitle = "finished your \(focusTime)min inteval"
+        content.sound = UNNotificationSound.default
+        
+        // time trigger
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        
+        let request = UNNotificationRequest(identifier: UUID().uuidString,
+                                            content: content,
+                                            trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request)
     }
 }
 

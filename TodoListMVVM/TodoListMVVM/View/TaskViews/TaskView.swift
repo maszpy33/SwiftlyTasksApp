@@ -28,11 +28,6 @@ struct TaskView: View {
                 HStack {
                     Text("\(task.categorySymbol ?? "🤷🏻‍♂️")")
                         .font(.title)
-    //                Image(systemName: task.categorySymbol ?? "person")
-    //                    .resizable()
-    //                    .scaledToFit()
-    //                    .frame(width: 22, height: 22)
-    //                    .foregroundColor(.primary)
                     
                     VStack(alignment: .leading) {
                         Text("Title:")

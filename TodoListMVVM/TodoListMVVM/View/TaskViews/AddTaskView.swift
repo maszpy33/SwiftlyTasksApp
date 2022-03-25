@@ -16,6 +16,8 @@ struct AddTaskView: View {
     @ObservedObject var taskVM: TaskViewModel
 //    var task: TaskItemEntity
     @State private var addTime: Bool = false
+    @State private var showDetails: Bool = false
+    @State private var showDefaultDetailsText: Bool = true
     
     // Model Variables
     @State var taskTitleTextField: String = ""
@@ -103,16 +105,31 @@ struct AddTaskView: View {
                         HStack{
                             Image(systemName: "clock.fill")
                                 .font(.title3)
-                            Text("Add Time")
+                            Text("Time")
+                                .font(.system(size: 16, weight: .semibold))
+                                .bold()
+                                .foregroundColor(.accentColor)
+                            
+                            Toggle("no label", isOn: $taskUIDeleted)
+                                .tint(Color.accentColor)
+                                .labelsHidden()
+                            
+                            Spacer()
+                            
+                            // SHOW DETAILS TOGGLE
+                            Image(systemName: "note")
+                                .font(.title3)
+                            Text("Details")
                                 .font(.headline)
                                 .bold()
                                 .foregroundColor(.accentColor)
-                            Spacer()
-                            Toggle("no label", isOn: $taskUIDeleted)
+
+                            Toggle("no label", isOn: $showDetails)
                                 .tint(Color.accentColor)
                                 .labelsHidden()
                         }
                         .padding(.horizontal, 20)
+                        .foregroundColor(.accentColor)
                                                 
                         HStack {
                             // Emoji input
@@ -140,20 +157,51 @@ struct AddTaskView: View {
                             // TITLE
                             TextField("Add new task...", text: $taskTitleTextField)
                                 .font(.headline)
+                                .frame(maxWidth: .infinity)
                                 .padding(10)
                                 .cornerRadius(10)
+
                         }
                         .padding(.horizontal, 15)
                         .padding(.vertical, 5)
                         
                         
-                        //                    // DETAILS
-                        //                    TextField("Add new task description...", text: $taskDetailsTextField)
-                        //                        .font(.headline)
-                        //                        .padding(.leading)
-                        //                        .frame(height: 55)
-                        //                        .background(Color.gray)
-                        //                        .cornerRadius(10)
+                        // DETAILS
+                        if showDetails {
+                            ZStack {
+                                VStack(alignment: .leading) {
+                                    Text("Add Details:")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                        .padding(.bottom, 3)
+                                    
+                                    TextEditor(text: $taskDetailsTextField)
+                                        .frame(minHeight: 50)
+                                        .multilineTextAlignment(.leading)
+                                        .overlay(
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .stroke(Color.blue, lineWidth: 1.5)
+                                            )
+                                        .onTapGesture {
+                                            self.showDefaultDetailsText = false
+                                        }
+                                }
+                                
+                                VStack(alignment: .leading) {
+                                    HStack(alignment: .top) {
+                                        Text("Add new task description...")
+                                            .opacity(self.showDefaultDetailsText ? 0.6 : 0)
+                                        Spacer()
+                                    }
+                                    Spacer()
+                                }
+                                .offset(x: 5, y: 30)
+                                
+                            }
+                            .frame(height: 200)
+                            .padding(.horizontal, 15)
+                            .padding(.top, 15)
+                        }
                         
                         // CATEGORY
                         //                                Picker(selection: $taskCategory,
@@ -188,6 +236,7 @@ struct AddTaskView: View {
                             taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, categorySymbol: taskCategorySymbole, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, uiDeleted: taskUIDeleted)
 
                             taskTitleTextField = ""
+                            taskDetailsTextField = ""
                             
                             self.presentationMode.wrappedValue.dismiss()
                             

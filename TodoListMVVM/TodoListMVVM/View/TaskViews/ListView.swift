@@ -68,20 +68,22 @@ struct ListView: View {
                 }
                 .listStyle(PlainListStyle())
             }
-            .navigationTitle("SwiftlyTasks")
+            //            .navigationTitle("SwiftlyTasks")
             .background(NavigationConfigurator { nc in
                 nc.navigationBar.barTintColor = UIColor(.primary)
                 nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.white]
             })
             .navigationBarItems(leading:
-                                    Button(action: {
-                changeProfileImg()
-            }) {
-                HStack {
-                    ProfileView(userVM: userVM)
-                    Text("\(currentUserName)")
-                        .font(.headline)
+                                    HStack {
+                Button(action: {
+                    changeProfileImg()
+                }) {
+                    HStack {
+                        ProfileView(userVM: userVM)
+                    }
                 }
+                Text("\(currentUserName)")
+                    .font(.headline)
             },
                                 trailing:
                                     HStack {
@@ -95,7 +97,7 @@ struct ListView: View {
                     Image(systemName: "plus.square")
                 }
             }
-                                    .foregroundColor(.accentColor)
+            .foregroundColor(.accentColor)
             )
             .sheet(isPresented: $showAddView) {
                 AddTaskView(taskVM: taskVM)

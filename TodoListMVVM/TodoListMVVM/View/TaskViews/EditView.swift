@@ -17,6 +17,8 @@ struct EditView: View {
     var task: TaskItemEntity
     
     @State private var addTime: Bool = true
+    @State private var showDetails: Bool = false
+    @State private var showDefaultDetailsText: Bool = true
     
     // Model Variables
     @State var taskTitleTextField: String = ""
@@ -97,22 +99,35 @@ struct EditView: View {
                 
                 ScrollView {
                     VStack {
-                        // DATE TIME TOGGLE
                         HStack{
+                            // DATE TIME TOGGLE
                             Image(systemName: "clock.fill")
                                 .font(.title3)
-                            Text("Add Time")
-                                .font(.headline)
+                            Text("Time")
+                                .font(.system(size: 16, weight: .semibold))
                                 .bold()
                                 .foregroundColor(.accentColor)
-                            
-                            Spacer()
                             
                             Toggle("no label", isOn: $taskUIDeleted)
                                 .tint(Color.accentColor)
                                 .labelsHidden()
+                            
+                            Spacer()
+                            
+                            // SHOW DETAILS TOGGLE
+                            Image(systemName: "note")
+                                .font(.title3)
+                            Text("Details")
+                                .font(.headline)
+                                .bold()
+                                .foregroundColor(.accentColor)
+
+                            Toggle("no label", isOn: $showDetails)
+                                .tint(Color.accentColor)
+                                .labelsHidden()
                         }
                         .padding(.horizontal, 20)
+                        .foregroundColor(.accentColor)
                         
                         HStack {
                             // Emoji input
@@ -146,32 +161,31 @@ struct EditView: View {
                         .padding(.horizontal, 15)
                         .padding(.vertical, 5)
                         
-                        //                    // DETAILS
-                        //                    TextField("Add new task description...", text: $taskDetailsTextField)
-                        //                        .font(.headline)
-                        //                        .padding(.leading)
-                        //                        .frame(height: 55)
-                        //                        .background(Color.gray)
-                        //                        .cornerRadius(10)
-                        
-                        // CATEGORY
-                        //                                Picker(selection: $taskCategory,
-                        //                                       label:
-                        //                                        Text("\(taskCategory)")
-                        //                                        .font(.system(size: 18, weight: .bold))
-                        //                                        .foregroundColor(.white)
-                        //                                ) {
-                        //                                    ForEach(taskVM.taskCategoryOptions, id: \.self) {
-                        //                                        Text($0.capitalized)
-                        //                                    }
-                        //                                }
-                        //                                .foregroundColor(.white)
-                        //                                .frame(height: 55)
-                        //                                .frame(maxWidth: .infinity)
-                        //                                .background(Color(red: 0.2, green: 0.2, blue: 0.2))
-                        //                                .cornerRadius(10)
-                        //                                //                        .padding(5)
-                        //                                .pickerStyle(.menu)
+                        // DETAILS
+                        if showDetails {
+                            ZStack {
+                                TextEditor(text: $taskDetailsTextField)
+                                    .frame(minHeight: 50)
+                                    .multilineTextAlignment(.leading)
+                                    .onTapGesture {
+                                        self.showDefaultDetailsText = false
+                                    }
+                                
+                                VStack(alignment: .leading) {
+                                    HStack(alignment: .top) {
+                                        Text("Add new task description...")
+                                            .opacity(self.showDefaultDetailsText ? 0.8 : 0)
+                                        Spacer()
+                                    }
+                                    Spacer()
+                                }
+                                
+                            }
+                            .frame(width: .infinity)
+                            .frame(height: 200)
+                            .padding(.horizontal, 15)
+                            .padding(.top, 15)
+                        }
                         
                         // SAVE BUTTON
                         Button(action: {
@@ -218,6 +232,10 @@ struct EditView: View {
                 self.taskPriority = task.priority ?? "non"
                 self.taskStatus = task.status
                 self.taskUIDeleted = task.uiDeleted
+                
+                if self.taskDetailsTextField != "" {
+                    self.showDetails = true
+                }
             }
         }
         .alert(isPresented: $showAlert) {

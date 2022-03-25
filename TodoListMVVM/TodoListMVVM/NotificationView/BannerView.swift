@@ -11,6 +11,7 @@ import SwiftUI
 struct BannerData {
     let title: String
     var actionTitle: String? = nil
+    
     // Level to drive tint colors and importance of the banner.
     var level: Level = .info
     
@@ -31,8 +32,6 @@ struct BannerData {
 
 
 struct BannerView: View {
-    
-//    @State private var showBanner = false
     
     var body: some View {
         VStack {
@@ -55,6 +54,7 @@ struct BannerView: View {
             .frame(height: 85)
             .background(Color(red: 0.1, green: 0.1, blue: 0.1))
             .foregroundColor(Color.primary)
+            .clipShape(Capsule())
             .cornerRadius(20)
             .background(
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
@@ -63,19 +63,6 @@ struct BannerView: View {
             
             
             Spacer()
-            
-//            Text("Banner Animation")
-//
-//            Button(action: {
-//                withAnimation(.default) {
-//                    self.showBanner = true
-//                    self.dismissBanner()
-//                }
-//            }) {
-//                Text("Press Me\nfor Notification Banner")
-//            }
-//
-//            Spacer()
         }
     }
     
