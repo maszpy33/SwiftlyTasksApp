@@ -68,7 +68,8 @@ struct ListView: View {
                 }
                 .listStyle(PlainListStyle())
             }
-            //            .navigationTitle("SwiftlyTasks")
+            .navigationTitle("SwiftlyTasks")
+//            .navigationBarHidden(true)
             .background(NavigationConfigurator { nc in
                 nc.navigationBar.barTintColor = UIColor(.primary)
                 nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.white]

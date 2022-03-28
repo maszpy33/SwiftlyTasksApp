@@ -22,6 +22,7 @@
 		9F9DE91F27B86FB1009418E3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9DE91E27B86FB1009418E3 /* DataManager.swift */; };
 		9FA2E38027BEEF7E009E570D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA2E37F27BEEF7E009E570D /* ContentView.swift */; };
 		9FA2E38227BEF1B5009E570D /* NoTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA2E38127BEF1B5009E570D /* NoTaskView.swift */; };
+		9FB7FE2427EDDE58000B30C8 /* DataClassViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB7FE2327EDDE58000B30C8 /* DataClassViewModel.swift */; };
 		9FCC321727BC6E09006444C9 /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCC321627BC6E09006444C9 /* EditView.swift */; };
 		9FCD970927BD6F510079FEA0 /* ToggleCheckExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCD970827BD6F510079FEA0 /* ToggleCheckExtension.swift */; };
 		9FCEA39527C105FE002482D3 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCEA39427C105FE002482D3 /* ProfileView.swift */; };
@@ -57,6 +58,7 @@
 		9F9DE91E27B86FB1009418E3 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		9FA2E37F27BEEF7E009E570D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		9FA2E38127BEF1B5009E570D /* NoTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoTaskView.swift; sourceTree = "<group>"; };
+		9FB7FE2327EDDE58000B30C8 /* DataClassViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataClassViewModel.swift; sourceTree = "<group>"; };
 		9FCC321627BC6E09006444C9 /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
 		9FCD970827BD6F510079FEA0 /* ToggleCheckExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleCheckExtension.swift; sourceTree = "<group>"; };
 		9FCEA39427C105FE002482D3 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 				9F30BE2C27CE58E200B749CD /* UserViewModel.swift */,
 				9F9DE91E27B86FB1009418E3 /* DataManager.swift */,
 				9F23769127E7DA8C00C87161 /* NotificationManager.swift */,
+				9FB7FE2327EDDE58000B30C8 /* DataClassViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				9FCD970927BD6F510079FEA0 /* ToggleCheckExtension.swift in Sources */,
 				9FCC321727BC6E09006444C9 /* EditView.swift in Sources */,
 				9FA2E38227BEF1B5009E570D /* NoTaskView.swift in Sources */,
+				9FB7FE2427EDDE58000B30C8 /* DataClassViewModel.swift in Sources */,
 				9FDD830E27CE8651002ADC9F /* TodoListModel_CoreData.xcdatamodeld in Sources */,
 				9FD984F027B7DFE9005BF23F /* ListView.swift in Sources */,
 				9FDD831227CE86E8002ADC9F /* TaskItemEntity+CoreDataProperties.swift in Sources */,

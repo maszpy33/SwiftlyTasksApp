@@ -13,11 +13,6 @@ import SwiftUI
 class UserViewModel: Identifiable, ObservableObject {
     
     @Published var userOne = User(userName: "DefaultName", taskOverdueLimit: 3, themeColor: "yellow", profileImage: UIImage(named: "JokerCodeProfile")!, timerDuration: 25, timerBreakDuration: 5, timerRounds: 5)
-//    {
-//        didSet {
-//            saveData()
-//        }
-//    }
     
     let secondaryAccentColor = Color("SecondaryAccentColor")
 
@@ -35,10 +30,10 @@ class UserViewModel: Identifiable, ObservableObject {
                 print("Successfully loaded core data!")
             }
         }
-        fetchTaskData()
+        fetchUserData()
     }
 
-    func fetchTaskData() {
+    func fetchUserData() {
         let request = NSFetchRequest<UserEntity>(entityName: "UserEntity")
 
         do {
@@ -48,10 +43,10 @@ class UserViewModel: Identifiable, ObservableObject {
         }
     }
     
-    func saveData() {
+    func saveUserData() {
         do {
             try container.viewContext.save()
-            fetchTaskData()
+            fetchUserData()
         } catch {
             print("Error saving. \(error)")
         }
@@ -64,7 +59,7 @@ class UserViewModel: Identifiable, ObservableObject {
             for userData in savedUserData {
                 container.viewContext.delete(userData)
             }
-            saveData()
+            saveUserData()
         }
         let updatedUser = UserEntity(context: container.viewContext)
         updatedUser.userName = userName
@@ -75,7 +70,7 @@ class UserViewModel: Identifiable, ObservableObject {
         updatedUser.timerRounds = rounds
         
 //        updatedUser.profileImage = pickedImage
-        saveData()
+        saveUserData()
     }
     
     func updateTimerSettings(duration: Int16, breakDuration: Int16, rounds: Int16) {

@@ -11,41 +11,24 @@ import SwiftUI
 
 class TaskViewModel: Identifiable, ObservableObject {
     
-//    @Published var tasks: [TaskItem] = [
-//        //        TaskItem(title: "Publish an articel"),
-//        //        TaskItem(title: "Finish 100DoSUI"),
-//        //        TaskItem(title: "Understand CoreData")
-//        TaskItem(title: "Publish An Article", details: "@Medium", category: "private", dueDate: Date(timeIntervalSinceReferenceDate:1619231231.0), priority: "low", status: false),
-//        TaskItem(title: "Buy Some Foods", details: "BBinstant", category: "programming", dueDate: Date(timeIntervalSinceReferenceDate:1621231231.0), priority: "high", status: false),
-//        TaskItem(title: "Launch the App", details: "App Store", category: "art", dueDate: Date(), priority: "medium", status: false),
-//        TaskItem(title: "Walk Around", details: "Garden", category: "university", dueDate: Date(), priority: "low", status: false)
-//    ]
+    // *************************
+    // ****** SHARED CODE ******
+    // *************************
     
-    @Published var tasks: [TaskItem] = [] {
-        didSet {
-            saveData()
-        }
-    }
+    //    @Published var sortType: SortType = .priority
+    //    @Published var isPresented = false
+    //    @Published var searched = ""
     
-//    @Published var sortType: SortType = .priority
-//    @Published var isPresented = false
-//    @Published var searched = ""
-    
-    // Settings choice arrays for adding or edditing a task
-    let taskCategoryOptions = ["private","computer science", "university", "art", "sport", "other"]
-    let taskCategorySymboleOptions = ["swift", "pencil", "clock", "alarm", "heart.circle", "brain.head.profile", "bed.double.circle", "star","keyboard", "laptopcomputer", "iphone", "ipad", "applewatch", "airpodspro", "gamecontroller.fill", "airplane", "car", "bus", "tram", "figure.walk", "person", "person.3", "globe.europe.africa.fill", "flame", "drop", "bolt", "pawprint", "leaf", "message", "quote.bubble", "cart", "giftcard.fill", "creditcard", "eurosign.circle", "x.squareroot", "number.square"]
-    let taskPriorityOptions = ["non", "low", "medium", "high"]
-    
-    let taskOverdueLimit = -3
     let secondaryAccentColor = Color("SecondaryAccentColor")
     
     // DATEFORMATTER
     let dateFormatter = DateFormatter()
     
-    // Core Data stuff
+    // COREDATA STUFF
     let container: NSPersistentContainer
     
     @Published var savedTasks: [TaskItemEntity] = []
+    @Published var savedUserData: [UserEntity] = []
     
     init() {
         container = NSPersistentContainer(name: "TodoListModel_CoreData")
@@ -58,6 +41,24 @@ class TaskViewModel: Identifiable, ObservableObject {
         }
         fetchTaskData()
     }
+    
+    // *************************
+    // ***** TASKVIEWMODEL *****
+    // *************************
+    
+    @Published var tasks: [TaskItem] = [] {
+        didSet {
+            saveTaskData()
+        }
+    }
+    
+    // Settings choice arrays for adding or edditing a task
+    let taskCategoryOptions = ["private","computer science", "university", "art", "sport", "other"]
+    let taskCategorySymboleOptions = ["swift", "pencil", "clock", "alarm", "heart.circle", "brain.head.profile", "bed.double.circle", "star","keyboard", "laptopcomputer", "iphone", "ipad", "applewatch", "airpodspro", "gamecontroller.fill", "airplane", "car", "bus", "tram", "figure.walk", "person", "person.3", "globe.europe.africa.fill", "flame", "drop", "bolt", "pawprint", "leaf", "message", "quote.bubble", "cart", "giftcard.fill", "creditcard", "eurosign.circle", "x.squareroot", "number.square"]
+    let taskPriorityOptions = ["non", "low", "medium", "high"]
+    
+    let taskOverdueLimit = -3
+    
     
     func fetchTaskData() {
         let request = NSFetchRequest<TaskItemEntity>(entityName: "TaskItemEntity")
@@ -74,8 +75,19 @@ class TaskViewModel: Identifiable, ObservableObject {
         }
     }
     
+    // *************************
+    // ***** USERVIEWMODEL *****
+    // *************************
     
-    func saveData() {
+    @Published var userOne = User(userName: "DefaultName", taskOverdueLimit: 3, themeColor: "yellow", profileImage: UIImage(named: "JokerCodeProfile")!, timerDuration: 25, timerBreakDuration: 5, timerRounds: 5)
+    
+    
+    //FIXME:
+    // **********************************
+    // ***** CONTINUE UPDATING HERE *****
+    // **********************************
+    
+    func saveTaskData() {
         do {
             try container.viewContext.save()
             fetchTaskData()
@@ -95,7 +107,7 @@ class TaskViewModel: Identifiable, ObservableObject {
         newTask.dueDate = dueDate
         newTask.status = status
         newTask.uiDeleted = uiDeleted
-        saveData()
+        saveTaskData()
     }
     
     func deleteTaskEntity(with taskID: ObjectIdentifier) {
@@ -106,7 +118,7 @@ class TaskViewModel: Identifiable, ObservableObject {
 //        guard let index = savedTasks.firstIndex(where: { $0.id == taskID }) else { return }
 //        let entity = savedTasks[index]
         container.viewContext.delete(entity)
-        saveData()
+        saveTaskData()
     }
     
     func updateTaskEntity(taskEntity: TaskItemEntity, newTitle: String, newDetails: String, newCategory: String, newCategorySymbol: String, newPriority: String, newDueDate: Date, newStatus: Bool, newUIDelete: Bool) {
@@ -118,23 +130,23 @@ class TaskViewModel: Identifiable, ObservableObject {
         taskEntity.dueDate = newDueDate
         taskEntity.status = newStatus
         taskEntity.uiDeleted = newUIDelete
-        saveData()
+        saveTaskData()
     }
     
     func updateTaskEntityRandomPriority(taskEntity: TaskItemEntity) {
         let newPriority = taskPriorityOptions[Int.random(in: 0...taskPriorityOptions.count)]
         taskEntity.priority = newPriority
-        saveData()
+        saveTaskData()
     }
     
     func updateTaskStatus(taskEntity: TaskItemEntity) {
         taskEntity.status.toggle()
-        saveData()
+        saveTaskData()
     }
     
     func updateUIDeleted(taskEntity: TaskItemEntity) {
         taskEntity.uiDeleted.toggle()
-        saveData()
+        saveTaskData()
     }
     
     func styleForPriority(taskPriority: String) -> Color {
