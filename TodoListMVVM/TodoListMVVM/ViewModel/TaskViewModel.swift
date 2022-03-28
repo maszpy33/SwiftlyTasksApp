@@ -9,42 +9,22 @@ import Foundation
 import CoreData
 import SwiftUI
 
-class TaskViewModel: Identifiable, ObservableObject {
-    
-    // *************************
-    // ****** SHARED CODE ******
-    // *************************
+
+final class TaskViewModel: DataClassViewModel {
     
     //    @Published var sortType: SortType = .priority
     //    @Published var isPresented = false
     //    @Published var searched = ""
     
-    let secondaryAccentColor = Color("SecondaryAccentColor")
-    
     // DATEFORMATTER
     let dateFormatter = DateFormatter()
     
-    // COREDATA STUFF
-    let container: NSPersistentContainer
-    
-    @Published var savedTasks: [TaskItemEntity] = []
-    @Published var savedUserData: [UserEntity] = []
-    
-    init() {
-        container = NSPersistentContainer(name: "TodoListModel_CoreData")
-        container.loadPersistentStores { description, error in
-            if let error = error {
-                fatalError("Unable to initialize Core Data \(error)")
-            } else {
-                print("Successfully loaded core data!")
-            }
-        }
-        fetchTaskData()
-    }
-    
-    // *************************
-    // ***** TASKVIEWMODEL *****
-    // *************************
+    // Settings choice arrays for adding or edditing a task
+    let taskCategoryOptions = ["private","computer science", "university", "art", "sport", "other"]
+    let taskCategorySymboleOptions = ["swift", "pencil", "clock", "alarm", "heart.circle", "brain.head.profile", "bed.double.circle", "star","keyboard", "laptopcomputer", "iphone", "ipad", "applewatch", "airpodspro", "gamecontroller.fill", "airplane", "car", "bus", "tram", "figure.walk", "person", "person.3", "globe.europe.africa.fill", "flame", "drop", "bolt", "pawprint", "leaf", "message", "quote.bubble", "cart", "giftcard.fill", "creditcard", "eurosign.circle", "x.squareroot", "number.square"]
+    let taskPriorityOptions = ["non", "low", "medium", "high"]
+    let taskOverdueLimit = -3
+    let secondaryAccentColor = Color("SecondaryAccentColor")
     
     @Published var tasks: [TaskItem] = [] {
         didSet {
@@ -52,40 +32,9 @@ class TaskViewModel: Identifiable, ObservableObject {
         }
     }
     
-    // Settings choice arrays for adding or edditing a task
-    let taskCategoryOptions = ["private","computer science", "university", "art", "sport", "other"]
-    let taskCategorySymboleOptions = ["swift", "pencil", "clock", "alarm", "heart.circle", "brain.head.profile", "bed.double.circle", "star","keyboard", "laptopcomputer", "iphone", "ipad", "applewatch", "airpodspro", "gamecontroller.fill", "airplane", "car", "bus", "tram", "figure.walk", "person", "person.3", "globe.europe.africa.fill", "flame", "drop", "bolt", "pawprint", "leaf", "message", "quote.bubble", "cart", "giftcard.fill", "creditcard", "eurosign.circle", "x.squareroot", "number.square"]
-    let taskPriorityOptions = ["non", "low", "medium", "high"]
-    
-    let taskOverdueLimit = -3
-    
-    
-    func fetchTaskData() {
-        let request = NSFetchRequest<TaskItemEntity>(entityName: "TaskItemEntity")
-        let sortStatus = NSSortDescriptor(key: "status", ascending: true)
-        let sortDueDate = NSSortDescriptor(key: "dueDate", ascending: true)
-        let sortPriority = NSSortDescriptor(key: "priority", ascending: true)
-        request.sortDescriptors = [sortStatus, sortDueDate, sortPriority]
-        //        @FetchRequest(entity: Task.entity(), sortDescriptors: [NSSortDescriptor(key: "status", ascending: true), NSSortDescriptor(key: "dueDate", ascending: true)]) private var allTasks: FetchedResults<Task>
-        
-        do {
-            savedTasks = try container.viewContext.fetch(request)
-        } catch {
-            print("Error fetching. \(error)")
-        }
-    }
-    
-    // *************************
-    // ***** USERVIEWMODEL *****
-    // *************************
-    
-    @Published var userOne = User(userName: "DefaultName", taskOverdueLimit: 3, themeColor: "yellow", profileImage: UIImage(named: "JokerCodeProfile")!, timerDuration: 25, timerBreakDuration: 5, timerRounds: 5)
-    
-    
-    //FIXME:
-    // **********************************
-    // ***** CONTINUE UPDATING HERE *****
-    // **********************************
+    // ***********************************
+    // ***** TASKVIEWMODEL FUNCTIONS *****
+    // ***********************************
     
     func saveTaskData() {
         do {

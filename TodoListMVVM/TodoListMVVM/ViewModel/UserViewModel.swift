@@ -10,38 +10,16 @@ import CoreData
 import SwiftUI
 
 
-class UserViewModel: Identifiable, ObservableObject {
+final class UserViewModel: DataClassViewModel {
     
     @Published var userOne = User(userName: "DefaultName", taskOverdueLimit: 3, themeColor: "yellow", profileImage: UIImage(named: "JokerCodeProfile")!, timerDuration: 25, timerBreakDuration: 5, timerRounds: 5)
     
     let secondaryAccentColor = Color("SecondaryAccentColor")
 
-    // Core Data stuff
-    let container: NSPersistentContainer
-
-    @Published var savedUserData: [UserEntity] = []
     
-    init() {
-        container = NSPersistentContainer(name: "TodoListModel_CoreData")
-        container.loadPersistentStores { description, error in
-            if let error = error {
-                fatalError("Unable to initialize Core Data \(error)")
-            } else {
-                print("Successfully loaded core data!")
-            }
-        }
-        fetchUserData()
-    }
-
-    func fetchUserData() {
-        let request = NSFetchRequest<UserEntity>(entityName: "UserEntity")
-
-        do {
-            savedUserData = try container.viewContext.fetch(request)
-        } catch {
-            print("Error fetching. \(error)")
-        }
-    }
+    // ***********************************
+    // ***** USERVIEWMODEL FUNCTIONS *****
+    // ***********************************
     
     func saveUserData() {
         do {

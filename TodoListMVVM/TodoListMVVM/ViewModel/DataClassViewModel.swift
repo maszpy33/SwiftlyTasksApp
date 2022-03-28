@@ -7,15 +7,19 @@
 
 import Foundation
 import CoreData
-import SwiftUI
 
 
 class DataClassViewModel: Identifiable, ObservableObject {
-    // COREDATA STUFF
-    let container: NSPersistentContainer
+
+    // ***************************
+    // ***** SHAREDVIEWMODEL *****
+    // ***************************
     
     @Published var savedTasks: [TaskItemEntity] = []
     @Published var savedUserData: [UserEntity] = []
+    
+    // COREDATA STUFF
+    let container: NSPersistentContainer
     
     init() {
         container = NSPersistentContainer(name: "TodoListModel_CoreData")
@@ -27,17 +31,12 @@ class DataClassViewModel: Identifiable, ObservableObject {
             }
         }
         fetchTaskData()
+        fetchUserData()
     }
     
     // *************************
     // ***** TASKVIEWMODEL *****
     // *************************
-//
-//    @Published var tasks: [TaskItem] = [] {
-//        didSet {
-//            saveTaskData()
-//        }
-//    }
     
     func fetchTaskData() {
         let request = NSFetchRequest<TaskItemEntity>(entityName: "TaskItemEntity")
@@ -54,13 +53,19 @@ class DataClassViewModel: Identifiable, ObservableObject {
         }
     }
     
-//    func saveTaskData() {
-//        do {
-//            try container.viewContext.save()
-//            fetchTaskData()
-//        } catch {
-//            print("Error saving. \(error)")
-//        }
-//    }
+    // *************************
+    // ***** USERVIEWMODEL *****
+    // *************************
+    
+    func fetchUserData() {
+        let request = NSFetchRequest<UserEntity>(entityName: "UserEntity")
+
+        do {
+            savedUserData = try container.viewContext.fetch(request)
+        } catch {
+            print("Error fetching. \(error)")
+        }
+    }
+    
     
 }
