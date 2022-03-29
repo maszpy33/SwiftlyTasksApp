@@ -130,7 +130,7 @@ struct EditView: View {
                         .foregroundColor(.accentColor)
                         
                         HStack {
-                            // Emoji input
+                            // EMOJI INPUT
                             TextField("🤷🏻‍♂️", text: $taskCategorySymbole)
                                 .font(.title)
                                 .frame(width: 55, height: 55)
@@ -163,25 +163,20 @@ struct EditView: View {
                         
                         // DETAILS
                         if showDetails {
-                            ZStack {
+                            VStack(alignment: .leading) {
+                                Text("Add Details:")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                    .padding(.bottom, 3)
+                                
                                 TextEditor(text: $taskDetailsTextField)
                                     .frame(minHeight: 50)
                                     .multilineTextAlignment(.leading)
-                                    .onTapGesture {
-                                        self.showDefaultDetailsText = false
-                                    }
-                                
-                                VStack(alignment: .leading) {
-                                    HStack(alignment: .top) {
-                                        Text("Add new task description...")
-                                            .opacity(self.showDefaultDetailsText ? 0.8 : 0)
-                                        Spacer()
-                                    }
-                                    Spacer()
-                                }
-                                
+                                    .overlay(
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(Color.blue, lineWidth: 1.5)
+                                        )
                             }
-                            .frame(width: .infinity)
                             .frame(height: 200)
                             .padding(.horizontal, 15)
                             .padding(.top, 15)

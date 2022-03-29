@@ -31,19 +31,23 @@ struct PomodoroView: View {
     @State var isTimerStarted = false
     @State var pausePressed: Bool = false
     @State var to: CGFloat = 0
-    @State var currentTimeDuration = 0
+    @State var currentTimeDuration: Int16 = 0
     @State var time = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
-    // USER DATA
-    @State var userTimerDuration = 1500
-    @State var pauseDuration = 600
-    @State var rounds = 5
+    // RUNNING TIMER VARIABLE
+    @State var userTimerDuration: Int16 = 1500
+    @State var pauseDuration: Int16 = 600
+    @State var rounds: Int16 = 5
     
     @State var circleRange: CGFloat = 0
     
     @State private var currentUserName: String = "UserName"
     
     @State private var showSettingsView: Bool = false
+    
+    // TIMER TEXT VARIABLES
+    let bannerSaveDataTitle = "⏰ Timer is up"
+    let bannerSaveDataDescription = "finished focus, take a break"
     
     var body: some View {
         NavigationView {
@@ -201,7 +205,7 @@ struct PomodoroView: View {
             .navigationTitle("Focus Timer")
             .navigationBarItems(leading:
                                     Button(action: {
-                // Add action
+                print("change profile picture")
             }) {
                 HStack {
                     ProfileView(userVM: userVM)
@@ -211,24 +215,33 @@ struct PomodoroView: View {
             },
                                 trailing:
                                     HStack {
-                Text("Settings")
-                    .font(.title2)
-                    .bold()
-                
                 Button(action: {
                     self.showSettingsView.toggle()
                 }) {
-                    Image(systemName: "gear")
+                    HStack {
+                        Image(systemName: "gear")
+                        Text("Settings")
+                            .font(.title2)
+                            .bold()
+                    }
+                    .foregroundColor(.accentColor)
                 }
             }
-                                    .foregroundColor(.accentColor)
+                                
             )
             .sheet(isPresented: $showSettingsView) {
-                TimerSettingsView(userVM: userVM)
+                //@Binding var newDuration: String = "25"
+                //@Binding var newBreakDuration: String = "10"
+                //@Binding var newRounds: String = "5"
+                //                @State var userTimerDuration = 1500
+                //                @State var pauseDuration = 600
+                //                @State var rounds = 5
+                
+                TimerSettingsView(userVM: userVM, newDuration: $userTimerDuration, newBreakDuration: $pauseDuration, newRounds: $rounds)
             }
         }
         .onAppear {
-            currentUserName = userVM.savedUserData.first!.userName ?? "UserName"
+            currentUserName = userVM.savedUserData.first!.wUserName
             
             withAnimation(.easeOut) {
                 self.circleRange = 280
@@ -236,9 +249,9 @@ struct PomodoroView: View {
             
             if !userVM.savedUserData.isEmpty {
                 let currentUser = userVM.savedUserData.first!
-                userTimerDuration = Int(currentUser.timerDuration) * 60
-                pauseDuration = Int(currentUser.timerBreakDuration) * 60
-                rounds = Int(currentUser.timerRounds)
+                self.userTimerDuration = currentUser.timerDuration
+                self.pauseDuration = currentUser.timerBreakDuration
+                self.rounds = currentUser.timerRounds
             }
         }
     }

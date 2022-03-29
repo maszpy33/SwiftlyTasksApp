@@ -32,6 +32,9 @@ struct BannerData {
 
 
 struct BannerView: View {
+    @State var title: String
+    @State var description: String
+    
     
     var body: some View {
         VStack {
@@ -39,11 +42,11 @@ struct BannerView: View {
                 Spacer(minLength: 15)
                 
                 VStack(alignment: .leading) {
-                    Text("💾 ✅ Saved Succesfully")
+                    Text(title)
                         .font(.title3)
                         .bold()
                     Divider()
-                    Text("your user settings have been updated")
+                    Text(description)
                         .font(.headline)
                         .bold()
                 }
@@ -57,7 +60,7 @@ struct BannerView: View {
             .clipShape(Capsule())
             .cornerRadius(20)
             .background(
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                Capsule()
                     .stroke(Color.accentColor, lineWidth: 3))
             .padding(.horizontal)
             
@@ -83,7 +86,7 @@ struct BannerView: View {
         @State(initialValue: "Default Banner Details") var defaultDetails: String
         
         static var previews: some View {
-            BannerView()
+            BannerView(title: "BannerTitle", description: "Banner Description")
                 .preferredColorScheme(.dark)
         }
     }

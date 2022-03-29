@@ -101,6 +101,7 @@ struct AddTaskView: View {
                 
 //                ScrollView {
                     VStack {
+                        
                         // DATE TIME TOGGLE
                         HStack{
                             Image(systemName: "clock.fill")
@@ -132,7 +133,7 @@ struct AddTaskView: View {
                         .foregroundColor(.accentColor)
                                                 
                         HStack {
-                            // Emoji input
+                            // EMOJI INPUT
                             TextField("🤷🏻‍♂️", text: $taskCategorySymbole)
                                 .font(.title)
                                 .frame(width: 55, height: 55)

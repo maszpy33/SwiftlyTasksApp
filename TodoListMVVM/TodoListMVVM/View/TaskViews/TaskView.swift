@@ -26,9 +26,11 @@ struct TaskView: View {
             
             VStack(alignment: .leading) {
                 HStack {
+                    // TASK EMOJI
                     Text("\(task.categorySymbol ?? "🤷🏻‍♂️")")
                         .font(.title)
                     
+                    // TASK TITLE
                     VStack(alignment: .leading) {
                         Text("Title:")
                             .font(.caption)
@@ -41,6 +43,7 @@ struct TaskView: View {
                     Spacer()
                     
                     VStack(alignment: .leading) {
+                        // TASK TIME LEFT
                         Text("\(daysHoursString) Left:")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -57,6 +60,7 @@ struct TaskView: View {
                 
                 HStack {
                     VStack(alignment: .leading) {
+                        // TASK DUE DATE
                         Text("Due Date:")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -70,11 +74,23 @@ struct TaskView: View {
                     Spacer()
                     
                     VStack(alignment: .leading) {
-                        Image(systemName: task.status ? "checkmark.square" : "xmark.square")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 22, height: 22)
-                            .foregroundColor(task.status ? .green : .gray)
+                        HStack {
+                            // HAS DETAILS ICON
+                            if task.uiDeleted {
+                                Image(systemName: "text.justify")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 22, height: 22)
+                                    .foregroundColor(.gray)
+                            }
+                            
+                            // TASK STATUS
+                            Image(systemName: task.status ? "checkmark.square" : "xmark.square")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 22, height: 22)
+                                .foregroundColor(task.status ? .green : .gray)
+                        }
                     }
                     
                 }

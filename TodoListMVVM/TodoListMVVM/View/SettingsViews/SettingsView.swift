@@ -32,6 +32,8 @@ struct SettingsView: View {
     @State var showBanner = false
     let bannerViewOffset: CGFloat = -300.0
     let bannerViewDefaultPos: CGFloat = -10.0
+    let bannerSaveDataTitle = "💾 ✅ Saved Succesfully"
+    let bannerSaveDataDescription = "your user settings have been updated"
     
     
     var body: some View {
@@ -159,7 +161,7 @@ struct SettingsView: View {
                 .padding(.horizontal, 15)
                 
                 // BANNERVIEW
-                BannerView()
+                BannerView(title: bannerSaveDataTitle, description: bannerSaveDataDescription)
                     .offset(x: 0, y: showBanner ? bannerViewDefaultPos : bannerViewOffset)
                 
             }
