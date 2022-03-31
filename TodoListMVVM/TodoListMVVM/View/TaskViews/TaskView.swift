@@ -10,7 +10,6 @@ import SwiftUI
 struct TaskView: View {
     
     @ObservedObject var userVM: UserViewModel
-    
     @ObservedObject var taskVM: TaskViewModel
     var task: TaskItemEntity
     
@@ -77,7 +76,7 @@ struct TaskView: View {
                         HStack {
                             // HAS DETAILS ICON
                             if task.uiDeleted {
-                                Image(systemName: "text.justify")
+                                Image(systemName: "text.alignleft")
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 22, height: 22)

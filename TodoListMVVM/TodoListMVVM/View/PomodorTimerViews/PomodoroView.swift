@@ -28,22 +28,25 @@ struct PomodoroView: View {
     @ObservedObject var userVM: UserViewModel
     @ObservedObject var taskVM: TaskViewModel
     
-    @State var isTimerStarted = false
-    @State var pausePressed: Bool = false
-    @State var to: CGFloat = 0
-    @State var currentTimeDuration: Int16 = 0
-    @State var time = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    // SETTINGS TIMER VARIABLES
+    @State var newDuration: Int16 = 25
+    @State var newBreakDuration: Int16 = 5
+    @State var newRounds: Int16 = 8
     
     // RUNNING TIMER VARIABLE
     @State var userTimerDuration: Int16 = 1500
-    @State var pauseDuration: Int16 = 600
-    @State var rounds: Int16 = 5
     
+    // TIMER PROPERTIES
+    @State var isTimerStarted = false
+    @State var pausePressed: Bool = false
+    @State var to: CGFloat = 0
     @State var circleRange: CGFloat = 0
-    
-    @State private var currentUserName: String = "UserName"
+    @State var currentTimeDuration: Int16 = 0
+    @State var time = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     @State private var showSettingsView: Bool = false
+    
+    @State private var currentUserName: String = "UserName"
     
     // TIMER TEXT VARIABLES
     let bannerSaveDataTitle = "⏰ Timer is up"
@@ -91,7 +94,9 @@ struct PomodoroView: View {
                     if self.isTimerStarted {
                         if self.pausePressed {
                             
-                            // CONTINUE BUTTON
+                            // *********************
+                            // ** CONTINUE BUTTON **
+                            // *********************
                             Button(action: {
                                 
                                 self.pausePressed = false
@@ -112,7 +117,9 @@ struct PomodoroView: View {
                         } else {
                             HStack(spacing: 20) {
                                 
-                                // PAUSE BUTTON
+                                // ********************
+                                // *** PAUSE BUTTON ***
+                                // ********************
                                 Button(action: {
                                     
                                     self.pausePressed = true
@@ -129,7 +136,9 @@ struct PomodoroView: View {
                                 }
                                 .buttonStyle(DefaultButtonStyle())
                                 
-                                // QUIT BUTTON
+                                // ********************
+                                // *** QUIT BUTTON ****
+                                // ********************
                                 Button(action: {
                                     
                                     self.isTimerStarted = false
@@ -152,7 +161,9 @@ struct PomodoroView: View {
                         }
                     } else {
                         
-                        // START BUTTON
+                        // ********************
+                        // *** START BUTTON ***
+                        // ********************
                         Button(action: {
                             
                             self.isTimerStarted = true
@@ -175,7 +186,7 @@ struct PomodoroView: View {
                     Spacer()
                     
                     HStack {
-                        Text("Focus: \(userTimerDuration/60)min | Break: \(pauseDuration/60)min | Rounds: \(rounds)")
+                        Text("Focus: \(newDuration)min | Break: \(newBreakDuration)min | Rounds: \(newRounds)")
                             .font(.headline)
                             .foregroundColor(.accentColor)
                             .opacity(0.8)
@@ -185,6 +196,9 @@ struct PomodoroView: View {
                 
             }
             .onReceive(self.time, perform: { _ in
+//                print("newDuration: \(self.newDuration)")
+//                print("userTimerDuration: \(self.userTimerDuration)")
+//                print("currentTimerDuration: \(self.currentTimeDuration)")
                 
                 if self.isTimerStarted {
                     if self.currentTimeDuration != 0 {
@@ -196,9 +210,10 @@ struct PomodoroView: View {
                         }
                     }
                 } else {
-                    self.currentTimeDuration = userTimerDuration
+                    self.currentTimeDuration = userTimerDuration * 60
                     self.to = 0
                     self.pausePressed = false
+                    self.userTimerDuration = self.newDuration
                     //                self.isTimerStarted.toggle()
                 }
             })
@@ -215,45 +230,52 @@ struct PomodoroView: View {
             },
                                 trailing:
                                     HStack {
-                Button(action: {
-                    self.showSettingsView.toggle()
-                }) {
+                NavigationLink(destination: TimerSettingsView(userVM: userVM, newDuration: $newDuration, newBreakDuration: $newBreakDuration, newRounds: $newRounds)) {
                     HStack {
+                        Image(systemName: "clock")
                         Image(systemName: "gear")
-                        Text("Settings")
-                            .font(.title2)
-                            .bold()
+//                        Text("Settings")
+//                            .font(.title2)
+//                            .bold()
                     }
                     .foregroundColor(.accentColor)
                 }
             }
                                 
             )
-            .sheet(isPresented: $showSettingsView) {
-                //@Binding var newDuration: String = "25"
-                //@Binding var newBreakDuration: String = "10"
-                //@Binding var newRounds: String = "5"
-                //                @State var userTimerDuration = 1500
-                //                @State var pauseDuration = 600
-                //                @State var rounds = 5
+            .onAppear {
+                // FIXME: if is unnecassary, because of the ! in currentUserName
+                currentUserName = userVM.savedUserData.first!.wUserName
                 
-                TimerSettingsView(userVM: userVM, newDuration: $userTimerDuration, newBreakDuration: $pauseDuration, newRounds: $rounds)
+                withAnimation(.easeOut) {
+                    self.circleRange = 280
+                }
+                
+                if !userVM.savedUserData.isEmpty {
+                    let currentUser = userVM.savedUserData.first!
+                    self.userTimerDuration = currentUser.timerDuration
+                    self.newBreakDuration = currentUser.timerBreakDuration
+                    self.newRounds = currentUser.timerRounds
+                    self.newDuration = currentUser.timerDuration
+                }
             }
-        }
-        .onAppear {
-            currentUserName = userVM.savedUserData.first!.wUserName
             
-            withAnimation(.easeOut) {
-                self.circleRange = 280
-            }
-            
-            if !userVM.savedUserData.isEmpty {
-                let currentUser = userVM.savedUserData.first!
-                self.userTimerDuration = currentUser.timerDuration
-                self.pauseDuration = currentUser.timerBreakDuration
-                self.rounds = currentUser.timerRounds
-            }
         }
+//        .onAppear {
+//            currentUserName = userVM.savedUserData.first!.wUserName
+//
+//            withAnimation(.easeOut) {
+//                self.circleRange = 280
+//            }
+//
+//            if !userVM.savedUserData.isEmpty {
+//                let currentUser = userVM.savedUserData.first!
+//                self.userTimerDuration = currentUser.timerDuration
+//                self.pauseDuration = currentUser.timerBreakDuration
+//                self.rounds = currentUser.timerRounds
+//                self.newDuration = currentUser.timerDuration
+//            }
+//        }
     }
     
     func formatTime() -> String {

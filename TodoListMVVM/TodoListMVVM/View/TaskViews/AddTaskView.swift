@@ -227,11 +227,11 @@ struct AddTaskView: View {
                         Button(action: {
                             // check if input is valid
                             guard !taskTitleTextField.isEmpty else {
-                                        self.errorTitle = "input error"
-                                        self.errorMessage = "Pleace enter a title to save the task"
-                                        self.showAlert = true
-                                        return
-                                    }
+                                self.errorTitle = "input error"
+                                self.errorMessage = "Pleace enter a title to save the task"
+                                self.showAlert = true
+                                return
+                            }
 
                             // ADD NEW TASK
                             taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, categorySymbol: taskCategorySymbole, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, uiDeleted: taskUIDeleted)
