@@ -41,7 +41,7 @@ struct BannerView: View {
             HStack {
                 Spacer(minLength: 15)
                 
-                VStack(alignment: .leading) {
+                VStack(alignment: .center) {
                     Text(title)
                         .font(.title3)
                         .bold()

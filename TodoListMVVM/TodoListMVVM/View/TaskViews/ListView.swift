@@ -49,7 +49,7 @@ struct ListView: View {
                                     }
                                 })
                             }
-                            .tint(taskEntity.status ? .gray : .green)
+                            .tint(taskEntity.status ? .gray : Color(red: 0.3, green: 0.65, blue: 0.0))
                             .swipeActions(edge: .trailing) {
                                 Button(role: .destructive) {
                                     withAnimation(.linear(duration: 0.4)) {
@@ -70,10 +70,10 @@ struct ListView: View {
             }
             .navigationTitle("SwiftlyTasks")
 //            .navigationBarHidden(true)
-            .background(NavigationConfigurator { nc in
-                nc.navigationBar.barTintColor = UIColor(.primary)
-                nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.white]
-            })
+//            .background(NavigationConfigurator { nc in
+//                nc.navigationBar.barTintColor = UIColor(.primary)
+//                nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.white]
+//            })
             .navigationBarItems(leading:
                                     HStack {
                 Button(action: {
@@ -108,9 +108,9 @@ struct ListView: View {
             // update user name
             currentUserName = userVM.savedUserData.first!.wUserName
         }
-        .introspectNavigationController { nav in
-            nav.navigationBar.barTintColor = UIColor(Color(red: 0.2, green: 0.2, blue: 0.2))
-        }
+//        .introspectNavigationController { nav in
+//            nav.navigationBar.barTintColor = UIColor(Color(red: 0.2, green: 0.2, blue: 0.2))
+//        }
     }
     
     private func changeProfileImg() {

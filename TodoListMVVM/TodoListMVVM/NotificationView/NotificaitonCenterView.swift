@@ -9,7 +9,7 @@ import SwiftUI
 import UserNotifications
 
 
-struct NotificationView: View {
+struct NotificationCenterView: View {
     var body: some View {
         VStack(spacing: 40) {
             Button("Request permission") {
@@ -45,8 +45,8 @@ struct NotificationView: View {
     }
 }
 
-struct NotificationView_Previews: PreviewProvider {
+struct NotificationCenterView_Previews: PreviewProvider {
     static var previews: some View {
-        NotificationView()
+        NotificationCenterView()
     }
 }

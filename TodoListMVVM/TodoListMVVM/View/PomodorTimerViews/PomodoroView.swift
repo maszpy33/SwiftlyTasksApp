@@ -199,22 +199,29 @@ struct PomodoroView: View {
 //                print("newDuration: \(self.newDuration)")
 //                print("userTimerDuration: \(self.userTimerDuration)")
 //                print("currentTimerDuration: \(self.currentTimeDuration)")
+//                print(currentTimeDuration)
+//                print(newDuration)
+//                print(time)
                 
                 if self.isTimerStarted {
+                    // if timer is up
                     if self.currentTimeDuration != 0 {
+                        // if pause is NOT pressed, reduce currentTimerDuration by 1
                         if !self.pausePressed {
                             self.currentTimeDuration -= 1
                             withAnimation(.default) {
-                                self.to = 1 - CGFloat(self.currentTimeDuration) / CGFloat(userTimerDuration)
+                                self.to = 1 - CGFloat(self.currentTimeDuration) / CGFloat(self.userTimerDuration)
                             }
                         }
+                        // else do nothing
                     }
+                    // else stats back to start
                 } else {
-                    self.currentTimeDuration = userTimerDuration * 60
+                    self.currentTimeDuration = userTimerDuration
                     self.to = 0
                     self.pausePressed = false
-                    self.userTimerDuration = self.newDuration
-                    //                self.isTimerStarted.toggle()
+                    // newDuration is saved in minutes
+                    self.userTimerDuration = self.newDuration * 60
                 }
             })
             .navigationTitle("Focus Timer")
@@ -232,54 +239,45 @@ struct PomodoroView: View {
                                     HStack {
                 NavigationLink(destination: TimerSettingsView(userVM: userVM, newDuration: $newDuration, newBreakDuration: $newBreakDuration, newRounds: $newRounds)) {
                     HStack {
-                        Image(systemName: "clock")
+//                        Image(systemName: "clock")
                         Image(systemName: "gear")
-//                        Text("Settings")
-//                            .font(.title2)
-//                            .bold()
+                            .foregroundColor(.accentColor)
+                        Text("Settings")
+                            .font(.title2)
+                            .bold()
                     }
-                    .foregroundColor(.accentColor)
+//                    .foregroundColor(.accentColor)
                 }
             }
                                 
             )
-            .onAppear {
-                // FIXME: if is unnecassary, because of the ! in currentUserName
-                currentUserName = userVM.savedUserData.first!.wUserName
-                
-                withAnimation(.easeOut) {
-                    self.circleRange = 280
-                }
-                
-                if !userVM.savedUserData.isEmpty {
-                    let currentUser = userVM.savedUserData.first!
-                    self.userTimerDuration = currentUser.timerDuration
-                    self.newBreakDuration = currentUser.timerBreakDuration
-                    self.newRounds = currentUser.timerRounds
-                    self.newDuration = currentUser.timerDuration
-                }
-            }
-            
         }
-//        .onAppear {
-//            currentUserName = userVM.savedUserData.first!.wUserName
-//
-//            withAnimation(.easeOut) {
-//                self.circleRange = 280
-//            }
-//
-//            if !userVM.savedUserData.isEmpty {
-//                let currentUser = userVM.savedUserData.first!
-//                self.userTimerDuration = currentUser.timerDuration
-//                self.pauseDuration = currentUser.timerBreakDuration
-//                self.rounds = currentUser.timerRounds
-//                self.newDuration = currentUser.timerDuration
-//            }
-//        }
+        .onAppear {
+            // FIXME: if is unnecassary, because of the ! in currentUserName
+            currentUserName = userVM.savedUserData.first!.wUserName
+
+            withAnimation(.easeOut) {
+                self.circleRange = 280
+            }
+
+            // so newDuration is only changed, when save button is pressed
+            // otherwise, set newDuration to current userTimerDuration
+
+            if !userVM.savedUserData.isEmpty {
+                let currentUser = userVM.savedUserData.first!
+                self.userTimerDuration = currentUser.timerDuration * 60
+                self.newBreakDuration = currentUser.timerBreakDuration
+                self.newRounds = currentUser.timerRounds
+                // newDuration is saved in minutes
+                self.newDuration = currentUser.timerDuration
+                print("New DURATION")
+                print(newDuration)
+            }
+        }
     }
     
     func formatTime() -> String {
-        let minutes = Int(currentTimeDuration) / 60 % 60
+        let minutes = Int(currentTimeDuration) / 60
         let seconds = Int(currentTimeDuration) % 60
         
         return String(format: "%02i:%02i", minutes, seconds)

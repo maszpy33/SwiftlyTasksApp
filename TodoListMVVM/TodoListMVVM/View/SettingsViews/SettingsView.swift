@@ -108,7 +108,7 @@ struct SettingsView: View {
                             
                             Divider()
                             
-                            NotificationView()
+                            NotificationCenterView()
                             
                             Divider()
                         }

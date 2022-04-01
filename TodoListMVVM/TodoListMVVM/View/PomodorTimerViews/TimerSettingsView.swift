@@ -77,11 +77,12 @@ struct TimerSettingsView: View {
                                 .onReceive(Just(self.newDuration)) { inputNumber in
                                     
                                     //                                String(self.newDuration) = String(inputNumber).filter { "0123456789".contains($0) }
-                                    self.newDuration = Int16(String(inputNumber).filter {
+                                    newDuration = Int16(String(inputNumber).filter {
                                         "0123456789".contains($0) }) ?? 1
+                                    print(newDuration)
                                     
-                                    if inputNumber > 999 {
-                                        self.newDuration = 999
+                                    if inputNumber > 500 {
+                                        self.newDuration = 500
                                     }
                                     
                                     if inputNumber <= 0 {
@@ -116,18 +117,20 @@ struct TimerSettingsView: View {
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 10)
                                         .stroke(Color.blue, lineWidth: 2))
-                            //                            .onReceive(Just(self.settingsPauseDuration)) { inputNumber in
-                            //
-                            //                                self.settingsPauseDuration = inputNumber.filter { "0123456789".contains($0) }
-                            //
-                            //                                if inputNumber.count > 3 {
-                            //                                    self.settingsPauseDuration.removeFirst()
-                            //                                }
-                            //
-                            //                                if Int(inputNumber) ?? 0 < 0 {
-                            //                                    self.settingsPauseDuration = "1"
-                            //                                }
-                            //                            }
+                                .onReceive(Just(self.newBreakDuration)) { inputNumber in
+                                    
+                                    newBreakDuration = Int16(String(inputNumber).filter {
+                                        "0123456789".contains($0) }) ?? 1
+                                    print(newDuration)
+                                    
+                                    if inputNumber > 999 {
+                                        self.newBreakDuration = 999
+                                    }
+                                    
+                                    if inputNumber <= 0 {
+                                        self.newBreakDuration = 1
+                                    }
+                                }
                             
                             Text("minutes")
                                 .font(.title3)
@@ -155,110 +158,120 @@ struct TimerSettingsView: View {
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 10)
                                         .stroke(Color.blue, lineWidth: 2))
-                            //                            .onReceive(Just(self.settingsRound)) { inputNumber in
-                            //
-                            //                                self.settingsRound = inputNumber.filter { "0123456789".contains($0) }
-                            //
-                            //                                if inputNumber.count > 3 {
-                            //                                    self.settingsRound.removeFirst()
-                            //                                }
-                            //
-                            //                                if Int(inputNumber) ?? 0 < 0 {
-                            //                                    self.settingsRound = "1"
-                            //                                }
-                            //                            }
+                                .onReceive(Just(self.newRounds)) { inputNumber in
+                                    
+                                    newRounds = Int16(String(inputNumber).filter {
+                                        "0123456789".contains($0) }) ?? 1
+                                    print(newRounds)
+                                    
+                                    if inputNumber > 999 {
+                                        self.newRounds = 999
+                                    }
+                                    
+                                    if inputNumber <= 0 {
+                                        self.newRounds = 1
+                                    }
+                                }
                             
                             Spacer(minLength: 10)
                         }
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 3)
+                        
+                        HStack {
+                            // DEFAULT BUTTON
+                            Button(action: {
+                                // POMODORO DEFAULTS
+                                self.newDuration = 25
+                                self.newBreakDuration = 5
+                                self.newRounds = 8
+                                
+                                // SAVE TIMER SETTINGS
+                                userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor, duration: newDuration, breakDuration: newBreakDuration , rounds: newRounds)
+                                
+                                self.presentationMode.wrappedValue.dismiss()
+                            }, label: {
+                                Text("🍅 Default")
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+                                    .frame(height: 55)
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.accentColor.opacity(0.2))
+                                    .cornerRadius(10)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                            .stroke(Color.accentColor, lineWidth: 2))
+                                    .cornerRadius(10)
+                            })
+                                .padding(.horizontal, 5)
+                                .padding(.vertical, 25)
+                            
+                            // SAVE BUTTON
+                            Button(action: {
+                                //                        print("_______________________________")
+                                //                        print("newDuration: \(newDuration)")
+                                //                        print("_______________________________")
+                                
+                                // check if input is valid
+                                guard newDuration != 0 else {
+                                    self.errorTitle = "input error"
+                                    self.errorMessage = "pleace enter a timer duration"
+                                    self.showAlert = true
+                                    return
+                                }
+                                guard !settingsPauseDuration.isEmpty else {
+                                    self.errorTitle = "input error"
+                                    self.errorMessage = "pleace enter a break duration"
+                                    self.showAlert = true
+                                    return
+                                }
+                                guard !settingsRound.isEmpty else {
+                                    self.errorTitle = "input error"
+                                    self.errorMessage = "pleace enter how many rounds\ntill long break"
+                                    self.showAlert = true
+                                    return
+                                }
+                                
+                                // SAVE TIMER SETTINGS
+                                userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor, duration: newDuration, breakDuration: newBreakDuration , rounds: newRounds)
+                                
+                                self.presentationMode.wrappedValue.dismiss()
+                                
+                            }, label: {
+                                Text("Save")
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+                                    .frame(height: 55)
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.accentColor.opacity(0.2))
+                                    .cornerRadius(10)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                            .stroke(Color.accentColor, lineWidth: 2))
+                                    .cornerRadius(10)
+                            })
+                                .padding(.horizontal, 5)
+                                .padding(.vertical, 25)
+                        }
                     }
-                    
-                    // SAVE BUTTON
-                    Button(action: {
-                        // check if input is valid
-                        guard !settingsTimerDuration.isEmpty else {
-                            self.errorTitle = "input error"
-                            self.errorMessage = "pleace enter a timer duration"
-                            self.showAlert = true
-                            return
-                        }
-                        guard !settingsPauseDuration.isEmpty else {
-                            self.errorTitle = "input error"
-                            self.errorMessage = "pleace enter a break duration"
-                            self.showAlert = true
-                            return
-                        }
-                        guard !settingsRound.isEmpty else {
-                            self.errorTitle = "input error"
-                            self.errorMessage = "pleace enter how many rounds\ntill long break"
-                            self.showAlert = true
-                            return
-                        }
-                        
-                        //                    if settingsTimerDuration == "" {
-                        //                        self.settingsTimerDuration = "25"
-                        //                    }
-                        //                    if settingsPauseDuration == "" {
-                        //                        self.settingsPauseDuration = "10"
-                        //                    }
-                        //                    if settingsRound == "" {
-                        //                        self.settingsRound = "5"
-                        //                    }
-                        
-                        //                    newDuration = Int16(self.settingsTimerDuration) ?? 25
-                        //                    newBreakDuration = Int16(self.settingsPauseDuration) ?? 10
-                        //                    newRounds = Int16(self.settingsRound) ?? 8
-                        
-                        // SAVE TIMER SETTINGS
-                        userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor, duration: newDuration, breakDuration: newBreakDuration , rounds: newRounds)
-                        
-                        self.presentationMode.wrappedValue.dismiss()
-                        
-                    }, label: {
-                        Text("Save")
-                            .font(.headline)
-                            .foregroundColor(.primary)
-                            .frame(height: 55)
-                            .frame(maxWidth: .infinity)
-                            .background(Color.accentColor.opacity(0.2))
-                            .cornerRadius(10)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                    .stroke(Color.accentColor, lineWidth: 2))
-                            .cornerRadius(10)
-                    })
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 25)
-                    
-                    Spacer()
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 3)
                 }
-                .padding(.top, 20)
-                .padding(.horizontal, 10)
-                //            .navigationBarItems(leading:
-                //
-                //            )
-                Spacer()
+                
+                //                Spacer()
             }
+            .padding(.top, 20)
+            .padding(.horizontal, 10)
+            .navigationBarTitle("")
+            .navigationBarHidden(true)
+            //            .navigationBarItems(leading:
+            //
+            //            )
+            Spacer()
+            
         }
         .alert(isPresented: $showAlert) {
             Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
         }
         .onAppear {
-            //            if !userVM.savedUserData.isEmpty {
-            //                let currentUser = userVM.savedUserData.first!
-            //                self.newUserName = currentUser.wUserName
-            //                self.newTaskOverdueLimit = String(currentUser.taskOverdueLimit)
-            //                self.newThemeColor = currentUser.wThemeColor
-            ////                self.newDuration = Int16(currentUser.timerDuration)
-            ////                self.newBreakDuration = Int16(currentUser.timerBreakDuration)
-            ////                self.newRounds = Int16(currentUser.timerRounds)
-            //
-            //                self.settingsTimerDuration = String(self.newDuration)
-            //                self.settingsPauseDuration = String(self.newBreakDuration)
-            //                self.settingsRound = String(self.newRounds)
-            //            }
-            
             print("_______________________________")
             print("ON APPEAR OF SHEET SETTINGSVIEW")
             print("_______________________________")
@@ -266,6 +279,17 @@ struct TimerSettingsView: View {
         
     }
     
+    //Function to keep text length in limits
+    private func inputLimit(_ maxValue: Int16, _ valueInput: Int16) -> Bool {
+        guard valueInput <= maxValue else {
+            return false
+        }
+        guard valueInput != 0 else {
+            return false
+        }
+        
+        return true
+    }
 }
 
 //struct TimerSettingsView_Previews: PreviewProvider {
