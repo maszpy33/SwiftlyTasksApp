@@ -25,9 +25,9 @@ struct ListView: View {
             ZStack {
                 Color(red: 0.1, green: 0.1, blue: 0.1)
                     .edgesIgnoringSafeArea(.all)
-                
+
                 List {
-                    ForEach(taskVM.savedTasks) { taskEntity in
+                    ForEach(taskVM.searchableTasks) { taskEntity in
                         NavigationLink(destination: EditView(taskVM: taskVM, task: taskEntity), label: {
                             TaskView(userVM: userVM, taskVM: taskVM, task: taskEntity)
                         })
@@ -67,6 +67,7 @@ struct ListView: View {
                     }
                 }
                 .listStyle(PlainListStyle())
+                .searchable(text: $taskVM.searchText)
             }
             .navigationTitle("SwiftlyTasks")
 //            .navigationBarHidden(true)

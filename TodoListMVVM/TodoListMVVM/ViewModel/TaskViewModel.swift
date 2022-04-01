@@ -12,7 +12,7 @@ import SwiftUI
 
 final class TaskViewModel: DataClassViewModel {
     
-    //    @Published var sortType: SortType = .priority
+        @Published var sortType: SortType = .priority
     //    @Published var isPresented = false
     //    @Published var searched = ""
     
@@ -26,9 +26,18 @@ final class TaskViewModel: DataClassViewModel {
     let taskOverdueLimit = -3
     let secondaryAccentColor = Color("SecondaryAccentColor")
     
-    @Published var tasks: [TaskItem] = [] {
-        didSet {
-            saveTaskData()
+//    @Published var tasks: [TaskItem] = [] {
+//        didSet {
+//            saveTaskData()
+//        }
+//    }
+    
+    // SEARCHBAR VARIABLES
+    @Published var searchText = ""
+    var searchableTasks: [TaskItemEntity] {
+        print(searchText)
+        return searchText == "" ? savedTasks : savedTasks.filter {
+            $0.wTitle.contains(searchText)
         }
     }
     
@@ -139,7 +148,7 @@ final class TaskViewModel: DataClassViewModel {
         return (daysUntil, "Days")
     }
     
-    
+    // calculate how many days or hours are left till task
     func daysHoursLeft(dueDate: Date) -> (Int, String) {
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
@@ -207,14 +216,14 @@ final class TaskViewModel: DataClassViewModel {
     //        tasks.remove(atOffsets: indexAt)
     //    }
     
-    //    func sort() {
-    //        switch sortType {
-    //        case .alphabetical:
-    //            tasks.sort(by: { $0.title < $1.title })
-    //        case .dueDate:
-    //            tasks.sort(by: { $0.dueDate < $1.dueDate })
-    //        case .priority:
-    //            tasks.sort(by: { $0.priority.rawValue > $1.priority.rawValue })
-    //        }
-    //    }
+//        func sort() {
+//            switch sortType {
+//            case .alphabetical:
+//                tasks.sort(by: { $0.title < $1.title })
+//            case .dueDate:
+//                tasks.sort(by: { $0.dueDate < $1.dueDate })
+//            case .priority:
+//                tasks.sort(by: { $0.priority > $1.priority })
+//            }
+//        }
 }

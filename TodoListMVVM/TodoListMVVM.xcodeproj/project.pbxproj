@@ -160,6 +160,7 @@
 			children = (
 				9FA2E37F27BEEF7E009E570D /* ContentView.swift */,
 				9FCEA39427C105FE002482D3 /* ProfileView.swift */,
+				9F30BE2A27CE532600B749CD /* ImagePicker.swift */,
 				9FF2581D27D14E0600507FBE /* SettingsViews */,
 				9FF2581C27D14DFB00507FBE /* PomodorTimerViews */,
 				9FF2581B27D14DF100507FBE /* TaskViews */,
@@ -170,12 +171,11 @@
 		9FD984FC27B7E057005BF23F /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				9F30BE2A27CE532600B749CD /* ImagePicker.swift */,
+				9FB7FE2327EDDE58000B30C8 /* DataClassViewModel.swift */,
 				9FD9850027B7E0E5005BF23F /* TaskViewModel.swift */,
 				9F30BE2C27CE58E200B749CD /* UserViewModel.swift */,
 				9F9DE91E27B86FB1009418E3 /* DataManager.swift */,
 				9F23769127E7DA8C00C87161 /* NotificationManager.swift */,
-				9FB7FE2327EDDE58000B30C8 /* DataClassViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
