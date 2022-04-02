@@ -16,17 +16,17 @@ struct AddTaskView: View {
     @ObservedObject var taskVM: TaskViewModel
 //    var task: TaskItemEntity
     @State private var addTime: Bool = false
-    @State private var showDetails: Bool = false
     @State private var showDefaultDetailsText: Bool = true
     
     // Model Variables
     @State var taskTitleTextField: String = ""
     @State var taskDetailsTextField: String = ""
     @State var taskCategory: String = "private"
-    @State var taskCategorySymbole: String = "🤷🏻‍♂️"
+    @State var taskEmoji: String = "🤷🏻‍♂️"
     @State var taskDueDate: Date = Date()
     @State var taskPriority: String = "normal"
     @State var taskStatus: Bool = false
+    @State var taskHasDetails: Bool = false
     @State var taskUIDeleted: Bool = false
     
     // ERROR VARIABLES
@@ -125,7 +125,7 @@ struct AddTaskView: View {
                                 .bold()
                                 .foregroundColor(.accentColor)
 
-                            Toggle("no label", isOn: $showDetails)
+                            Toggle("no label", isOn: $taskHasDetails)
                                 .tint(Color.accentColor)
                                 .labelsHidden()
                         }
@@ -134,7 +134,7 @@ struct AddTaskView: View {
                                                 
                         HStack {
                             // EMOJI INPUT
-                            TextField("🤷🏻‍♂️", text: $taskCategorySymbole)
+                            TextField("🤷🏻‍♂️", text: $taskEmoji)
                                 .font(.title)
                                 .frame(width: 55, height: 55)
                                 .cornerRadius(10)
@@ -143,15 +143,15 @@ struct AddTaskView: View {
                                         .stroke(Color.accentColor, lineWidth: 4))
                                 .cornerRadius(10)
                                 .multilineTextAlignment(.center)
-                                .onReceive(Just(self.taskCategorySymbole)) { inputValue in
+                                .onReceive(Just(self.taskEmoji)) { inputValue in
                                     if inputValue.emojis.count > 1 {
-                                        self.taskCategorySymbole.removeFirst()
+                                        self.taskEmoji.removeFirst()
                                     } else if inputValue != "" {
                                         if !inputValue.isSingleEmoji {
-                                            self.taskCategorySymbole = "🤷🏻‍♂️"
+                                            self.taskEmoji = "🤷🏻‍♂️"
                                         }
                                     } else {
-                                        self.taskCategorySymbole = inputValue
+                                        self.taskEmoji = inputValue
                                     }
                                 }
                             
@@ -168,7 +168,7 @@ struct AddTaskView: View {
                         
                         
                         // DETAILS
-                        if showDetails {
+                        if taskHasDetails {
                             ZStack {
                                 VStack(alignment: .leading) {
                                     Text("Add Details:")
@@ -234,7 +234,7 @@ struct AddTaskView: View {
                             }
 
                             // ADD NEW TASK
-                            taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, categorySymbol: taskCategorySymbole, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, uiDeleted: taskUIDeleted)
+                            taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted)
 
                             taskTitleTextField = ""
                             taskDetailsTextField = ""
@@ -268,7 +268,7 @@ struct AddTaskView: View {
     }
     
     private func checkForEmoji() -> Bool {
-        guard taskCategorySymbole.isSingleEmoji else {
+        guard taskEmoji.isSingleEmoji else {
             return false
         }
         return true

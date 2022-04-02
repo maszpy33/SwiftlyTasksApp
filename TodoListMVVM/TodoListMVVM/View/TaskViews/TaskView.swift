@@ -26,7 +26,7 @@ struct TaskView: View {
             VStack(alignment: .leading) {
                 HStack {
                     // TASK EMOJI
-                    Text("\(task.categorySymbol ?? "🤷🏻‍♂️")")
+                    Text("\(task.wTaskEmoji)")
                         .font(.title)
                     
                     // TASK TITLE
@@ -75,7 +75,7 @@ struct TaskView: View {
                     VStack(alignment: .leading) {
                         HStack {
                             // HAS DETAILS ICON
-                            if task.uiDeleted {
+                            if task.hasDetails {
                                 Image(systemName: "text.alignleft")
                                     .resizable()
                                     .scaledToFit()

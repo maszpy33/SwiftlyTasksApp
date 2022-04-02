@@ -42,140 +42,141 @@ struct TimerSettingsView: View {
                 
                 ScrollView {
                     VStack {
-                        HStack {
-                            Image(systemName: "alarm")
-                            Text("Timer Settings")
+                        VStack {
+                            HStack {
+                                Image(systemName: "alarm")
+                                Text("Timer Settings")
+                                
+                                Spacer()
+                            }
+                            .font(.headline)
+                            .foregroundColor(.accentColor)
+                            .padding(.bottom, 10)
+                            .padding(.horizontal, 10)
                             
-                            Spacer()
+                            Divider()
+                            
+                            HStack {
+                                Image(systemName: "clock")
+                                    .font(.title3)
+                                    .foregroundColor(.accentColor)
+                                
+                                Text("Focus Duration:")
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+                                    .labelStyle(.titleOnly)
+                                
+                                Spacer()
+                                
+                                TextField("", value: $newDuration, format: .number)
+                                    .multilineTextAlignment(.center)
+                                    .font(.title3)
+                                    .frame(width: 70, height: 40)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(Color.blue, lineWidth: 2))
+                                    .onReceive(Just(self.newDuration)) { inputNumber in
+                                        
+                                        //                                String(self.newDuration) = String(inputNumber).filter { "0123456789".contains($0) }
+                                        newDuration = Int16(String(inputNumber).filter {
+                                            "0123456789".contains($0) }) ?? 1
+                                        print(newDuration)
+                                        
+                                        if inputNumber > 500 {
+                                            self.newDuration = 500
+                                        }
+                                        
+                                        if inputNumber <= 0 {
+                                            self.newDuration = 1
+                                        }
+                                    }
+                                
+                                Text("minutes")
+                                    .font(.title3)
+                            }
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 3)
+                            
+                            
+                            Divider()
+                            
+                            HStack {
+                                Image(systemName: "123.rectangle")
+                                    .font(.title3)
+                                    .foregroundColor(.accentColor)
+                                
+                                Text("Break Duration:")
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+                                
+                                Spacer()
+                                
+                                TextField("", value: $newBreakDuration, format: .number)
+                                    .multilineTextAlignment(.center)
+                                    .font(.title3)
+                                    .frame(width: 70, height: 40)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(Color.blue, lineWidth: 2))
+                                    .onReceive(Just(self.newBreakDuration)) { inputNumber in
+                                        
+                                        newBreakDuration = Int16(String(inputNumber).filter {
+                                            "0123456789".contains($0) }) ?? 1
+                                        print(newDuration)
+                                        
+                                        if inputNumber > 999 {
+                                            self.newBreakDuration = 999
+                                        }
+                                        
+                                        if inputNumber <= 0 {
+                                            self.newBreakDuration = 1
+                                        }
+                                    }
+                                
+                                Text("minutes")
+                                    .font(.title3)
+                            }
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 3)
+                            
+                            Divider()
+                            
+                            HStack {
+                                Image(systemName: "circle")
+                                    .font(.title3)
+                                    .foregroundColor(.accentColor)
+                                
+                                Text("Rounds:")
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+                                
+                                Spacer()
+                                
+                                TextField("", value: $newRounds, format: .number)
+                                    .multilineTextAlignment(.center)
+                                    .font(.title3)
+                                    .frame(width: 70, height: 40)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(Color.blue, lineWidth: 2))
+                                    .onReceive(Just(self.newRounds)) { inputNumber in
+                                        
+                                        newRounds = Int16(String(inputNumber).filter {
+                                            "0123456789".contains($0) }) ?? 1
+                                        print(newRounds)
+                                        
+                                        if inputNumber > 999 {
+                                            self.newRounds = 999
+                                        }
+                                        
+                                        if inputNumber <= 0 {
+                                            self.newRounds = 1
+                                        }
+                                    }
+                                
+                                Spacer(minLength: 10)
+                            }
                         }
-                        .font(.headline)
-                        .foregroundColor(.accentColor)
-                        .padding(.bottom, 10)
-                        .padding(.horizontal, 10)
-                        
-                        Divider()
-                        
-                        HStack {
-                            Image(systemName: "clock")
-                                .font(.title3)
-                                .foregroundColor(.accentColor)
-                            
-                            Text("Focus Duration:")
-                                .font(.headline)
-                                .foregroundColor(.primary)
-                                .labelStyle(.titleOnly)
-                            
-                            Spacer()
-                            
-                            TextField("", value: $newDuration, format: .number)
-                                .multilineTextAlignment(.center)
-                                .font(.title3)
-                                .frame(width: 70, height: 40)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.blue, lineWidth: 2))
-                                .onReceive(Just(self.newDuration)) { inputNumber in
-                                    
-                                    //                                String(self.newDuration) = String(inputNumber).filter { "0123456789".contains($0) }
-                                    newDuration = Int16(String(inputNumber).filter {
-                                        "0123456789".contains($0) }) ?? 1
-                                    print(newDuration)
-                                    
-                                    if inputNumber > 500 {
-                                        self.newDuration = 500
-                                    }
-                                    
-                                    if inputNumber <= 0 {
-                                        self.newDuration = 1
-                                    }
-                                }
-                            
-                            Text("minutes")
-                                .font(.title3)
-                        }
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 3)
-                        
-                        
-                        Divider()
-                        
-                        HStack {
-                            Image(systemName: "123.rectangle")
-                                .font(.title3)
-                                .foregroundColor(.accentColor)
-                            
-                            Text("Break Duration:")
-                                .font(.headline)
-                                .foregroundColor(.primary)
-                            
-                            Spacer()
-                            
-                            TextField("", value: $newBreakDuration, format: .number)
-                                .multilineTextAlignment(.center)
-                                .font(.title3)
-                                .frame(width: 70, height: 40)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.blue, lineWidth: 2))
-                                .onReceive(Just(self.newBreakDuration)) { inputNumber in
-                                    
-                                    newBreakDuration = Int16(String(inputNumber).filter {
-                                        "0123456789".contains($0) }) ?? 1
-                                    print(newDuration)
-                                    
-                                    if inputNumber > 999 {
-                                        self.newBreakDuration = 999
-                                    }
-                                    
-                                    if inputNumber <= 0 {
-                                        self.newBreakDuration = 1
-                                    }
-                                }
-                            
-                            Text("minutes")
-                                .font(.title3)
-                        }
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 3)
-                        
-                        Divider()
-                        
-                        HStack {
-                            Image(systemName: "circle")
-                                .font(.title3)
-                                .foregroundColor(.accentColor)
-                            
-                            Text("Rounds:")
-                                .font(.headline)
-                                .foregroundColor(.primary)
-                            
-                            Spacer()
-                            
-                            TextField("", value: $newRounds, format: .number)
-                                .multilineTextAlignment(.center)
-                                .font(.title3)
-                                .frame(width: 70, height: 40)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.blue, lineWidth: 2))
-                                .onReceive(Just(self.newRounds)) { inputNumber in
-                                    
-                                    newRounds = Int16(String(inputNumber).filter {
-                                        "0123456789".contains($0) }) ?? 1
-                                    print(newRounds)
-                                    
-                                    if inputNumber > 999 {
-                                        self.newRounds = 999
-                                    }
-                                    
-                                    if inputNumber <= 0 {
-                                        self.newRounds = 1
-                                    }
-                                }
-                            
-                            Spacer(minLength: 10)
-                        }
-                        
                         HStack {
                             // DEFAULT BUTTON
                             Button(action: {
@@ -251,31 +252,33 @@ struct TimerSettingsView: View {
                                 .padding(.horizontal, 5)
                                 .padding(.vertical, 25)
                         }
+                        
+                        Spacer()
                     }
                     .padding(.horizontal, 10)
                     .padding(.vertical, 3)
                 }
+                .padding(.horizontal, 15)
                 
                 //                Spacer()
             }
             .padding(.top, 20)
             .padding(.horizontal, 10)
-            .navigationBarTitle("")
-            .navigationBarHidden(true)
+            //            .navigationBarTitle("")
+            //            .navigationBarHidden(true)
             //            .navigationBarItems(leading:
             //
             //            )
-            Spacer()
             
         }
         .alert(isPresented: $showAlert) {
             Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
         }
-        .onAppear {
-            print("_______________________________")
-            print("ON APPEAR OF SHEET SETTINGSVIEW")
-            print("_______________________________")
-        }
+//        .onAppear {
+//            print("_______________________________")
+//            print("ON APPEAR OF SHEET SETTINGSVIEW")
+//            print("_______________________________")
+//        }
         
     }
     

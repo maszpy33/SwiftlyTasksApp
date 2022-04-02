@@ -17,17 +17,17 @@ struct EditView: View {
     var task: TaskItemEntity
     
     @State private var addTime: Bool = true
-    @State private var showDetails: Bool = false
     @State private var showDefaultDetailsText: Bool = true
     
     // Model Variables
     @State var taskTitleTextField: String = ""
     @State var taskDetailsTextField: String = ""
     @State var taskCategory: String = "private"
-    @State var taskCategorySymbole: String = "🤷🏻‍♂️"
+    @State var taskEmoji: String = "🤷🏻‍♂️"
     @State var taskDueDate: Date = Date()
     @State var taskPriority: String = "normal"
     @State var taskStatus: Bool = false
+    @State var taskHasDetails: Bool = false
     @State var taskUIDeleted: Bool = false
     
     // ERROR VARIABLES
@@ -122,7 +122,7 @@ struct EditView: View {
                                 .bold()
                                 .foregroundColor(.accentColor)
 
-                            Toggle("no label", isOn: $showDetails)
+                            Toggle("no label", isOn: $taskHasDetails)
                                 .tint(Color.accentColor)
                                 .labelsHidden()
                         }
@@ -131,7 +131,7 @@ struct EditView: View {
                         
                         HStack {
                             // EMOJI INPUT
-                            TextField("🤷🏻‍♂️", text: $taskCategorySymbole)
+                            TextField("🤷🏻‍♂️", text: $taskEmoji)
                                 .font(.title)
                                 .frame(width: 55, height: 55)
                                 .cornerRadius(10)
@@ -140,15 +140,15 @@ struct EditView: View {
                                         .stroke(Color.accentColor, lineWidth: 4))
                                 .cornerRadius(10)
                                 .multilineTextAlignment(.center)
-                                .onReceive(Just(self.taskCategorySymbole)) { inputValue in
+                                .onReceive(Just(self.taskEmoji)) { inputValue in
                                     if inputValue.emojis.count > 1 {
-                                        self.taskCategorySymbole.removeFirst()
+                                        self.taskEmoji.removeFirst()
                                     } else if inputValue != "" {
                                         if !inputValue.isSingleEmoji {
-                                            self.taskCategorySymbole = "🤷🏻‍♂️"
+                                            self.taskEmoji = "🤷🏻‍♂️"
                                         }
                                     } else {
-                                        self.taskCategorySymbole = inputValue
+                                        self.taskEmoji = inputValue
                                     }
                                 }
                             
@@ -162,7 +162,7 @@ struct EditView: View {
                         .padding(.vertical, 5)
                         
                         // DETAILS
-                        if showDetails {
+                        if taskHasDetails {
                             VStack(alignment: .leading) {
                                 Text("Add Details:")
                                     .font(.caption)
@@ -193,7 +193,7 @@ struct EditView: View {
                             }
                             
                             // SAVE CHANGES
-                            taskVM.updateTaskEntity(taskEntity: task, newTitle: taskTitleTextField, newDetails: taskDetailsTextField, newCategory: taskCategory, newCategorySymbol: taskCategorySymbole, newPriority: taskPriority, newDueDate: taskDueDate, newStatus: taskStatus, newUIDelete: taskUIDeleted)
+                            taskVM.updateTaskEntity(taskEntity: task, newTitle: taskTitleTextField, newDetails: taskDetailsTextField, newCategory: taskCategory, newTaskEmoji: taskEmoji, newPriority: taskPriority, newDueDate: taskDueDate, newStatus: taskStatus, newHasDetails: taskHasDetails, newUIDelete: taskUIDeleted)
                             
                             taskTitleTextField = ""
                             self.presentationMode.wrappedValue.dismiss()
@@ -219,17 +219,18 @@ struct EditView: View {
             }
             .navigationBarHidden(true)
             .onAppear {
-                self.taskTitleTextField = task.title ?? "No Title"
-                self.taskDetailsTextField = task.details ?? "description..."
-                self.taskCategory = task.category ?? "private"
-                self.taskCategorySymbole = task.categorySymbol ?? "🤷🏻‍♂️"
-                self.taskDueDate = task.dueDate ?? Date()
-                self.taskPriority = task.priority ?? "non"
+                self.taskTitleTextField = task.wTitle
+                self.taskDetailsTextField = task.wDetails
+                self.taskCategory = task.wCategory
+                self.taskEmoji = task.wTaskEmoji
+                self.taskDueDate = task.wDueDate
+                self.taskPriority = task.wPriority
+                self.taskHasDetails = task.hasDetails
                 self.taskStatus = task.status
                 self.taskUIDeleted = task.uiDeleted
                 
                 if self.taskDetailsTextField != "" {
-                    self.showDetails = true
+                    self.taskHasDetails = true
                 }
             }
         }

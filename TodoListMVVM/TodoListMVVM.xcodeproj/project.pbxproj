@@ -15,7 +15,6 @@
 		9F30BE2B27CE532700B749CD /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F30BE2A27CE532600B749CD /* ImagePicker.swift */; };
 		9F30BE2D27CE58E200B749CD /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F30BE2C27CE58E200B749CD /* UserViewModel.swift */; };
 		9F30BE2F27CE593700B749CD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F30BE2E27CE593700B749CD /* User.swift */; };
-		9F3E803D27F5E266000FEBA9 /* ScreenSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3E803C27F5E266000FEBA9 /* ScreenSize.swift */; };
 		9F6D04AE27B7E4F900283669 /* MainViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6D04AD27B7E4F900283669 /* MainViewModifier.swift */; };
 		9F6D04B027B7E52E00283669 /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6D04AF27B7E52E00283669 /* AddTaskView.swift */; };
 		9F88A3DE27EBCB7B000F1BBC /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F88A3DD27EBCB7B000F1BBC /* BannerView.swift */; };
@@ -52,7 +51,6 @@
 		9F30BE2A27CE532600B749CD /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		9F30BE2C27CE58E200B749CD /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		9F30BE2E27CE593700B749CD /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		9F3E803C27F5E266000FEBA9 /* ScreenSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenSize.swift; sourceTree = "<group>"; };
 		9F6D04AD27B7E4F900283669 /* MainViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModifier.swift; sourceTree = "<group>"; };
 		9F6D04AF27B7E52E00283669 /* AddTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
 		9F88A3DD27EBCB7B000F1BBC /* BannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
@@ -102,7 +100,6 @@
 				9FCD970827BD6F510079FEA0 /* ToggleCheckExtension.swift */,
 				9F6D04AD27B7E4F900283669 /* MainViewModifier.swift */,
 				9F169D1527CEBC2E00BD6192 /* NavigaitonBarColorModifier.swift */,
-				9F3E803C27F5E266000FEBA9 /* ScreenSize.swift */,
 			);
 			path = CustomModifier;
 			sourceTree = "<group>";
@@ -321,7 +318,6 @@
 				9FCEA39527C105FE002482D3 /* ProfileView.swift in Sources */,
 				9F30BE2B27CE532700B749CD /* ImagePicker.swift in Sources */,
 				9F93034927D1862400E71979 /* TimerSettingsView.swift in Sources */,
-				9F3E803D27F5E266000FEBA9 /* ScreenSize.swift in Sources */,
 				9F169D1627CEBC2E00BD6192 /* NavigaitonBarColorModifier.swift in Sources */,
 				9FA2E38027BEEF7E009E570D /* ContentView.swift in Sources */,
 				9FDD831827CE87BE002ADC9F /* UserEntity+CoreDataProperties.swift in Sources */,

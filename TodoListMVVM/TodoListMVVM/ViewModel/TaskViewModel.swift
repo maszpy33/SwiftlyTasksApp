@@ -12,7 +12,7 @@ import SwiftUI
 
 final class TaskViewModel: DataClassViewModel {
     
-        @Published var sortType: SortType = .priority
+    @Published var sortType: SortType = .priority
     //    @Published var isPresented = false
     //    @Published var searched = ""
     
@@ -32,8 +32,10 @@ final class TaskViewModel: DataClassViewModel {
 //        }
 //    }
     
-    // SEARCHBAR VARIABLES
+    // SEARCHBAR string variable
     @Published var searchText = ""
+    
+    // SEARCHBAR savedTask wrapper
     var searchableTasks: [TaskItemEntity] {
         print(searchText)
         return searchText == "" ? savedTasks : savedTasks.filter {
@@ -55,15 +57,16 @@ final class TaskViewModel: DataClassViewModel {
     }
     
     
-    func saveTaskEntitys(title: String, details: String, category: String, categorySymbol: String, priority: String, dueDate: Date, status: Bool, uiDeleted: Bool) {
+    func saveTaskEntitys(title: String, details: String, category: String, taskEmoji: String, priority: String, dueDate: Date, status: Bool, hasDetails: Bool, uiDeleted: Bool) {
         let newTask = TaskItemEntity(context: container.viewContext)
         newTask.title = title
         newTask.details = details
         newTask.category = category
-        newTask.categorySymbol = categorySymbol
+        newTask.taskEmoji = taskEmoji
         newTask.priority = priority
         newTask.dueDate = dueDate
         newTask.status = status
+        newTask.hasDetails = hasDetails
         newTask.uiDeleted = uiDeleted
         saveTaskData()
     }
@@ -79,14 +82,15 @@ final class TaskViewModel: DataClassViewModel {
         saveTaskData()
     }
     
-    func updateTaskEntity(taskEntity: TaskItemEntity, newTitle: String, newDetails: String, newCategory: String, newCategorySymbol: String, newPriority: String, newDueDate: Date, newStatus: Bool, newUIDelete: Bool) {
+    func updateTaskEntity(taskEntity: TaskItemEntity, newTitle: String, newDetails: String, newCategory: String, newTaskEmoji: String, newPriority: String, newDueDate: Date, newStatus: Bool, newHasDetails: Bool, newUIDelete: Bool) {
         taskEntity.title = newTitle
         taskEntity.details = newDetails
         taskEntity.category = newCategory
-        taskEntity.categorySymbol = newCategorySymbol
+        taskEntity.taskEmoji = newTaskEmoji
         taskEntity.priority = newPriority
         taskEntity.dueDate = newDueDate
         taskEntity.status = newStatus
+        taskEntity.hasDetails = newHasDetails
         taskEntity.uiDeleted = newUIDelete
         saveTaskData()
     }

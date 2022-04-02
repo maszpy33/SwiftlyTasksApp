@@ -14,10 +14,11 @@ struct TaskItem: Identifiable, Equatable {
     var title: String
     var details: String
     var category: String
-    var categorySymbol: String
+    var taskEmoji: String
     var dueDate: Date
     var priority: String
     var status: Bool
+    var hasDetails: Bool
     var uiDeleted: Bool
 }
 

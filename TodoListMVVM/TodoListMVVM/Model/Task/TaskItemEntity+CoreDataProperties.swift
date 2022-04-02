@@ -18,23 +18,27 @@ extension TaskItemEntity {
     }
 
     @NSManaged public var category: String?
-    @NSManaged public var categorySymbol: String?
+    @NSManaged public var taskEmoji: String?
     @NSManaged public var details: String?
     @NSManaged public var dueDate: Date?
     @NSManaged public var priority: String?
     @NSManaged public var status: Bool
     @NSManaged public var title: String?
     @NSManaged public var uiDeleted: Bool
+    @NSManaged public var hasDetails: Bool
     @NSManaged public var profileImage: Data?
 
     public var wTitle: String {
         title ?? "No Title"
     }
-    public var wEmoji: String {
-        categorySymbol ?? "🤷🏻‍♂️"
+    public var wTaskEmoji: String {
+        taskEmoji ?? "🤷🏻‍♂️"
     }
     public var wDetails: String {
         details ?? "no description"
+    }
+    public var wCategory: String {
+        category ?? "private"
     }
     public var wDueDate: Date {
         dueDate ?? Date()
