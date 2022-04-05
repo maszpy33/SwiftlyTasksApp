@@ -107,7 +107,7 @@ struct ListView: View {
         }
         .onAppear {
             // update user name
-            currentUserName = userVM.savedUserData.first!.wUserName
+            currentUserName = userVM.savedUserData.first?.wUserName ?? "NoName"
         }
 //        .introspectNavigationController { nav in
 //            nav.navigationBar.barTintColor = UIColor(Color(red: 0.2, green: 0.2, blue: 0.2))
