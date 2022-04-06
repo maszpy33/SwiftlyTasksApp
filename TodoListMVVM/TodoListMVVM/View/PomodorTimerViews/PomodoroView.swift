@@ -237,7 +237,7 @@ struct PomodoroView: View {
             },
                                 trailing:
                                     HStack {
-                NavigationLink(destination: TimerSettingsView(userVM: userVM, newDuration: $newDuration, newBreakDuration: $newBreakDuration, newRounds: $newRounds)) {
+                NavigationLink(destination: TimerSettingsView(newDuration: $newDuration, newBreakDuration: $newBreakDuration, newRounds: $newRounds).environmentObject(userVM)) {
                     HStack {
 //                        Image(systemName: "clock")
                         Image(systemName: "gear")

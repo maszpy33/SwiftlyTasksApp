@@ -12,7 +12,7 @@ import Combine
 struct TimerSettingsView: View {
     @Environment(\.presentationMode) var presentationMode
     
-    @ObservedObject var userVM: UserViewModel
+    @EnvironmentObject var userVM: UserViewModel
     
     // TIMER VARIABLES
     @Binding var newDuration: Int16
