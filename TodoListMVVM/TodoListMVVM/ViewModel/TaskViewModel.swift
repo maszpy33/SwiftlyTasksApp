@@ -159,7 +159,7 @@ final class TaskViewModel: DataClassViewModel {
         let today = dateFormatter.string(from: Date())
         let dueDateFormatted = dateFormatter.string(from: dueDate)
         
-        print(dueDateFormatted)
+//        print(dueDateFormatted)
         
         guard dueDateFormatted != today else {
             return (0, "Hours")
@@ -171,7 +171,7 @@ final class TaskViewModel: DataClassViewModel {
         
         let diffs = Calendar.current.dateComponents([.day, .hour], from: Date(), to: taskDueDateComponents)
         
-        print(diffs)
+//        print(diffs)
         
         let daysUntil = diffs.day ?? 0 + 1
         let hoursLeft = diffs.hour ?? 0 + 1

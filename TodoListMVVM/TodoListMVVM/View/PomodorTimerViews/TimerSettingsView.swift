@@ -15,7 +15,7 @@ struct TimerSettingsView: View {
     @EnvironmentObject var userVM: UserViewModel
     
     // TIMER VARIABLES
-    @Binding var newDuration: Int16
+    @Binding var newDuration: Int32
     @Binding var newBreakDuration: Int16
     @Binding var newRounds: Int16
     
@@ -78,7 +78,7 @@ struct TimerSettingsView: View {
                                     .onReceive(Just(self.newDuration)) { inputNumber in
                                         
                                         //                                String(self.newDuration) = String(inputNumber).filter { "0123456789".contains($0) }
-                                        newDuration = Int16(String(inputNumber).filter {
+                                        newDuration = Int32(String(inputNumber).filter {
                                             "0123456789".contains($0) }) ?? 1
                                         print(newDuration)
                                         

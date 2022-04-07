@@ -134,12 +134,12 @@
 		9FD984EC27B7DFE9005BF23F /* TodoListMVVM */ = {
 			isa = PBXGroup;
 			children = (
+				9FD984ED27B7DFE9005BF23F /* TodoListMVVMApp.swift */,
 				9FD984FD27B7E05C005BF23F /* Model */,
 				9FD984FC27B7E057005BF23F /* ViewModel */,
 				9FD984FB27B7E052005BF23F /* View */,
 				9F88A3DA27EBCA5D000F1BBC /* NotificationView */,
 				9F6D04AC27B7E4B500283669 /* CustomModifier */,
-				9FD984ED27B7DFE9005BF23F /* TodoListMVVMApp.swift */,
 				9FD984F127B7DFF2005BF23F /* Assets.xcassets */,
 				9FD984F327B7DFF2005BF23F /* Preview Content */,
 			);

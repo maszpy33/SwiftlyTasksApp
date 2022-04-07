@@ -19,7 +19,7 @@ extension UserEntity {
     @NSManaged public var themeColor: String?
     @NSManaged public var taskOverdueLimit: Int16
     @NSManaged public var userName: String?
-    @NSManaged public var timerDuration: Int16
+    @NSManaged public var timerDuration: Int32
     @NSManaged public var timerBreakDuration: Int16
     @NSManaged public var timerRounds: Int16
     

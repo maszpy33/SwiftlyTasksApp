@@ -25,26 +25,29 @@ struct DefaultButtonStyle: ButtonStyle {
 
 struct PomodoroView: View {
     
+    @Environment(\.scenePhase) var scenePhase
+    
     @ObservedObject var userVM: UserViewModel
     @ObservedObject var taskVM: TaskViewModel
     
     // SETTINGS TIMER VARIABLES
-    @State var newDuration: Int16 = 25
+    @State var newDuration: Int32 = 25
     @State var newBreakDuration: Int16 = 5
     @State var newRounds: Int16 = 8
     
     // RUNNING TIMER VARIABLE
-    @State var userTimerDuration: Int16 = 1500
+    @State var userTimerDuration: Int32 = 1500
     
     // TIMER PROPERTIES
     @State var isTimerStarted = false
     @State var pausePressed: Bool = false
     @State var to: CGFloat = 0
     @State var circleRange: CGFloat = 0
-    @State var currentTimeDuration: Int16 = 0
+    @State var currentTimeDuration: Int32 = 0
     @State var time = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     @State private var showSettingsView: Bool = false
+    @State private var saveCurrentTime: DispatchTime = DispatchTime.now()
     
     @State private var currentUserName: String = "UserName"
     
@@ -196,12 +199,12 @@ struct PomodoroView: View {
                 
             }
             .onReceive(self.time, perform: { _ in
-//                print("newDuration: \(self.newDuration)")
-//                print("userTimerDuration: \(self.userTimerDuration)")
-//                print("currentTimerDuration: \(self.currentTimeDuration)")
-//                print(currentTimeDuration)
-//                print(newDuration)
-//                print(time)
+                //                print("newDuration: \(self.newDuration)")
+                //                print("userTimerDuration: \(self.userTimerDuration)")
+                //                print("currentTimerDuration: \(self.currentTimeDuration)")
+                //                print(currentTimeDuration)
+                //                print(newDuration)
+                //                print(time)
                 
                 if self.isTimerStarted {
                     // if timer is up
@@ -239,14 +242,14 @@ struct PomodoroView: View {
                                     HStack {
                 NavigationLink(destination: TimerSettingsView(newDuration: $newDuration, newBreakDuration: $newBreakDuration, newRounds: $newRounds).environmentObject(userVM)) {
                     HStack {
-//                        Image(systemName: "clock")
+                        //                        Image(systemName: "clock")
                         Image(systemName: "gear")
                             .foregroundColor(.accentColor)
                         Text("Settings")
                             .font(.title2)
                             .bold()
                     }
-//                    .foregroundColor(.accentColor)
+                    //                    .foregroundColor(.accentColor)
                 }
             }
                                 
@@ -255,14 +258,14 @@ struct PomodoroView: View {
         .onAppear {
             // FIXME: if is unnecassary, because of the ! in currentUserName
             currentUserName = userVM.savedUserData.first!.wUserName
-
+            
             withAnimation(.easeOut) {
                 self.circleRange = 280
             }
-
+            
             // so newDuration is only changed, when save button is pressed
             // otherwise, set newDuration to current userTimerDuration
-
+            
             if !userVM.savedUserData.isEmpty {
                 let currentUser = userVM.savedUserData.first!
                 self.userTimerDuration = currentUser.timerDuration * 60
@@ -274,9 +277,56 @@ struct PomodoroView: View {
                 print(newDuration)
             }
         }
+        .onChange(of: scenePhase) { newPhase in
+            if newPhase == .active {
+                if isTimerStarted && !pausePressed {
+                    print("Previous Time: \(self.currentTimeDuration)")
+                    self.calculatePassedTime()
+                    print("Time Now: \(self.currentTimeDuration)")
+                }
+                print("Active Main View")
+                
+            } else if newPhase == .inactive {
+                print("Inactive Main View")
+                
+            } else if newPhase == .background {
+                self.saveCurrentTime = DispatchTime.now()
+                print("Background Main View")
+            }
+        }
     }
     
-    func formatTime() -> String {
+    private func calculatePassedTime() {
+//        taskVM.dateFormatter.dateStyle = .medium
+//        taskVM.dateFormatter.timeStyle = .medium
+//
+//        let timeSaved = Calendar.current.dateComponents([.second, .minute, .hour], from: self.saveCurrentTime)
+//        let timeNow = Calendar.current.dateComponents([.second], from: Date())
+//
+//        let timePassed = Calendar.current.dateComponents([.second], from: timeSaved, to: timeNow)
+//
+//        let diffHours = timePassed.hour ?? 0
+//        let diffMinutes = timePassed.minute ?? 0
+//        let diffSeconds = timePassed.second ?? 0
+//        print("Difference Time: \(diffHours) seconds")
+//        print("Difference Time: \(diffMinutes) seconds")
+//        print("Difference Time: \(diffSeconds) seconds")
+        
+        let start = self.saveCurrentTime
+        
+        let end = DispatchTime.now()
+        let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
+        let passedSeconds = Double(nanoTime) / 1_000_000_000
+        
+        guard passedSeconds > 0 else {
+            self.currentTimeDuration = 0
+            return
+        }
+        
+        self.currentTimeDuration = self.currentTimeDuration - Int32(passedSeconds)
+    }
+    
+    private func formatTime() -> String {
         let minutes = Int(currentTimeDuration) / 60
         let seconds = Int(currentTimeDuration) % 60
         

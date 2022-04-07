@@ -15,7 +15,7 @@ struct User: Identifiable, Equatable {
     let taskOverdueLimit: Int16
     let themeColor: String
     let profileImage: UIImage
-    let timerDuration: Int16
+    let timerDuration: Int32
     let timerBreakDuration: Int16
     let timerRounds: Int16
     

@@ -17,7 +17,7 @@ struct SettingsView: View {
     @State private var newUserName: String = "UserName"
     @State private var newThemeColor: String = "yellwo"
     @State private var newTaskOverdueLimit: String = "99"
-    @State private var newTimerDuration: Int16 = 25
+    @State private var newTimerDuration: Int32 = 25
     @State private var newTimerBreakDuration: Int16 = 5
     @State private var newTimerRounds: Int16 = 5
     
@@ -128,7 +128,7 @@ struct SettingsView: View {
                             }
                             
                             // SAVE USER SETTINGS
-                            userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor, duration: Int16(newTimerDuration), breakDuration: Int16(newTimerBreakDuration), rounds: Int16(newTimerRounds))
+                            userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor, duration: Int32(newTimerDuration), breakDuration: Int16(newTimerBreakDuration), rounds: Int16(newTimerRounds))
                             
 //                            self.errorTitle = "✅ Settings Saved"
 //                            self.errorMessage = "your data hase been updated"

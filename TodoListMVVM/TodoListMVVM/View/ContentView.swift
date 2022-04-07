@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @Environment(\.managedObjectContext) private var moc
+//    @Environment(\.managedObjectContext) private var moc
     @StateObject var taskVM = TaskViewModel()
     @StateObject var userVM = UserViewModel()
     

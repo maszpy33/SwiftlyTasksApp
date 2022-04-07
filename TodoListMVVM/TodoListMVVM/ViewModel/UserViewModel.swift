@@ -30,7 +30,7 @@ final class UserViewModel: DataClassViewModel {
         }
     }
     
-    func updateUserEntity(userName: String, taskOverdueLimit: Int16, themeColor: String, duration: Int16, breakDuration: Int16, rounds: Int16) {
+    func updateUserEntity(userName: String, taskOverdueLimit: Int16, themeColor: String, duration: Int32, breakDuration: Int16, rounds: Int16) {
 //        let pickedImage = profileImage.jpegData(compressionQuality: 0.70)
         
         if !savedUserData.isEmpty {
@@ -51,7 +51,7 @@ final class UserViewModel: DataClassViewModel {
         saveUserData()
     }
     
-    func updateTimerSettings(duration: Int16, breakDuration: Int16, rounds: Int16) {
+    func updateTimerSettings(duration: Int32, breakDuration: Int16, rounds: Int16) {
         
     }
 }
