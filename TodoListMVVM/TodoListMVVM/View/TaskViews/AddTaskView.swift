@@ -14,9 +14,11 @@ struct AddTaskView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @ObservedObject var taskVM: TaskViewModel
-//    var task: TaskItemEntity
+    //    var task: TaskItemEntity
     @State private var addTime: Bool = false
     @State private var showDefaultDetailsText: Bool = true
+    
+    @FocusState private var addTaskIsFocus: Bool
     
     // Model Variables
     @State var taskTitleTextField: String = ""
@@ -36,70 +38,71 @@ struct AddTaskView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
-                Spacer(minLength: 15)
-                
-                HStack {
-                    // STATUS TOGGLE
-                    ZStack {
-                        Image(systemName: "square")
-                            .resizable()
-                            .frame(width: 26, height: 26)
-                            .foregroundColor(taskStatus ? .gray : taskVM.styleForPriority(taskPriority: taskPriority))
-                            .opacity(taskStatus ? 0.8 : 1)
-                        
-                        Image(systemName: "checkmark.square.fill")
-                            .resizable()
-                            .frame(width: 26, height: 26)
-                            .foregroundColor(.gray)
-                            .font(.system(size: 22, weight: .bold, design: .default))
-                            .opacity(taskStatus ? 1 : 0)
-                    }
-                    .onTapGesture {
-                        withAnimation(.linear) {
-                            taskStatus.toggle()
+            ScrollView {
+                VStack {
+                    Spacer(minLength: 15)
+                    
+                    HStack {
+                        // STATUS TOGGLE
+                        ZStack {
+                            Image(systemName: "square")
+                                .resizable()
+                                .frame(width: 26, height: 26)
+                                .foregroundColor(taskStatus ? .gray : taskVM.styleForPriority(taskPriority: taskPriority))
+                                .opacity(taskStatus ? 0.8 : 1)
+                            
+                            Image(systemName: "checkmark.square.fill")
+                                .resizable()
+                                .frame(width: 26, height: 26)
+                                .foregroundColor(.gray)
+                                .font(.system(size: 22, weight: .bold, design: .default))
+                                .opacity(taskStatus ? 1 : 0)
                         }
-                    }
-                    
-                    Spacer()
-                    
-                    // DUEDATE
-                    if taskUIDeleted {
-                        DatePicker("no label", selection: $taskDueDate, in: Date()...)
-                            .foregroundColor(.accentColor)
-                            .frame(height: 55)
-                            .cornerRadius(10)
-                            .pickerStyle(.menu)
-                            .labelsHidden()
-                    } else {
-                        DatePicker("no label", selection: $taskDueDate, in: Date()..., displayedComponents: .date)
-                            .foregroundColor(.accentColor)
-                            .frame(height: 55)
-                            .cornerRadius(10)
-                            .pickerStyle(.menu)
-                            .labelsHidden()
-                    }
-                    
-                    
-                    Spacer()
-                    
-                    // PRIORITY
-                    Menu {
-                        Picker("", selection: $taskPriority) {
-                            ForEach(taskVM.taskPriorityOptions, id: \.self) {
-                                Text($0.capitalized)
+                        .onTapGesture {
+                            withAnimation(.linear) {
+                                taskStatus.toggle()
                             }
                         }
-                        .font(.headline)
-                    } label: {
-                        Image(systemName: "flag.fill")
-                            .font(.title2)
-                            .foregroundColor(taskVM.styleForPriority(taskPriority: taskPriority))
+                        
+                        Spacer()
+                        
+                        // DUEDATE
+                        if taskUIDeleted {
+                            DatePicker("no label", selection: $taskDueDate, in: Date()...)
+                                .foregroundColor(.accentColor)
+                                .frame(height: 55)
+                                .cornerRadius(10)
+                                .pickerStyle(.menu)
+                                .labelsHidden()
+                        } else {
+                            DatePicker("no label", selection: $taskDueDate, in: Date()..., displayedComponents: .date)
+                                .foregroundColor(.accentColor)
+                                .frame(height: 55)
+                                .cornerRadius(10)
+                                .pickerStyle(.menu)
+                                .labelsHidden()
+                        }
+                        
+                        
+                        Spacer()
+                        
+                        // PRIORITY
+                        Menu {
+                            Picker("", selection: $taskPriority) {
+                                ForEach(taskVM.taskPriorityOptions, id: \.self) {
+                                    Text($0.capitalized)
+                                }
+                            }
+                            .font(.headline)
+                        } label: {
+                            Image(systemName: "flag.fill")
+                                .font(.title2)
+                                .foregroundColor(taskVM.styleForPriority(taskPriority: taskPriority))
+                        }
                     }
-                }
-                .padding(.horizontal, 15)
-                
-//                ScrollView {
+                    .padding(.horizontal, 15)
+                    
+                    //                ScrollView {
                     VStack {
                         
                         // DATE TIME TOGGLE
@@ -124,17 +127,18 @@ struct AddTaskView: View {
                                 .font(.headline)
                                 .bold()
                                 .foregroundColor(.accentColor)
-
+                            
                             Toggle("no label", isOn: $taskHasDetails)
                                 .tint(Color.accentColor)
                                 .labelsHidden()
                         }
                         .padding(.horizontal, 20)
                         .foregroundColor(.accentColor)
-                                                
+                        
                         HStack {
                             // EMOJI INPUT
                             TextField("🤷🏻‍♂️", text: $taskEmoji)
+                                .focused($addTaskIsFocus)
                                 .font(.title)
                                 .frame(width: 55, height: 55)
                                 .cornerRadius(10)
@@ -161,7 +165,7 @@ struct AddTaskView: View {
                                 .frame(maxWidth: .infinity)
                                 .padding(10)
                                 .cornerRadius(10)
-
+                            
                         }
                         .padding(.horizontal, 15)
                         .padding(.vertical, 5)
@@ -180,9 +184,9 @@ struct AddTaskView: View {
                                         .frame(minHeight: 50)
                                         .multilineTextAlignment(.leading)
                                         .overlay(
-                                                RoundedRectangle(cornerRadius: 10)
-                                                    .stroke(Color.blue, lineWidth: 1.5)
-                                            )
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(Color.blue, lineWidth: 1.5)
+                                        )
                                         .onTapGesture {
                                             self.showDefaultDetailsText = false
                                         }
@@ -232,10 +236,10 @@ struct AddTaskView: View {
                                 self.showAlert = true
                                 return
                             }
-
+                            
                             // ADD NEW TASK
                             taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted)
-
+                            
                             taskTitleTextField = ""
                             taskDetailsTextField = ""
                             
@@ -254,11 +258,11 @@ struct AddTaskView: View {
                                         .stroke(Color.accentColor, lineWidth: 4))
                                 .cornerRadius(10)
                         })
-                            .padding(15)
+                        .padding(15)
                         
                         Spacer()
                     }
-//                }
+                }
             }
             .navigationBarHidden(true)
         }

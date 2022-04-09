@@ -12,10 +12,18 @@ import SwiftUI
 
 final class UserViewModel: DataClassViewModel {
     
-    @Published var userOne = User(userName: "DefaultName", taskOverdueLimit: 3, themeColor: "yellow", profileImage: UIImage(named: "JokerCodeProfile")!, timerDuration: 25, timerBreakDuration: 5, timerRounds: 5)
+//    let initUserDefaults = User(userName: "DefaultName", taskOverdueLimit: 3, themeColor: "yellow", profileImage: UIImage(named: "JokerCodeProfile")!, timerDuration: 25, timerBreakDuration: 5, timerRounds: 5)
     
     let secondaryAccentColor = Color("SecondaryAccentColor")
-
+    
+    override init() {
+        super.init()
+        
+        // initUser when app is first started
+        if savedUserData.isEmpty {
+            updateUserEntity(userName: "UserName", taskOverdueLimit: 14, themeColor: "blue", duration: 25, breakDuration: 5, rounds: 8)
+        }
+    }
     
     // ***********************************
     // ***** USERVIEWMODEL FUNCTIONS *****
