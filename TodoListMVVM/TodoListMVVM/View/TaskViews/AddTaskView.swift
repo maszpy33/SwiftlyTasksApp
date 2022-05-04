@@ -110,8 +110,7 @@ struct AddTaskView: View {
                             Image(systemName: "clock.fill")
                                 .font(.title3)
                             Text("Time")
-                                .font(.system(size: 16, weight: .semibold))
-                                .bold()
+                                .font(.system(size: 16, weight: .bold))
                                 .foregroundColor(.accentColor)
                             
                             Toggle("no label", isOn: $taskUIDeleted)
@@ -124,8 +123,7 @@ struct AddTaskView: View {
                             Image(systemName: "note")
                                 .font(.title3)
                             Text("Details")
-                                .font(.headline)
-                                .bold()
+                                .font(.system(size: 16, weight: .bold))
                                 .foregroundColor(.accentColor)
                             
                             Toggle("no label", isOn: $taskHasDetails)
@@ -163,6 +161,7 @@ struct AddTaskView: View {
                             TextField("Add new task...", text: $taskTitleTextField)
                                 .font(.headline)
                                 .frame(maxWidth: .infinity)
+                                .background(Color(UIColor.secondarySystemBackground))
                                 .padding(10)
                                 .cornerRadius(10)
                             
@@ -248,7 +247,7 @@ struct AddTaskView: View {
                         }, label: {
                             Text("Save")
                                 .font(.headline)
-                                .foregroundColor(.white)
+                                .foregroundColor(.primary)
                                 .frame(height: 55)
                                 .frame(maxWidth: .infinity)
                                 .background(Color.accentColor.opacity(0.2))

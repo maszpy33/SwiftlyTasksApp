@@ -39,7 +39,8 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color(red: 0.1, green: 0.1, blue: 0.1)
+//                Color(red: 0.1, green: 0.1, blue: 0.1)
+                userVM.secondaryAccentColor
                     .edgesIgnoringSafeArea(.all)
 
                 ScrollView {
@@ -142,7 +143,7 @@ struct SettingsView: View {
                         }, label: {
                             Text("Save")
                                 .font(.headline)
-                                .foregroundColor(.white)
+                                .foregroundColor(.primary)
                                 .frame(height: 55)
                                 .frame(maxWidth: .infinity)
                                 .background(Color.accentColor.opacity(0.2))

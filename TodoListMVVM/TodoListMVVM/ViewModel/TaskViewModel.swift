@@ -39,7 +39,7 @@ final class TaskViewModel: DataClassViewModel {
     var searchableTasks: [TaskItemEntity] {
         print(searchText)
         return searchText == "" ? savedTasks : savedTasks.filter {
-            $0.wTitle.contains(searchText)
+            $0.wTitle.lowercased().contains(searchText.lowercased())
         }
     }
     
