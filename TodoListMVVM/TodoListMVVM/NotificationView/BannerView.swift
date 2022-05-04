@@ -35,6 +35,7 @@ struct BannerView: View {
     @State var title: String
     @State var description: String
     
+    let secondaryAccentColor = Color("SecondaryAccentColor")
     
     var body: some View {
         VStack {
@@ -55,7 +56,7 @@ struct BannerView: View {
             }
             .frame(maxWidth: .infinity)
             .frame(height: 85)
-            .background(Color.secondary)
+            .background(secondaryAccentColor)
             .foregroundColor(Color.primary)
             .clipShape(Capsule())
             .cornerRadius(20)

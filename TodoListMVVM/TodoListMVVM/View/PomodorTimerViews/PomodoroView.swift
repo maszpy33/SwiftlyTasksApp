@@ -12,7 +12,7 @@ import NotificationCenter
 struct DefaultButtonStyle: ButtonStyle {
     func makeBody(configuration: Self.Configuration) -> some View {
         return configuration.label
-            .foregroundColor(.white)
+            .foregroundColor(.primary)
             .background(Color.accentColor.opacity(0.2))
             .cornerRadius(10)
             .background(
@@ -51,6 +51,8 @@ struct PomodoroView: View {
     
     @State private var currentUserName: String = "UserName"
     
+    @State private var showingConfirmationAlert = false
+    
     // TIMER TEXT VARIABLES
     let bannerSaveDataTitle = "⏰ Timer is up"
     let bannerSaveDataDescription = "finished focus, take a break"
@@ -58,7 +60,8 @@ struct PomodoroView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color(red: 0.1, green: 0.1, blue: 0.1)
+//                Color(red: 0.1, green: 0.1, blue: 0.1)
+                userVM.secondaryAccentColor
                     .edgesIgnoringSafeArea(.all)
                 
                 VStack {
@@ -71,45 +74,45 @@ struct PomodoroView: View {
                             .stroke(Color.accentColor.opacity(0.2), style: StrokeStyle(lineWidth: 10, lineCap: .round))
                             .frame(width: circleRange, height: circleRange)
                         Circle()
-                            .trim(from: 0, to: self.to)
+                            .trim(from: 0, to: to)
                             .stroke(Color.accentColor, style: StrokeStyle(lineWidth: 10, lineCap: .round))
                             .frame(width: circleRange, height: circleRange)
                             .rotationEffect(.init(degrees: -90))
-                            .opacity(self.isTimerStarted ? 1 : 0)
+                            .opacity(isTimerStarted ? 1 : 0)
                         
                         VStack {
-                            if self.pausePressed {
+                            if pausePressed {
                                 Text("Paused")
                                     .font(.custom("Avenir", size: 65))
                                     .fontWeight(.bold)
                                 
-                                Text("\(self.currentTimeDuration, specifier: formatTime())")
+                                Text("\(currentTimeDuration, specifier: formatTime())")
                                     .font(.custom("Avenir", size: 25))
                                     .fontWeight(.bold)
                             } else {
-                                Text("\(self.currentTimeDuration, specifier: formatTime())")
+                                Text("\(currentTimeDuration, specifier: formatTime())")
                                     .font(.custom("Avenir", size: 65))
                                     .fontWeight(.bold)
                             }
                         }
                     }//
                     
-                    if self.isTimerStarted {
-                        if self.pausePressed {
+                    if isTimerStarted {
+                        if pausePressed {
                             
                             // *********************
                             // ** CONTINUE BUTTON **
                             // *********************
                             Button(action: {
                                 
-                                self.pausePressed = false
+                                pausePressed = false
                                 
                             }) {
                                 HStack(spacing: 15) {
                                     Text("Continue")
                                         .bold()
                                         .font(.title)
-                                        .foregroundColor(.white)
+                                        .foregroundColor(.primary)
                                         .frame(width:(UIScreen.main.bounds.width / 2) - 55)
                                 }
                                 .padding(.vertical)
@@ -124,13 +127,14 @@ struct PomodoroView: View {
                                 // *** PAUSE BUTTON ***
                                 // ********************
                                 Button(action: {
-                                    
-                                    self.pausePressed = true
+                                    withAnimation(Animation.easeInOut(duration: 0.7)) {
+                                        pausePressed = true
+                                    }
                                     
                                 }) {
                                     HStack(spacing: 15) {
                                         Text("Pause")
-                                            .foregroundColor(.white)
+                                            .foregroundColor(.primary)
                                             .bold()
                                             .font(.title)
                                             .frame(width:(UIScreen.main.bounds.width / 2) - 55)
@@ -144,12 +148,15 @@ struct PomodoroView: View {
                                 // ********************
                                 Button(action: {
                                     
-                                    self.isTimerStarted = false
+                                    showingConfirmationAlert = true
+                                    withAnimation(Animation.easeInOut(duration: 1)) {
+                                        pausePressed = true
+                                    }
                                     
                                 }) {
                                     HStack(spacing: 15) {
                                         Text("Quit")
-                                            .foregroundColor(.white)
+                                            .foregroundColor(.primary)
                                             .bold()
                                             .font(.title)
                                             .frame(width:(UIScreen.main.bounds.width / 2) - 55)
@@ -157,8 +164,6 @@ struct PomodoroView: View {
                                     .padding(.vertical)
                                 }
                                 .buttonStyle(DefaultButtonStyle())
-                                
-                                
                             }
                             .padding(.top, 55)
                         }
@@ -174,7 +179,7 @@ struct PomodoroView: View {
                         }) {
                             HStack(spacing: 15) {
                                 Text("Start")
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.primary)
                                     .bold()
                                     .font(.title)
                                     .frame(width:(UIScreen.main.bounds.width / 2) - 55)
@@ -196,7 +201,12 @@ struct PomodoroView: View {
                     }
                     .padding(.bottom, 15)
                 }
-                
+                .alert("Stop Current Timer", isPresented: $showingConfirmationAlert) {
+                    Button("Stop Timer") { isTimerStarted = false }
+                                    Button("Cancel", role: .cancel) { pausePressed = false }
+                                } message: {
+                                    Text("Really want to quit the\nrunning timer?")
+                                }
             }
             .onReceive(self.time, perform: { _ in
                 //                print("newDuration: \(self.newDuration)")

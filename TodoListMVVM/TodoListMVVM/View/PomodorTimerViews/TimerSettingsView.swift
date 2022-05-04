@@ -37,7 +37,8 @@ struct TimerSettingsView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color(red: 0.1, green: 0.1, blue: 0.1)
+//                Color(red: 0.1, green: 0.1, blue: 0.1)
+                userVM.secondaryAccentColor
                     .edgesIgnoringSafeArea(.all)
                 
                 ScrollView {

@@ -20,7 +20,7 @@ struct TaskView: View {
     
     var body: some View {
         ZStack {
-            Color(red: 0.1, green: 0.1, blue: 0.1)
+            userVM.secondaryAccentColor
                 .edgesIgnoringSafeArea(.all)
             
             VStack(alignment: .leading) {
