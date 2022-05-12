@@ -29,6 +29,7 @@ struct PomodoroView: View {
     
     @ObservedObject var userVM: UserViewModel
     @ObservedObject var taskVM: TaskViewModel
+    @StateObject var nm = NotificationManager()
     
     // SETTINGS TIMER VARIABLES
     @State var newDuration: Int32 = 25
@@ -176,6 +177,7 @@ struct PomodoroView: View {
                             
                             self.isTimerStarted = true
                             
+                            timerNotification(focusTime: Double(userTimerDuration))
                         }) {
                             HStack(spacing: 15) {
                                 Text("Start")
@@ -201,21 +203,16 @@ struct PomodoroView: View {
                     }
                     .padding(.bottom, 15)
                 }
+                // ASK FOR PERMISSION TO TERMINATE AN RUNNING TIMER
                 .alert("Stop Current Timer", isPresented: $showingConfirmationAlert) {
                     Button("Stop Timer") { isTimerStarted = false }
-                                    Button("Cancel", role: .cancel) { pausePressed = false }
+                                    Button("Continue Timer", role: .cancel) { pausePressed = false }
                                 } message: {
                                     Text("Really want to quit the\nrunning timer?")
                                 }
             }
             .onReceive(self.time, perform: { _ in
-                //                print("newDuration: \(self.newDuration)")
-                //                print("userTimerDuration: \(self.userTimerDuration)")
-                //                print("currentTimerDuration: \(self.currentTimeDuration)")
-                //                print(currentTimeDuration)
-                //                print(newDuration)
-                //                print(time)
-                
+                // CALCULATE THE REMAINING TIME OF THE TIMER
                 if self.isTimerStarted {
                     // if timer is up
                     if self.currentTimeDuration != 0 {
@@ -252,14 +249,12 @@ struct PomodoroView: View {
                                     HStack {
                 NavigationLink(destination: TimerSettingsView(newDuration: $newDuration, newBreakDuration: $newBreakDuration, newRounds: $newRounds).environmentObject(userVM)) {
                     HStack {
-                        //                        Image(systemName: "clock")
                         Image(systemName: "gear")
                             .foregroundColor(.accentColor)
                         Text("Settings")
                             .font(.title2)
                             .bold()
                     }
-                    //                    .foregroundColor(.accentColor)
                 }
             }
                                 
@@ -339,21 +334,37 @@ struct PomodoroView: View {
     }
     
     
-    private func timerNotification(focusTime: Int) {
-        NotificationManager.instance.scheduleNotification()
+    private func timerNotification(focusTime: Double) {
         let content = UNMutableNotificationContent()
-        content.title = "☑️ Focus Done"
-        content.subtitle = "finished your \(focusTime)min inteval"
+        content.title = "☑️ \(focusTime)min Timer is done"
+        content.subtitle = "Take a break!"
         content.sound = UNNotificationSound.default
         
         // time trigger
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: focusTime, repeats: false)
         
         let request = UNNotificationRequest(identifier: UUID().uuidString,
                                             content: content,
                                             trigger: trigger)
         
         UNUserNotificationCenter.current().add(request)
+        print("Added notification request")
+        
+//
+//        NotificationManager.instance.scheduleNotification()
+//        let content = UNMutableNotificationContent()
+//        content.title = "☑️ Focus Done"
+//        content.subtitle = "finished your \(focusTime)min inteval"
+//        content.sound = UNNotificationSound.default
+//
+//        // time trigger
+//        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
+//
+//        let request = UNNotificationRequest(identifier: UUID().uuidString,
+//                                            content: content,
+//                                            trigger: trigger)
+//
+//        UNUserNotificationCenter.current().add(request)
     }
 }
 

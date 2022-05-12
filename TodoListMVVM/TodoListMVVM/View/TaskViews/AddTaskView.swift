@@ -171,8 +171,6 @@ struct AddTaskView: View {
                             // TITLE
                             TextField("Add new task...", text: $taskTitleTextField)
                                 .font(.headline)
-                                .frame(maxWidth: .infinity)
-                                .background(Color(UIColor.secondarySystemBackground))
                                 .padding(10)
                                 .cornerRadius(10)
                             

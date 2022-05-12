@@ -187,7 +187,7 @@ struct EditView: View {
                                 Text("\(taskCountdown)")
                                     .font(.system(.title2, design: .rounded ))
                                     .multilineTextAlignment(.leading)
-                                    .foregroundColor(.accentColor)
+                                    .foregroundColor(.primary)
                                 
                                 Spacer()
                             }

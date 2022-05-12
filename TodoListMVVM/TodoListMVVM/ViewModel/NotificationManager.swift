@@ -9,11 +9,15 @@ import Foundation
 import UserNotifications
 
 
-class NotificationManager {
+class NotificationManager: ObservableObject {
     
     // https://www.youtube.com/watch?v=mG9BVAs8AIo
     
     static let instance = NotificationManager() // singelton
+    
+    var reminderInXMinutes: Double = 2.0
+    var reminderTitle: String = ""
+    var reminderSubTitle: String = ""
     
     func requestAuthorization() {
         let options: UNAuthorizationOptions = [.alert, .sound, .badge]
@@ -34,7 +38,7 @@ class NotificationManager {
         content.badge = 1
         
         // time trigger
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3.0, repeats: false)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: reminderInXMinutes, repeats: false)
         
         let request = UNNotificationRequest(identifier: UUID().uuidString,
                                             content: content,
