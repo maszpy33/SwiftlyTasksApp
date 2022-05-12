@@ -13,11 +13,12 @@ import SwiftUI
 final class TaskViewModel: DataClassViewModel {
     
     @Published var sortType: SortType = .priority
-    //    @Published var isPresented = false
-    //    @Published var searched = ""
     
     // DATEFORMATTER
     let dateFormatter = DateFormatter()
+    
+    // FIXME: Make default time changable
+    let defaultTime = Calendar.current.date(bySettingHour: 10, minute: 0, second: 0, of: Date())!
     
     // Settings choice arrays for adding or edditing a task
     let taskCategoryOptions = ["private","computer science", "university", "art", "sport", "other"]
@@ -25,12 +26,6 @@ final class TaskViewModel: DataClassViewModel {
     let taskPriorityOptions = ["non", "low", "medium", "high"]
     let taskOverdueLimit = -3
     let secondaryAccentColor = Color("SecondaryAccentColor")
-    
-//    @Published var tasks: [TaskItem] = [] {
-//        didSet {
-//            saveTaskData()
-//        }
-//    }
     
     // SEARCHBAR string variable
     @Published var searchText = ""
@@ -195,6 +190,27 @@ final class TaskViewModel: DataClassViewModel {
         return (hoursLeft, "Hours")
     }
     
+    func returnDaysAndHours(dueDate: Date) -> String {
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .medium
+//        let today = dateFormatter.string(from: Date())
+//        let dueDateFormatted = dateFormatter.string(from: dueDate)
+        
+        let taskDueDate = Calendar.current.dateComponents([.minute, .hour, .day, .month, .year], from: dueDate)
+        
+        let taskDueDateComponents = DateComponents(calendar: Calendar.current, year: taskDueDate.year!, month: taskDueDate.month!, day: taskDueDate.day!, hour: taskDueDate.hour!, minute: taskDueDate.minute!).date!
+        
+        let diffs = Calendar.current.dateComponents([.day, .hour], from: Date(), to: taskDueDateComponents)
+        
+        let daysUntil = diffs.day ?? 0 + 1
+        let hoursLeft = diffs.hour ?? 0 + 1
+        let minutesLeft = diffs.minute ?? 0 + 1
+        
+        let resultCountdown = "\(daysUntil)d \(hoursLeft)h \(minutesLeft)m"
+        
+        return resultCountdown
+    }
+    
     
     //    func styleForPriority(taskPriority: String) -> Color {
     //        let priority = Priority(rawValue: taskPriority)
@@ -209,15 +225,6 @@ final class TaskViewModel: DataClassViewModel {
     //        default:
     //            return Color.black
     //        }
-    //    }
-    
-    
-    //    func addTask(task: TaskItem) {
-    //        tasks.append(task)
-    //    }
-    //
-    //    func removeTask(indexAt: IndexSet) {
-    //        tasks.remove(atOffsets: indexAt)
     //    }
     
 //        func sort() {

@@ -46,10 +46,12 @@ struct BannerView: View {
                     Text(title)
                         .font(.title3)
                         .bold()
+                        .foregroundColor(.primary)
                     Divider()
                     Text(description)
                         .font(.headline)
                         .bold()
+                        .foregroundColor(.primary)
                 }
                 
                 Spacer()
@@ -58,36 +60,41 @@ struct BannerView: View {
             .frame(height: 85)
             .background(secondaryAccentColor)
             .foregroundColor(Color.primary)
-            .clipShape(Capsule())
+            .clipShape(RoundedRectangle(cornerRadius: 20))
             .cornerRadius(20)
             .background(
-                Capsule()
+                RoundedRectangle(cornerRadius: 20)
                     .stroke(Color.accentColor, lineWidth: 3))
             .padding(.horizontal)
-            
+            .shadow(
+                color: Color.black.opacity(0.7),
+                radius: 30,
+                x: 0,
+                y: 30)
+            .offset(y: -5)
             
             Spacer()
         }
     }
     
-//    private func dismissBanner() {
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-//            withAnimation(.default) {
-//                showBanner = false
-//            }
-//        }
-//    }
+    //    private func dismissBanner() {
+    //        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+    //            withAnimation(.default) {
+    //                showBanner = false
+    //            }
+    //        }
+    //    }
 }
+
+
+
+struct BannerView_Previews: PreviewProvider {
     
+    @State(initialValue: "Default Banner Title") var defaultTitle: String
+    @State(initialValue: "Default Banner Details") var defaultDetails: String
     
-    
-    struct BannerView_Previews: PreviewProvider {
-        
-        @State(initialValue: "Default Banner Title") var defaultTitle: String
-        @State(initialValue: "Default Banner Details") var defaultDetails: String
-        
-        static var previews: some View {
-            BannerView(title: "BannerTitle", description: "Banner Description")
-                .preferredColorScheme(.dark)
-        }
+    static var previews: some View {
+        BannerView(title: "BannerTitle", description: "Banner Description")
+            .preferredColorScheme(.dark)
     }
+}

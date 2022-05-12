@@ -18,6 +18,7 @@ struct EditView: View {
     
     @State private var addTime: Bool = true
     @State private var showDefaultDetailsText: Bool = true
+    @State private var taskCountdown: String = ""
     
     // Model Variables
     @State var taskTitleTextField: String = ""
@@ -111,9 +112,11 @@ struct EditView: View {
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundColor(.accentColor)
                                 
+                                // TIME TOGGLE
                                 Toggle("no label", isOn: $taskUIDeleted)
                                     .tint(Color.accentColor)
                                     .labelsHidden()
+                                
                                 
                                 Spacer()
                                 
@@ -127,6 +130,17 @@ struct EditView: View {
                                 Toggle("no label", isOn: $taskHasDetails)
                                     .tint(Color.accentColor)
                                     .labelsHidden()
+                                    .onReceive([self.taskHasDetails].publisher.first()) { toggleStatus in
+                                        // delete task details, when detials toggle is false
+                                        if !toggleStatus {
+                                            taskDetailsTextField = ""
+                                            showDefaultDetailsText = false
+                                        }
+                                        
+                                        if toggleStatus && taskDetailsTextField == "" {
+                                            showDefaultDetailsText = false
+                                        }
+                                    }
                             }
                             .padding(.horizontal, 20)
                             .foregroundColor(.accentColor)
@@ -163,21 +177,62 @@ struct EditView: View {
                             .padding(.horizontal, 15)
                             .padding(.vertical, 5)
                             
+                            // COUNTDOWN TEXT
+                            HStack {
+                                Text("Countdown: ")
+                                    .font(.system(.title2, design: .rounded ))
+                                    .bold()
+                                    .multilineTextAlignment(.leading)
+                                    .foregroundColor(.accentColor)
+                                Text("\(taskCountdown)")
+                                    .font(.system(.title2, design: .rounded ))
+                                    .multilineTextAlignment(.leading)
+                                    .foregroundColor(.accentColor)
+                                
+                                Spacer()
+                            }
+                            .padding(.horizontal, 10)
+                            .frame(height: 55)
+                            .cornerRadius(10)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    .stroke(Color.accentColor, lineWidth: 4))
+                            .cornerRadius(10)
+                            .multilineTextAlignment(.leading)
+                            .padding(.horizontal, 15)
+                            
                             // DETAILS
                             if taskHasDetails {
-                                VStack(alignment: .leading) {
-                                    Text("Add Details:")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                        .padding(.bottom, 3)
+                                ZStack {
+                                    VStack(alignment: .leading) {
+                                        Text("Add Details:")
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                            .padding(.bottom, 3)
+                                        
+                                        TextEditor(text: $taskDetailsTextField)
+                                            .frame(minHeight: 50)
+                                            .multilineTextAlignment(.leading)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .stroke(Color.blue, lineWidth: 1.5)
+                                            )
+                                            .onTapGesture {
+                                                showDefaultDetailsText = false
+                                            }
+                                    }
                                     
-                                    TextEditor(text: $taskDetailsTextField)
-                                        .frame(minHeight: 50)
-                                        .multilineTextAlignment(.leading)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 10)
-                                                .stroke(Color.blue, lineWidth: 1.5)
-                                        )
+                                    if taskDetailsTextField == "" {
+                                        VStack(alignment: .leading) {
+                                            HStack(alignment: .top) {
+                                                Text("Add new task description...")
+                                                    .opacity(self.showDefaultDetailsText ? 0.6 : 0)
+                                                Spacer()
+                                            }
+                                            Spacer()
+                                        }
+                                        .offset(x: 5, y: 30)
+                                    }
                                 }
                                 .frame(height: 200)
                                 .padding(.horizontal, 15)
@@ -192,6 +247,10 @@ struct EditView: View {
                                     self.errorMessage = "pleace enter a title to save the task"
                                     self.showAlert = true
                                     return
+                                }
+                                
+                                if taskDetailsTextField == "" {
+                                    taskHasDetails = false
                                 }
                                 
                                 // SAVE CHANGES
@@ -234,6 +293,8 @@ struct EditView: View {
                     if self.taskDetailsTextField != "" {
                         self.taskHasDetails = true
                     }
+                    
+                    self.taskCountdown = taskVM.returnDaysAndHours(dueDate: taskDueDate)
                 }
             }
         }

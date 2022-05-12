@@ -67,6 +67,7 @@ struct AddTaskView: View {
                         Spacer()
                         
                         // DUEDATE
+                        // if add specific time to task
                         if taskUIDeleted {
                             DatePicker("no label", selection: $taskDueDate, in: Date()...)
                                 .foregroundColor(.accentColor)
@@ -74,6 +75,7 @@ struct AddTaskView: View {
                                 .cornerRadius(10)
                                 .pickerStyle(.menu)
                                 .labelsHidden()
+                        // no specific time to task -> set to default
                         } else {
                             DatePicker("no label", selection: $taskDueDate, in: Date()..., displayedComponents: .date)
                                 .foregroundColor(.accentColor)
@@ -102,7 +104,6 @@ struct AddTaskView: View {
                     }
                     .padding(.horizontal, 15)
                     
-                    //                ScrollView {
                     VStack {
                         
                         // DATE TIME TOGGLE
@@ -116,6 +117,16 @@ struct AddTaskView: View {
                             Toggle("no label", isOn: $taskUIDeleted)
                                 .tint(Color.accentColor)
                                 .labelsHidden()
+                                .onChange(of: taskUIDeleted) { toggleStatus in
+                                    showDefaultDetailsText = true
+                                    taskDetailsTextField = ""
+                                    
+                                    // delete task details, when detials toggle is false
+                                    if !toggleStatus {
+                                        taskDetailsTextField = ""
+                                    }
+                                }
+
                             
                             Spacer()
                             
@@ -187,7 +198,7 @@ struct AddTaskView: View {
                                                 .stroke(Color.blue, lineWidth: 1.5)
                                         )
                                         .onTapGesture {
-                                            self.showDefaultDetailsText = false
+                                            showDefaultDetailsText = false
                                         }
                                 }
                                 
@@ -206,25 +217,6 @@ struct AddTaskView: View {
                             .padding(.horizontal, 15)
                             .padding(.top, 15)
                         }
-                        
-                        // CATEGORY
-                        //                                Picker(selection: $taskCategory,
-                        //                                       label:
-                        //                                        Text("\(taskCategory)")
-                        //                                        .font(.system(size: 18, weight: .bold))
-                        //                                        .foregroundColor(.white)
-                        //                                ) {
-                        //                                    ForEach(taskVM.taskCategoryOptions, id: \.self) {
-                        //                                        Text($0.capitalized)
-                        //                                    }
-                        //                                }
-                        //                                .foregroundColor(.white)
-                        //                                .frame(height: 55)
-                        //                                .frame(maxWidth: .infinity)
-                        //                                .background(Color(red: 0.2, green: 0.2, blue: 0.2))
-                        //                                .cornerRadius(10)
-                        //                                //                        .padding(5)
-                        //                                .pickerStyle(.menu)
                         
                         // SAVE BUTTON
                         Button(action: {
@@ -267,6 +259,10 @@ struct AddTaskView: View {
         }
         .alert(isPresented: $showAlert) {
             Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
+        }
+        .onAppear {
+            // default time currently at 10am
+            taskDueDate = taskVM.defaultTime
         }
     }
     

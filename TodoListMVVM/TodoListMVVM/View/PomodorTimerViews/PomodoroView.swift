@@ -288,6 +288,7 @@ struct PomodoroView: View {
             }
         }
         .onChange(of: scenePhase) { newPhase in
+            // keep track of time, when app moves to background
             if newPhase == .active {
                 if isTimerStarted && !pausePressed {
                     print("Previous Time: \(self.currentTimeDuration)")
@@ -307,21 +308,9 @@ struct PomodoroView: View {
     }
     
     private func calculatePassedTime() {
-//        taskVM.dateFormatter.dateStyle = .medium
-//        taskVM.dateFormatter.timeStyle = .medium
-//
-//        let timeSaved = Calendar.current.dateComponents([.second, .minute, .hour], from: self.saveCurrentTime)
-//        let timeNow = Calendar.current.dateComponents([.second], from: Date())
-//
-//        let timePassed = Calendar.current.dateComponents([.second], from: timeSaved, to: timeNow)
-//
-//        let diffHours = timePassed.hour ?? 0
-//        let diffMinutes = timePassed.minute ?? 0
-//        let diffSeconds = timePassed.second ?? 0
-//        print("Difference Time: \(diffHours) seconds")
-//        print("Difference Time: \(diffMinutes) seconds")
-//        print("Difference Time: \(diffSeconds) seconds")
-        
+        // if app moves to background the remaining time is and current time are saved
+        // when usere opens app again, the new current time is subtracted by the saved time, when
+        // the app whent to the background -> subtract differens from time remaining
         let start = self.saveCurrentTime
         
         let end = DispatchTime.now()
@@ -334,6 +323,12 @@ struct PomodoroView: View {
         }
         
         self.currentTimeDuration = self.currentTimeDuration - Int32(passedSeconds)
+        
+        // check if time is below 0
+        guard currentTimeDuration > 0 else {
+            self.isTimerStarted = false
+            return
+        }
     }
     
     private func formatTime() -> String {
@@ -342,6 +337,7 @@ struct PomodoroView: View {
         
         return String(format: "%02i:%02i", minutes, seconds)
     }
+    
     
     private func timerNotification(focusTime: Int) {
         NotificationManager.instance.scheduleNotification()

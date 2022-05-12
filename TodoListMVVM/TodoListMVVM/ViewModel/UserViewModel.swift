@@ -16,6 +16,9 @@ final class UserViewModel: DataClassViewModel {
     
     let secondaryAccentColor = Color("SecondaryAccentColor")
     
+    // FIXME: Make default time changable
+    let defaultTime = Calendar.current.date(bySettingHour: 10, minute: 0, second: 0, of: Date())!
+    
     override init() {
         super.init()
         
