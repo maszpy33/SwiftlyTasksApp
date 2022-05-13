@@ -94,7 +94,8 @@ struct TaskView: View {
                     
                 }
             }
-            .padding(10)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 2)
             .background(taskVM.styleForPriority(taskPriority: task.priority ?? "normal").opacity(0.2))
             .cornerRadius(10)
             .background(
@@ -104,9 +105,9 @@ struct TaskView: View {
         }
         .onAppear {
             if task.uiDeleted {
-                (self.daysHoursLeft, self.daysHoursString) = taskVM.daysHoursLeft(dueDate: task.dueDate ?? Date())
+                (self.daysHoursLeft, self.daysHoursString) = taskVM.daysHoursLeft(dueDate: task.dueDate ?? Date(), hasTime: task.uiDeleted)
             } else {
-                (self.daysHoursLeft, self.daysHoursString) = taskVM.daysLeft(dueDate: task.dueDate ?? Date())
+                (self.daysHoursLeft, self.daysHoursString) = taskVM.daysHoursLeft(dueDate: task.dueDate ?? Date(), hasTime: task.uiDeleted)
             }
             
             self.overdueLimit = userVM.savedUserData.first?.taskOverdueLimit ?? 100

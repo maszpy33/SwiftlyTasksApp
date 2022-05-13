@@ -120,47 +120,60 @@ final class TaskViewModel: DataClassViewModel {
         }
     }
     
-    func daysLeft(dueDate: Date) -> (Int, String) {
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .short
-        let today = dateFormatter.string(from: Date())
-        let dueDateFormatted = dateFormatter.string(from: dueDate)
-        
-        print(dueDateFormatted)
-        
-        guard dueDateFormatted != today else {
-            return (0, "Days")
-        }
-        
-        let taskDueDate = Calendar.current.dateComponents([.day, .month, .year], from: dueDate)
-        
-        let taskDueDateComponents = DateComponents(calendar: Calendar.current, year: taskDueDate.year!, month: taskDueDate.month!, day: taskDueDate.day!).date!
-        
-        let diffs = Calendar.current.dateComponents([.day], from: Date(), to: taskDueDateComponents)
-        
-        let daysUntil = diffs.day ?? 0 + 1
-        
-        guard daysUntil != 1 else {
-            return (daysUntil, "Day")
-        }
-                    
-        return (daysUntil, "Days")
-    }
+//    func daysLeft(dueDate: Date) -> (Int, String) {
+//        dateFormatter.dateStyle = .medium
+//        dateFormatter.timeStyle = .short
+//        let today = dateFormatter.string(from: Date())
+//        let dueDateFormatted = dateFormatter.string(from: dueDate)
+//        
+//        print(dueDateFormatted)
+//        
+//        guard dueDateFormatted != today else {
+//            return (0, "Days")
+//        }
+//        
+//        let taskDueDate = Calendar.current.dateComponents([.day, .month, .year], from: dueDate)
+//        
+//        let taskDueDateComponents = DateComponents(calendar: Calendar.current, year: taskDueDate.year!, month: taskDueDate.month!, day: taskDueDate.day!).date!
+//        
+//        let diffs = Calendar.current.dateComponents([.day], from: Date(), to: taskDueDateComponents)
+//        
+//        let daysUntil = diffs.day ?? 0 + 1
+//        
+//        guard daysUntil != 1 else {
+//            return (daysUntil, "Day")
+//        }
+//                    
+//        return (daysUntil, "Days")
+//    }
     
     // calculate how many days or hours are left till task
-    func daysHoursLeft(dueDate: Date) -> (Int, String) {
+    func daysHoursLeft(dueDate: Date, hasTime: Bool) -> (Int, String) {
+        
+        // check if task has due day time else default time 10am
+        var newDueDate: Date {
+            if !hasTime {
+                let newDueDate = Calendar.current.date(bySettingHour: 10, minute: 0, second: 0, of: dueDate)!
+                return newDueDate
+            } else {
+                let newDueDate = dueDate
+                return newDueDate
+            }
+        }
+        
+
+        
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
+        let dueDateFormatted = dateFormatter.string(from: newDueDate)
         let today = dateFormatter.string(from: Date())
-        let dueDateFormatted = dateFormatter.string(from: dueDate)
         
-//        print(dueDateFormatted)
         
         guard dueDateFormatted != today else {
             return (0, "Hours")
         }
         
-        let taskDueDate = Calendar.current.dateComponents([.hour, .day, .month, .year], from: dueDate)
+        let taskDueDate = Calendar.current.dateComponents([.hour, .day, .month, .year], from: newDueDate)
         
         let taskDueDateComponents = DateComponents(calendar: Calendar.current, year: taskDueDate.year!, month: taskDueDate.month!, day: taskDueDate.day!, hour: taskDueDate.hour!).date!
         
@@ -168,11 +181,11 @@ final class TaskViewModel: DataClassViewModel {
         
 //        print(diffs)
         
-        let daysUntil = diffs.day ?? 0 + 1
-        let hoursLeft = diffs.hour ?? 0 + 1
+        let daysUntil = (diffs.day ?? 0)
+        let hoursLeft = (diffs.hour ?? 0)
         
-        // if days is not 0 return days
-        guard daysUntil == 0 else {
+        // if days higher than 1 return days
+        guard daysUntil < 2 else {
             return (daysUntil, "Days")
         }
         
@@ -182,7 +195,7 @@ final class TaskViewModel: DataClassViewModel {
         }
         
         // if hours != 1 return hours with hour string
-        guard hoursLeft != 1 else {
+        guard hoursLeft < 0 else {
             return (hoursLeft, "hour")
         }
         

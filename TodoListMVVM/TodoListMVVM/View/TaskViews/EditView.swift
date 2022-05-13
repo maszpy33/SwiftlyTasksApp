@@ -62,6 +62,12 @@ struct EditView: View {
                         .onTapGesture {
                             withAnimation(.linear) {
                                 taskStatus.toggle()
+                                
+                                // update task without pressing the save button
+                                // when status is changed
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                    taskVM.updateTaskStatus(taskEntity: task)
+                                        }
                             }
                         }
                         

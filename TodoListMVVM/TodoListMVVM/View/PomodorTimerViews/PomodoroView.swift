@@ -270,7 +270,6 @@ struct PomodoroView: View {
             
             // so newDuration is only changed, when save button is pressed
             // otherwise, set newDuration to current userTimerDuration
-            
             if !userVM.savedUserData.isEmpty {
                 let currentUser = userVM.savedUserData.first!
                 self.userTimerDuration = currentUser.timerDuration * 60
@@ -336,7 +335,7 @@ struct PomodoroView: View {
     
     private func timerNotification(focusTime: Double) {
         let content = UNMutableNotificationContent()
-        content.title = "☑️ \(focusTime)min Timer is done"
+        content.title = "☑️ \(focusTime/60.0)min Timer is done"
         content.subtitle = "Take a break!"
         content.sound = UNNotificationSound.default
         
