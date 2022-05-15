@@ -67,6 +67,8 @@ struct TaskView: View {
                             Text(task.dueDate ?? Date(), style: .date)
                             Text(task.dueDate ?? Date(), style: .time)
                                 .opacity(task.uiDeleted ? 1 : 0)
+                            Text("uhr")
+                                .opacity(task.uiDeleted ? 1 : 0)
                         }
                     }
                     
@@ -104,11 +106,12 @@ struct TaskView: View {
             .opacity(task.status ? 0.7 : 1)
         }
         .onAppear {
-            if task.uiDeleted {
-                (self.daysHoursLeft, self.daysHoursString) = taskVM.daysHoursLeft(dueDate: task.dueDate ?? Date(), hasTime: task.uiDeleted)
-            } else {
-                (self.daysHoursLeft, self.daysHoursString) = taskVM.daysHoursLeft(dueDate: task.dueDate ?? Date(), hasTime: task.uiDeleted)
-            }
+            (self.daysHoursLeft, self.daysHoursString) = taskVM.daysHoursLeft(dueDate: task.dueDate ?? Date(), hasTime: task.uiDeleted)
+//            if task.uiDeleted {
+//
+//            } else {
+//                (self.daysHoursLeft, self.daysHoursString) = taskVM.daysHoursLeft(dueDate: task.dueDate ?? Date(), hasTime: task.uiDeleted)
+//            }
             
             self.overdueLimit = userVM.savedUserData.first?.taskOverdueLimit ?? 100
             

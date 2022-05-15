@@ -19,14 +19,18 @@ struct ListView: View {
     
     @State private var currentUserName: String = "UserName"
     
+    @FocusState private var focusStatus: Field?
+//    @State private var hiddenText: String = ""
+//    @State var focusFieldChange = false
+    
     
     var body: some View {
         NavigationView {
             ZStack {
+                    
                 //                Color.green
                 //                userVM.secondaryAccentColor
                 //                    .edgesIgnoringSafeArea(.all)
-                
                 List {
                     ForEach(taskVM.searchableTasks) { taskEntity in
                         NavigationLink(destination: EditView(taskVM: taskVM, task: taskEntity), label: {
@@ -68,13 +72,36 @@ struct ListView: View {
                 }
                 .listStyle(PlainListStyle())
                 .searchable(text: $taskVM.searchText)
+                
+                // ADD TASK BUTTON
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        AddTaskButtonView()
+                            .environmentObject(taskVM)
+                            .padding()
+                    }
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .keyboard) {
+                    VStack {
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                focusStatus = nil
+                            }) {
+                                Image(systemName: "keyboard.chevron.compact.down")
+                            }
+                            .padding(.horizontal, 10)
+                        }
+                        AddTaskView(taskVM: taskVM)
+                    }
+
+                }
             }
             .navigationTitle("SwiftlyTasks")
-            //            .navigationBarHidden(true)
-            //            .background(NavigationConfigurator { nc in
-            //                nc.navigationBar.barTintColor = UIColor(.primary)
-            //                nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.white]
-            //            })
             .navigationBarItems(leading:
                                     HStack {
                 Button(action: {
@@ -94,7 +121,7 @@ struct ListView: View {
                     .bold()
                 
                 Button(action: {
-                    self.showAddView.toggle()
+                    showAddView.toggle()
                 }) {
                     Image(systemName: "plus.square")
                 }
@@ -109,9 +136,6 @@ struct ListView: View {
             // update user name
             currentUserName = userVM.savedUserData.first?.wUserName ?? "NoName"
         }
-        //        .introspectNavigationController { nav in
-        //            nav.navigationBar.barTintColor = UIColor(Color(red: 0.2, green: 0.2, blue: 0.2))
-        //        }
     }
     
     private func changeProfileImg() {

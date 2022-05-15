@@ -23,6 +23,9 @@ struct SettingsView: View {
     
     var user = User(userName: "", taskOverdueLimit: 3, themeColor: "", profileImage: UIImage(named: "JokerCodeProfile")!, timerDuration: 25, timerBreakDuration: 5, timerRounds: 5)
     
+    // DISMISS KEYBOARD VARIABLE
+    @FocusState private var focusedField: Field?
+    
     // ERROR VARIABLES
     @State private var showAlert = false
     @State private var errorTitle = ""
@@ -61,13 +64,14 @@ struct SettingsView: View {
                                 Spacer(minLength: 25)
                                 
                                 TextField("\(newUserName)", text: $newUserName)
+                                    .focused($focusedField, equals: .newUserName)
                                     .multilineTextAlignment(.center)
                                     .font(.title3)
                                     .frame(maxWidth: .infinity)
                                     .frame(height: 40)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.blue, lineWidth: 2))
+                                            .stroke(Color.accentColor, lineWidth: 2))
                             }
                             .padding(.horizontal, 15)
                             .padding(.vertical, 5)
@@ -86,12 +90,13 @@ struct SettingsView: View {
                                 Spacer()
                                 
                                 TextField("\(newTaskOverdueLimit)", text: $newTaskOverdueLimit)
+                                    .focused($focusedField, equals: .newTaskOverdueLimit)
                                     .multilineTextAlignment(.center)
                                     .font(.title3)
                                     .frame(width: 70, height: 40)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.blue, lineWidth: 2))
+                                            .stroke(Color.accentColor, lineWidth: 2))
                                     .onReceive(Just(self.newTaskOverdueLimit)) { inputNumber in
                                         
                                         self.newTaskOverdueLimit = inputNumber.filter { "0123456789".contains($0) }
@@ -165,6 +170,19 @@ struct SettingsView: View {
                 BannerView(title: bannerSaveDataTitle, description: bannerSaveDataDescription)
                     .offset(x: 0, y: showBanner ? bannerViewDefaultPos : bannerViewOffset)
                 
+            }
+            .toolbar {
+                ToolbarItem(placement: .keyboard) {
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            focusedField = nil
+                        }) {
+                            Image(systemName: "keyboard.chevron.compact.down")
+                        }
+                        .padding(.horizontal, 10)
+                    }
+                }
             }
             .navigationBarItems(leading:
                                     HStack {

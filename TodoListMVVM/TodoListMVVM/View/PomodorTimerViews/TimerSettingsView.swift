@@ -29,6 +29,9 @@ struct TimerSettingsView: View {
     @State private var newTaskOverdueLimit = "14"
     @State private var newThemeColor = "blue"
     
+    // DISMISS KEYBOARD VARIABLE
+    @FocusState private var focusedField: Field?
+    
     // ERROR VARIABLES
     @State private var showAlert = false
     @State private var errorTitle = ""
@@ -70,12 +73,13 @@ struct TimerSettingsView: View {
                             Spacer()
                             
                             TextField("", value: $newDuration, format: .number)
+                                .focused($focusedField, equals: .newDuration)
                                 .multilineTextAlignment(.center)
                                 .font(.title3)
                                 .frame(width: 70, height: 40)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.blue, lineWidth: 2))
+                                        .stroke(Color.accentColor, lineWidth: 2))
                                 .onReceive(Just(self.newDuration)) { inputNumber in
                                     
                                     //                                String(self.newDuration) = String(inputNumber).filter { "0123456789".contains($0) }
@@ -113,12 +117,13 @@ struct TimerSettingsView: View {
                             Spacer()
                             
                             TextField("", value: $newBreakDuration, format: .number)
+                                .focused($focusedField, equals: .newBreakDuration)
                                 .multilineTextAlignment(.center)
                                 .font(.title3)
                                 .frame(width: 70, height: 40)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.blue, lineWidth: 2))
+                                        .stroke(Color.accentColor, lineWidth: 2))
                                 .onReceive(Just(self.newBreakDuration)) { inputNumber in
                                     
                                     newBreakDuration = Int16(String(inputNumber).filter {
@@ -154,12 +159,13 @@ struct TimerSettingsView: View {
                             Spacer()
                             
                             TextField("", value: $newRounds, format: .number)
+                                .focused($focusedField, equals: .newRounds)
                                 .multilineTextAlignment(.center)
                                 .font(.title3)
                                 .frame(width: 70, height: 40)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.blue, lineWidth: 2))
+                                        .stroke(Color.accentColor, lineWidth: 2))
                                 .onReceive(Just(self.newRounds)) { inputNumber in
                                     
                                     newRounds = Int16(String(inputNumber).filter {
@@ -175,8 +181,14 @@ struct TimerSettingsView: View {
                                     }
                                 }
                             
-                            Spacer(minLength: 10)
+                            Text("minutes")
+                                .font(.title3)
+                                .opacity(0.0)
                         }
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 3)
+                        
+                        Divider()
                         
                         HStack {
                             // DEFAULT BUTTON
@@ -208,10 +220,6 @@ struct TimerSettingsView: View {
                             
                             // SAVE BUTTON
                             Button(action: {
-                                //                        print("_______________________________")
-                                //                        print("newDuration: \(newDuration)")
-                                //                        print("_______________________________")
-                                
                                 // check if input is valid
                                 guard newDuration != 0 else {
                                     self.errorTitle = "input error"
@@ -267,9 +275,19 @@ struct TimerSettingsView: View {
             }
             .navigationBarTitle("")
             .navigationBarHidden(true)
-            //            .navigationBarItems(leading:
-            //
-            //            )
+            .toolbar {
+                ToolbarItem(placement: .keyboard) {
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            focusedField = nil
+                        }) {
+                            Image(systemName: "keyboard.chevron.compact.down")
+                        }
+                        .padding(.horizontal, 10)
+                    }
+                }
+            }
             
         }
         .alert(isPresented: $showAlert) {

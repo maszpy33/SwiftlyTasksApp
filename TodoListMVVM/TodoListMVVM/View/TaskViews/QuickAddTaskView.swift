@@ -1,19 +1,18 @@
 //
-//  AddTaskView.swift
+//  QuickAddTaskView.swift
 //  TodoListMVVM
 //
-//  Created by Andreas Zwikirsch on 12.02.22.
+//  Created by Andreas Zwikirsch on 15.05.22.
 //
 
 import SwiftUI
 import Combine
 
-
-struct AddTaskView: View {
+struct QuickAddTaskView: View {
     
     @Environment(\.presentationMode) var presentationMode
     
-    @ObservedObject var taskVM: TaskViewModel
+    @EnvironmentObject var taskVM: TaskViewModel
     //    var task: TaskItemEntity
     @State private var addTime: Bool = false
     @State private var showDefaultDetailsText: Bool = true
@@ -41,9 +40,12 @@ struct AddTaskView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
+            ZStack{
+//                Color.gray
+//                    .edgesIgnoringSafeArea(.all)
+//                    .opacity(0.4)
                 VStack {
-                    Spacer(minLength: 15)
+                    Spacer()
                     
                     HStack {
                         // STATUS TOGGLE
@@ -78,7 +80,7 @@ struct AddTaskView: View {
                                 .cornerRadius(10)
                                 .pickerStyle(.menu)
                                 .labelsHidden()
-                        // no specific time for task -> set to default
+                            // no specific time for task -> set to default
                         } else {
                             DatePicker("no label", selection: $taskDueDate, in: Date()..., displayedComponents: .date)
                                 .foregroundColor(.accentColor)
@@ -111,7 +113,6 @@ struct AddTaskView: View {
                         
                         // DATE TIME TOGGLE
                         HStack{
-                            Spacer()
                             Label("Time", systemImage: "clock.fill")
                                 .font(.title3)
                                 .foregroundColor(taskUIDeleted ? .accentColor : .gray)
@@ -142,7 +143,34 @@ struct AddTaskView: View {
                                         showDefaultDetailsText = true
                                     }
                                 }
+                            
                             Spacer()
+                            
+                            // SAVE BUTTON
+                            Button(action: {
+                                // check if input is valid
+                                guard !taskTitleTextField.isEmpty else {
+                                    self.errorTitle = "input error"
+                                    self.errorMessage = "Pleace enter a title to save the task"
+                                    self.showAlert = true
+                                    return
+                                }
+                                
+                                // ADD NEW TASK
+                                taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted)
+                                
+                                taskTitleTextField = ""
+                                taskDetailsTextField = ""
+                                
+                                self.presentationMode.wrappedValue.dismiss()
+                                
+                            }, label: {
+                                Image(systemName: "paperplane.fill")
+                                    .foregroundColor(.accentColor)
+                                    .font(.system(size: 25, weight: .bold))
+                                //                                .font(.title2)
+                            })
+                            .padding(.vertical, 5)
                         }
                         .padding(.horizontal, 20)
                         .foregroundColor(.accentColor)
@@ -176,9 +204,10 @@ struct AddTaskView: View {
                                 .focused($focusedField, equals: .taskTitleTextField)
                                 .onAppear {
                                     self.focusedField = .taskTitleTextField
-                                        }
+                                }
                                 .font(.headline)
-                                .padding(10)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 5)
                                 .cornerRadius(10)
                             
                         }
@@ -207,6 +236,7 @@ struct AddTaskView: View {
                                             showDefaultDetailsText = false
                                         }
                                 }
+                                .padding(.bottom, 5)
                                 
                                 VStack(alignment: .leading) {
                                     HStack(alignment: .top) {
@@ -221,57 +251,22 @@ struct AddTaskView: View {
                             }
                             .frame(height: 200)
                             .padding(.horizontal, 15)
-                            .padding(.top, 15)
+                            .padding(.top, 5)
                         }
-                        
-                        // SAVE BUTTON
-                        Button(action: {
-                            // check if input is valid
-                            guard !taskTitleTextField.isEmpty else {
-                                self.errorTitle = "input error"
-                                self.errorMessage = "Pleace enter a title to save the task"
-                                self.showAlert = true
-                                return
-                            }
-                            
-                            // ADD NEW TASK
-                            taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted)
-                            
-                            taskTitleTextField = ""
-                            taskDetailsTextField = ""
-                            
-                            self.presentationMode.wrappedValue.dismiss()
-                            
-                        }, label: {
-                            Text("Save")
-                                .font(.headline)
-                                .foregroundColor(.primary)
-                                .frame(height: 55)
-                                .frame(maxWidth: .infinity)
-                                .background(Color.accentColor.opacity(0.2))
-                                .cornerRadius(10)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                        .stroke(Color.accentColor, lineWidth: 4))
-                                .cornerRadius(10)
-                        })
-                        .padding(15)
-                        
-                        Spacer()
                     }
                 }
-            }
-            .navigationBarHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .keyboard) {
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            focusedField = nil
-                        }) {
-                            Image(systemName: "keyboard.chevron.compact.down")
+                .navigationBarHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .keyboard) {
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                focusedField = nil
+                            }) {
+                                Image(systemName: "keyboard.chevron.compact.down")
+                            }
+                            .padding(.horizontal, 10)
                         }
-                        .padding(.horizontal, 10)
                     }
                 }
             }
@@ -291,17 +286,11 @@ struct AddTaskView: View {
         }
         return true
     }
+    
 }
 
-struct AddTaskView_Previews: PreviewProvider {
-    
-    @State static var defaultIsEditView = false
-    
-    static var previews: some View {
-        AddTaskView(taskVM: TaskViewModel())
-            .preferredColorScheme(.dark)
-    }
-}
-
-
-
+//struct QuickAddTaskView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        QuickAddTaskView()
+//    }
+//}

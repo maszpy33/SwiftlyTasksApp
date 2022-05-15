@@ -23,7 +23,8 @@ final class TaskViewModel: DataClassViewModel {
     // Settings choice arrays for adding or edditing a task
     let taskCategoryOptions = ["private","computer science", "university", "art", "sport", "other"]
     let taskCategorySymboleOptions = ["swift", "pencil", "clock", "alarm", "heart.circle", "brain.head.profile", "bed.double.circle", "star","keyboard", "laptopcomputer", "iphone", "ipad", "applewatch", "airpodspro", "gamecontroller.fill", "airplane", "car", "bus", "tram", "figure.walk", "person", "person.3", "globe.europe.africa.fill", "flame", "drop", "bolt", "pawprint", "leaf", "message", "quote.bubble", "cart", "giftcard.fill", "creditcard", "eurosign.circle", "x.squareroot", "number.square"]
-    let taskPriorityOptions = ["non", "low", "medium", "high"]
+    
+    let taskPriorityOptions = ["non", "low", "medium", "high", "special"]
     let taskOverdueLimit = -3
     let secondaryAccentColor = Color("SecondaryAccentColor")
     
@@ -115,6 +116,8 @@ final class TaskViewModel: DataClassViewModel {
             return Color.orange
         case "high":
             return Color.red
+        case "special":
+            return Color.accentColor
         default:
             return Color.gray
         }
@@ -125,25 +128,25 @@ final class TaskViewModel: DataClassViewModel {
 //        dateFormatter.timeStyle = .short
 //        let today = dateFormatter.string(from: Date())
 //        let dueDateFormatted = dateFormatter.string(from: dueDate)
-//        
+//
 //        print(dueDateFormatted)
-//        
+//
 //        guard dueDateFormatted != today else {
 //            return (0, "Days")
 //        }
-//        
+//
 //        let taskDueDate = Calendar.current.dateComponents([.day, .month, .year], from: dueDate)
-//        
+//
 //        let taskDueDateComponents = DateComponents(calendar: Calendar.current, year: taskDueDate.year!, month: taskDueDate.month!, day: taskDueDate.day!).date!
-//        
+//
 //        let diffs = Calendar.current.dateComponents([.day], from: Date(), to: taskDueDateComponents)
-//        
+//
 //        let daysUntil = diffs.day ?? 0 + 1
-//        
+//
 //        guard daysUntil != 1 else {
 //            return (daysUntil, "Day")
 //        }
-//                    
+//
 //        return (daysUntil, "Days")
 //    }
     
@@ -161,8 +164,6 @@ final class TaskViewModel: DataClassViewModel {
             }
         }
         
-
-        
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
         let dueDateFormatted = dateFormatter.string(from: newDueDate)
@@ -179,13 +180,11 @@ final class TaskViewModel: DataClassViewModel {
         
         let diffs = Calendar.current.dateComponents([.day, .hour], from: Date(), to: taskDueDateComponents)
         
-//        print(diffs)
-        
         let daysUntil = (diffs.day ?? 0)
         let hoursLeft = (diffs.hour ?? 0)
         
         // if days higher than 1 return days
-        guard daysUntil < 2 else {
+        guard daysUntil < 2 || daysUntil > -2 else {
             return (daysUntil, "Days")
         }
         
@@ -195,12 +194,12 @@ final class TaskViewModel: DataClassViewModel {
         }
         
         // if hours != 1 return hours with hour string
-        guard hoursLeft < 0 else {
-            return (hoursLeft, "hour")
+        guard hoursLeft < 0 || hoursLeft > -2 else {
+            return (hoursLeft + 1, "Hour")
         }
         
         // else return hours left
-        return (hoursLeft, "Hours")
+        return (hoursLeft + 1, "Hours")
     }
     
     func returnDaysAndHours(dueDate: Date) -> String {

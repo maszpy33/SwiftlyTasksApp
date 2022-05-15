@@ -29,7 +29,7 @@ struct PomodoroView: View {
     
     @ObservedObject var userVM: UserViewModel
     @ObservedObject var taskVM: TaskViewModel
-    @StateObject var nm = NotificationManager()
+//    @StateObject var nm = NotificationManager()
     
     // SETTINGS TIMER VARIABLES
     @State var newDuration: Int32 = 25

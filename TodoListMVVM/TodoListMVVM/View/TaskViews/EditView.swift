@@ -31,6 +31,9 @@ struct EditView: View {
     @State var taskHasDetails: Bool = false
     @State var taskUIDeleted: Bool = false
     
+    // DISMISS KEYBOARD VARIABLE
+    @FocusState private var focusedField: Field?
+    
     // ERROR VARIABLES
     @State private var showAlert = false
     @State private var errorTitle = ""
@@ -111,42 +114,52 @@ struct EditView: View {
                     ScrollView {
                         VStack {
                             HStack{
-                                // DATE TIME TOGGLE
-                                Image(systemName: "clock.fill")
+                                Spacer()
+                                Label("Time", systemImage: "clock.fill")
                                     .font(.title3)
-                                Text("Time")
-                                    .font(.system(size: 16, weight: .bold))
-                                    .foregroundColor(.accentColor)
-                                
-                                // TIME TOGGLE
-                                Toggle("no label", isOn: $taskUIDeleted)
-                                    .tint(Color.accentColor)
-                                    .labelsHidden()
-                                
+                                    .foregroundColor(taskUIDeleted ? .accentColor : .gray)
+                                    .opacity(taskUIDeleted ? 1.0 : 0.7)
+                                    .onTapGesture {
+                                        withAnimation(.linear) {
+                                            taskUIDeleted.toggle()
+                                        }
+                                    }
                                 
                                 Spacer()
                                 
                                 // SHOW DETAILS TOGGLE
-                                Image(systemName: "note")
+                                Label("Details", systemImage: "note")
                                     .font(.title3)
-                                Text("Details")
-                                    .font(.system(size: 16, weight: .bold))
-                                    .foregroundColor(.accentColor)
-                                
-                                Toggle("no label", isOn: $taskHasDetails)
-                                    .tint(Color.accentColor)
-                                    .labelsHidden()
-                                    .onReceive([self.taskHasDetails].publisher.first()) { toggleStatus in
-                                        // delete task details, when detials toggle is false
-                                        if !toggleStatus {
-                                            taskDetailsTextField = ""
-                                            showDefaultDetailsText = false
-                                        }
-                                        
-                                        if toggleStatus && taskDetailsTextField == "" {
-                                            showDefaultDetailsText = false
+                                    .foregroundColor(taskHasDetails ? .accentColor : .gray)
+                                    .opacity(taskHasDetails ? 1.0 : 0.7)
+                                    .onTapGesture {
+                                        withAnimation(.linear) {
+                                            taskHasDetails.toggle()
                                         }
                                     }
+                                    .onChange(of: taskHasDetails) { taskDetailsStatus in
+                                        
+                                        // delete task details, when detials toggle is false
+                                        if !taskDetailsStatus {
+                                            taskDetailsTextField = ""
+                                            showDefaultDetailsText = true
+                                        }
+                                    }
+                                Spacer()
+//                                Toggle("no label", isOn: $taskHasDetails)
+//                                    .tint(Color.accentColor)
+//                                    .labelsHidden()
+//                                    .onReceive([self.taskHasDetails].publisher.first()) { toggleStatus in
+//                                        // delete task details, when detials toggle is false
+//                                        if !toggleStatus {
+//                                            taskDetailsTextField = ""
+//                                            showDefaultDetailsText = false
+//                                        }
+//
+//                                        if toggleStatus && taskDetailsTextField == "" {
+//                                            showDefaultDetailsText = false
+//                                        }
+//                                    }
                             }
                             .padding(.horizontal, 20)
                             .foregroundColor(.accentColor)
@@ -154,6 +167,7 @@ struct EditView: View {
                             HStack {
                                 // EMOJI INPUT
                                 TextField("🤷🏻‍♂️", text: $taskEmoji)
+                                    .focused($focusedField, equals: .taskEmoji)
                                     .font(.title)
                                     .frame(width: 55, height: 55)
                                     .cornerRadius(10)
@@ -176,6 +190,7 @@ struct EditView: View {
                                 
                                 // TITLE
                                 TextField("Add new task...", text: $taskTitleTextField)
+                                    .focused($focusedField, equals: .taskTitleTextField)
                                     .font(.headline)
                                     .padding(10)
                                     .cornerRadius(10)
@@ -210,6 +225,8 @@ struct EditView: View {
                             // DETAILS
                             if taskHasDetails {
                                 ZStack {
+//                                    taskVM.secondaryAccentColor
+//                                        .edgesIgnoringSafeArea(.all)
                                     VStack(alignment: .leading) {
                                         Text("Add Details:")
                                             .font(.caption)
@@ -217,11 +234,12 @@ struct EditView: View {
                                             .padding(.bottom, 3)
                                         
                                         TextEditor(text: $taskDetailsTextField)
+                                            .focused($focusedField, equals: .taskDetailsTextField)
                                             .frame(minHeight: 50)
                                             .multilineTextAlignment(.leading)
                                             .overlay(
                                                 RoundedRectangle(cornerRadius: 10)
-                                                    .stroke(Color.blue, lineWidth: 1.5)
+                                                    .stroke(Color.accentColor, lineWidth: 1.5)
                                             )
                                             .onTapGesture {
                                                 showDefaultDetailsText = false
@@ -240,6 +258,7 @@ struct EditView: View {
                                         .offset(x: 5, y: 30)
                                     }
                                 }
+                                .background(taskVM.secondaryAccentColor)
                                 .frame(height: 200)
                                 .padding(.horizontal, 15)
                                 .padding(.top, 15)
@@ -285,6 +304,19 @@ struct EditView: View {
                     }
                 }
                 .navigationBarHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .keyboard) {
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                focusedField = nil
+                            }) {
+                                Image(systemName: "keyboard.chevron.compact.down")
+                            }
+                            .padding(.horizontal, 10)
+                        }
+                    }
+                }
                 .onAppear {
                     self.taskTitleTextField = task.wTitle
                     self.taskDetailsTextField = task.wDetails
