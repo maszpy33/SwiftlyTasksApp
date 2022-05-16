@@ -54,6 +54,8 @@ struct PomodoroView: View {
     
     @State private var showingConfirmationAlert = false
     
+    @State var showQuickEditView = false
+    
     // TIMER TEXT VARIABLES
     let bannerSaveDataTitle = "⏰ Timer is up"
     let bannerSaveDataDescription = "finished focus, take a break"
@@ -70,6 +72,7 @@ struct PomodoroView: View {
                     Spacer()
                     
                     ZStack {
+                        // CIRCLE ANIMATION OF TIMER
                         Circle()
                             .trim(from: 0, to: 1)
                             .stroke(Color.accentColor.opacity(0.2), style: StrokeStyle(lineWidth: 10, lineCap: .round))
@@ -82,6 +85,7 @@ struct PomodoroView: View {
                             .opacity(isTimerStarted ? 1 : 0)
                         
                         VStack {
+                            // SHOW CURRENT TIMER
                             if pausePressed {
                                 Text("Paused")
                                     .font(.custom("Avenir", size: 65))
@@ -95,6 +99,9 @@ struct PomodoroView: View {
                                     .font(.custom("Avenir", size: 65))
                                     .fontWeight(.bold)
                             }
+                        }
+                        .onTapGesture {
+                            self.showQuickEditView = true
                         }
                     }//
                     
@@ -195,6 +202,7 @@ struct PomodoroView: View {
                     
                     Spacer()
                     
+                    // SUMMARY OF TIMER SETTINGS [Duration, Break, Rounds]
                     HStack {
                         Text("Focus: \(newDuration)min | Break: \(newBreakDuration)min | Rounds: \(newRounds)")
                             .font(.headline)
@@ -205,11 +213,30 @@ struct PomodoroView: View {
                 }
                 // ASK FOR PERMISSION TO TERMINATE AN RUNNING TIMER
                 .alert("Stop Current Timer", isPresented: $showingConfirmationAlert) {
-                    Button("Stop Timer") { isTimerStarted = false }
-                                    Button("Continue Timer", role: .cancel) { pausePressed = false }
+                    Button("Stop") { isTimerStarted = false }
+                                    Button("Continue", role: .cancel) { pausePressed = false }
                                 } message: {
                                     Text("Really want to quit the\nrunning timer?")
                                 }
+                
+                // show QuickEditTimerView to change timer duration
+                if self.showQuickEditView {
+                    GeometryReader { _ in
+                        VStack(alignment: .center) {
+                            HStack(alignment: .center) {
+                                QuickEditTimerView(newDuration: $newDuration)
+                                    .environmentObject(userVM)
+                            }
+                        }
+                    }
+                    .background {
+                        Color.black.opacity(0.3)
+                            .edgesIgnoringSafeArea(.all)
+                    }
+                    .onTapGesture {
+                        self.showQuickEditView = false
+                    }
+                }
             }
             .onReceive(self.time, perform: { _ in
                 // CALCULATE THE REMAINING TIME OF THE TIMER
@@ -247,7 +274,8 @@ struct PomodoroView: View {
             },
                                 trailing:
                                     HStack {
-                NavigationLink(destination: TimerSettingsView(newDuration: $newDuration, newBreakDuration: $newBreakDuration, newRounds: $newRounds).environmentObject(userVM)) {
+                NavigationLink(destination: TimerSettingsView(newDuration: $newDuration, newBreakDuration: $newBreakDuration, newRounds: $newRounds)
+                    .environmentObject(userVM)) {
                     HStack {
                         Image(systemName: "gear")
                             .foregroundColor(.accentColor)
@@ -277,8 +305,6 @@ struct PomodoroView: View {
                 self.newRounds = currentUser.timerRounds
                 // newDuration is saved in minutes
                 self.newDuration = currentUser.timerDuration
-                print("New DURATION")
-                print(newDuration)
             }
         }
         .onChange(of: scenePhase) { newPhase in

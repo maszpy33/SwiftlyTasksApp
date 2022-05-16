@@ -128,7 +128,6 @@ struct TimerSettingsView: View {
                                     
                                     newBreakDuration = Int16(String(inputNumber).filter {
                                         "0123456789".contains($0) }) ?? 1
-                                    print(newDuration)
                                     
                                     if inputNumber > 999 {
                                         self.newBreakDuration = 999
