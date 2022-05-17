@@ -11,13 +11,20 @@ struct QuickEditTimerView: View {
     
     @EnvironmentObject var userVM: UserViewModel
     
+    @Binding var showQuickEditView: Bool
+    
     @Binding var newDuration: Int32
-    //    @Binding var newBreakDuration: Int16
-    //    @Binding var newRounds: Int16
+//    @Binding var newBreakDuration: Int16
+//    @Binding var newRounds: Int16
     
     @State private var displayedDuration: String = ""
     @FocusState var focusedField: Field?
     @State private var someText: String = ""
+    
+    // ERROR VARIABLES
+    @State private var showAlert = false
+    @State private var errorTitle = ""
+    @State private var errorMessage = ""
     
     var body: some View {
         ZStack {
@@ -25,12 +32,53 @@ struct QuickEditTimerView: View {
                 TextField("", value: $newDuration, format: .number)
                     .focused($focusedField, equals: .newDuration)
                     .font(.system(size: 25, weight: .semibold))
-                    .background(Color.accentColor.opacity(0.9))
+                    .background(
+                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                            .stroke(Color.accentColor, lineWidth: 2))
                     .cornerRadius(10)
                 
-                Button("Press Me") {
-                    print("something happens")
-                }
+                // SAVE BUTTON
+                Button(action: {
+                    // check if input is valid
+                    guard newDuration != 0 else {
+                        self.errorTitle = "input error"
+                        self.errorMessage = "pleace enter a timer duration"
+                        self.showAlert = true
+                        return
+                    }
+//                    guard !settingsPauseDuration.isEmpty else {
+//                        self.errorTitle = "input error"
+//                        self.errorMessage = "pleace enter a break duration"
+//                        self.showAlert = true
+//                        return
+//                    }
+//                    guard !settingsRound.isEmpty else {
+//                        self.errorTitle = "input error"
+//                        self.errorMessage = "pleace enter how many rounds\ntill long break"
+//                        self.showAlert = true
+//                        return
+//                    }
+                    
+                    // SAVE TIMER SETTINGS
+                    userVM.updateUserEntity(userName: userVM.savedUserData.first!.wUserName, taskOverdueLimit: userVM.savedUserData.first!.taskOverdueLimit, themeColor: userVM.savedUserData.first!.wThemeColor, duration: newDuration, breakDuration: userVM.savedUserData.first!.timerBreakDuration , rounds: userVM.savedUserData.first!.timerRounds)
+                    
+                    self.showQuickEditView = false
+                    
+                }, label: {
+                    Text("Save")
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                        .frame(height: 55)
+                        .frame(maxWidth: .infinity)
+                        .background(Color.accentColor.opacity(0.2))
+                        .cornerRadius(10)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                .stroke(Color.accentColor, lineWidth: 2))
+                        .cornerRadius(10)
+                })
+                .padding(.horizontal, 5)
+                .padding(.vertical, 25)
             }
             .padding(15)
         }

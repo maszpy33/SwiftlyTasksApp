@@ -262,9 +262,9 @@
 				9FD984EF27B7DFE9005BF23F /* ListView.swift */,
 				9F6D04AF27B7E52E00283669 /* AddTaskView.swift */,
 				9FE47D0C28310F6000A84537 /* QuickAddTaskView.swift */,
+				9F328827282E624A0065B5D6 /* AddTaskButtonView.swift */,
 				9FCC321627BC6E09006444C9 /* EditView.swift */,
 				9FD9850427B7E1FE005BF23F /* TaskView.swift */,
-				9F328827282E624A0065B5D6 /* AddTaskButtonView.swift */,
 			);
 			path = TaskViews;
 			sourceTree = "<group>";

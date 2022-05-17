@@ -221,21 +221,36 @@ struct PomodoroView: View {
                 
                 // show QuickEditTimerView to change timer duration
                 if self.showQuickEditView {
-                    GeometryReader { _ in
-                        VStack(alignment: .center) {
-                            HStack(alignment: .center) {
-                                QuickEditTimerView(newDuration: $newDuration)
-                                    .environmentObject(userVM)
-                            }
+                    Color.black
+                        .edgesIgnoringSafeArea(.all).opacity(0.2)
+                        .onTapGesture {
+                            self.showQuickEditView = false
                         }
+                    VStack(alignment: .center) {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            QuickEditTimerView(showQuickEditView: $showQuickEditView, newDuration: $newDuration)
+                                .environmentObject(userVM)
+                            Spacer()
+                        }
+                        Spacer()
                     }
-                    .background {
-                        Color.black.opacity(0.3)
-                            .edgesIgnoringSafeArea(.all)
-                    }
-                    .onTapGesture {
-                        self.showQuickEditView = false
-                    }
+//                    GeometryReader { _ in
+//                        VStack(alignment: .center) {
+//                            HStack(alignment: .center) {
+//                                QuickEditTimerView(newDuration: $newDuration)
+//                                    .environmentObject(userVM)
+//                            }
+//                        }
+//                    }
+//                    .background {
+//                        Color.black.opacity(0.3)
+//                            .edgesIgnoringSafeArea(.all)
+//                    }
+//                    .onTapGesture {
+//                        self.showQuickEditView = false
+//                    }
                 }
             }
             .onReceive(self.time, perform: { _ in

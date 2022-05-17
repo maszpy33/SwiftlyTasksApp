@@ -23,6 +23,8 @@ struct ListView: View {
 //    @State private var hiddenText: String = ""
 //    @State var focusFieldChange = false
     
+    @State private var dragAmount = CGSize.zero
+    @State private var enabled = false
     
     var body: some View {
         NavigationView {
@@ -81,8 +83,17 @@ struct ListView: View {
                         AddTaskButtonView()
                             .environmentObject(taskVM)
                             .padding()
+                            .offset(self.dragAmount)
                     }
                 }
+                .gesture(DragGesture()
+                    .onChanged { self.dragAmount = $0.translation }
+                    .onEnded { _ in
+                        withAnimation(.easeOut.delay(0.2)) {
+                            self.dragAmount = .zero
+                            self.enabled.toggle()
+                        }
+                    })
             }
             .toolbar {
                 ToolbarItem(placement: .keyboard) {
