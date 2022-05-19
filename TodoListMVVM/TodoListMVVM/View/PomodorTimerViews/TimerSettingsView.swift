@@ -85,7 +85,6 @@ struct TimerSettingsView: View {
                                     //                                String(self.newDuration) = String(inputNumber).filter { "0123456789".contains($0) }
                                     newDuration = Int32(String(inputNumber).filter {
                                         "0123456789".contains($0) }) ?? 1
-                                    print(newDuration)
                                     
                                     if inputNumber > 500 {
                                         self.newDuration = 500

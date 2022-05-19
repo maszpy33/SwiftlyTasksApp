@@ -16,20 +16,22 @@ struct ListView: View {
     
     @State private var showAddView: Bool = false
     @State private var showEditView: Bool = false
+    @State private var showQuickAddView: Bool = false
     
     @State private var currentUserName: String = "UserName"
     
     @FocusState private var focusStatus: Field?
-//    @State private var hiddenText: String = ""
-//    @State var focusFieldChange = false
+    //    @State private var hiddenText: String = ""
+    //    @State var focusFieldChange = false
     
     @State private var dragAmount = CGSize.zero
     @State private var enabled = false
+    @State private var scaleAmount: Double = 1.0
     
     var body: some View {
         NavigationView {
             ZStack {
-                    
+                
                 //                Color.green
                 //                userVM.secondaryAccentColor
                 //                    .edgesIgnoringSafeArea(.all)
@@ -82,18 +84,32 @@ struct ListView: View {
                         Spacer()
                         AddTaskButtonView()
                             .environmentObject(taskVM)
-                            .padding()
+                            .scaleEffect(self.scaleAmount)
                             .offset(self.dragAmount)
+                            .padding()
+                            .onTapGesture {
+                                DispatchQueue.main.async {
+                                    withAnimation(.default) {
+                                        scaleAmount = 0.7
+                                    }
+                                    withAnimation(.default.delay(0.2)) {
+                                        scaleAmount = 1.0
+                                    }
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                                    showQuickAddView = true
+                                }
+                            }
+                            .gesture(DragGesture()
+                                .onChanged { self.dragAmount = $0.translation }
+                                .onEnded { _ in
+                                    withAnimation(.easeOut.delay(0.2)) {
+                                        self.dragAmount = .zero
+                                        self.enabled.toggle()
+                                    }
+                                })
                     }
                 }
-                .gesture(DragGesture()
-                    .onChanged { self.dragAmount = $0.translation }
-                    .onEnded { _ in
-                        withAnimation(.easeOut.delay(0.2)) {
-                            self.dragAmount = .zero
-                            self.enabled.toggle()
-                        }
-                    })
             }
             .toolbar {
                 ToolbarItem(placement: .keyboard) {
@@ -109,7 +125,7 @@ struct ListView: View {
                         }
                         AddTaskView(taskVM: taskVM)
                     }
-
+                    
                 }
             }
             .navigationTitle("SwiftlyTasks")
@@ -141,6 +157,10 @@ struct ListView: View {
             )
             .sheet(isPresented: $showAddView) {
                 AddTaskView(taskVM: taskVM)
+            }
+            .sheet(isPresented: $showQuickAddView) {
+                QuickAddTaskView()
+                    .environmentObject(taskVM)
             }
         }
         .onAppear {

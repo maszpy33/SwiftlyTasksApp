@@ -101,7 +101,9 @@ struct PomodoroView: View {
                             }
                         }
                         .onTapGesture {
-                            self.showQuickEditView = true
+                            withAnimation(.default) {
+                                self.showQuickEditView = true
+                            }
                         }
                     }//
                     

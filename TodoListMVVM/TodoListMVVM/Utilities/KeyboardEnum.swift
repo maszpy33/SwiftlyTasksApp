@@ -23,4 +23,7 @@ enum Field: Int, CaseIterable {
     // USER SETTINGS
     case newUserName
     case newTaskOverdueLimit
+    
+    // QUICKTIMERDURATIONEDIT
+    case quickNewDuration
 }

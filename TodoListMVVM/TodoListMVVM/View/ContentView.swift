@@ -42,12 +42,12 @@ struct ContentView: View {
                     Image(systemName: "gear")
                     Text("Settings")
                 }
-            
-            PokedexView()
-                .tabItem {
-                    Image(systemName: "leaf")
-                    Text("Pokedex")
-                }
+//
+//            PokedexView()
+//                .tabItem {
+//                    Image(systemName: "leaf")
+//                    Text("Pokedex")
+//                }
         }
         .onAppear {
             NotificationManager.instance.requestAuthorization()
