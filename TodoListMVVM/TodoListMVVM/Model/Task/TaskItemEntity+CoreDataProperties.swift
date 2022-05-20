@@ -35,7 +35,7 @@ extension TaskItemEntity {
         taskEmoji ?? "🤷🏻‍♂️"
     }
     public var wDetails: String {
-        details ?? "no description"
+        details ?? "no details"
     }
     public var wCategory: String {
         category ?? "private"

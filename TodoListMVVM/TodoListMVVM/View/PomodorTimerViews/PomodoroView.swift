@@ -33,11 +33,13 @@ struct PomodoroView: View {
     
     // SETTINGS TIMER VARIABLES
     @State var newDuration: Int32 = 25
-    @State var newBreakDuration: Int16 = 5
-    @State var newRounds: Int16 = 8
+    @State var newBreakDuration: Int32 = 5
+    @State var newRounds: Int32 = 8
     
     // RUNNING TIMER VARIABLE
     @State var userTimerDuration: Int32 = 1500
+    @State private var isBreak: Bool = true
+    @State private var roundsCounter: Int = 0
     
     // TIMER PROPERTIES
     @State var isTimerStarted = false
@@ -159,6 +161,7 @@ struct PomodoroView: View {
                                 Button(action: {
                                     
                                     showingConfirmationAlert = true
+                                    isBreak = true
                                     withAnimation(Animation.easeInOut(duration: 1)) {
                                         pausePressed = true
                                     }
@@ -185,7 +188,7 @@ struct PomodoroView: View {
                         Button(action: {
                             
                             self.isTimerStarted = true
-                            
+//                            self.currentTimeDuration -= 57
                             timerNotification(focusTime: Double(userTimerDuration))
                         }) {
                             HStack(spacing: 15) {
@@ -238,28 +241,13 @@ struct PomodoroView: View {
                         }
                         Spacer()
                     }
-//                    GeometryReader { _ in
-//                        VStack(alignment: .center) {
-//                            HStack(alignment: .center) {
-//                                QuickEditTimerView(newDuration: $newDuration)
-//                                    .environmentObject(userVM)
-//                            }
-//                        }
-//                    }
-//                    .background {
-//                        Color.black.opacity(0.3)
-//                            .edgesIgnoringSafeArea(.all)
-//                    }
-//                    .onTapGesture {
-//                        self.showQuickEditView = false
-//                    }
                 }
             }
             .onReceive(self.time, perform: { _ in
                 // CALCULATE THE REMAINING TIME OF THE TIMER
                 if self.isTimerStarted {
                     // if timer is up
-                    if self.currentTimeDuration != 0 {
+                    if self.currentTimeDuration > 0 {
                         // if pause is NOT pressed, reduce currentTimerDuration by 1
                         if !self.pausePressed {
                             self.currentTimeDuration -= 1
@@ -268,14 +256,28 @@ struct PomodoroView: View {
                             }
                         }
                         // else do nothing
+                    } else {
+                        // if timer = 0 and isBreak==false assign duration to breakDuration
+                        if isBreak {
+                            isBreak = false
+                            currentTimeDuration = newBreakDuration * 60
+//                            currentTimeDuration -= 52
+                            self.to = 0
+                        } else if !isBreak {
+                            isBreak = true
+                            currentTimeDuration = newDuration * 60
+//                            currentTimeDuration -= 57
+                            self.to = 0
+                        }
                     }
                     // else stats back to start
                 } else {
+                    
                     self.currentTimeDuration = userTimerDuration
                     self.to = 0
                     self.pausePressed = false
                     // newDuration is saved in minutes
-                    self.userTimerDuration = self.newDuration * 60
+                    self.userTimerDuration = newDuration * 60
                 }
             })
             .navigationTitle("Focus Timer")
@@ -378,7 +380,7 @@ struct PomodoroView: View {
     
     private func timerNotification(focusTime: Double) {
         let content = UNMutableNotificationContent()
-        content.title = "☑️ \(focusTime/60.0)min Timer is done"
+        content.title = "☑️ \(Int(focusTime/60.0))min Timer is done"
         content.subtitle = "Take a break!"
         content.sound = UNNotificationSound.default
         
@@ -390,8 +392,6 @@ struct PomodoroView: View {
                                             trigger: trigger)
         
         UNUserNotificationCenter.current().add(request)
-        print("Added notification request")
-        
 //
 //        NotificationManager.instance.scheduleNotification()
 //        let content = UNMutableNotificationContent()

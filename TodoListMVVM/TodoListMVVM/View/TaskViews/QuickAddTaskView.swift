@@ -41,9 +41,6 @@ struct QuickAddTaskView: View {
     var body: some View {
         NavigationView {
             ZStack{
-//                Color.gray
-//                    .edgesIgnoringSafeArea(.all)
-//                    .opacity(0.4)
                 VStack {
                     Spacer()
                     
@@ -151,7 +148,7 @@ struct QuickAddTaskView: View {
                                 // check if input is valid
                                 guard !taskTitleTextField.isEmpty else {
                                     self.errorTitle = "input error"
-                                    self.errorMessage = "Pleace enter a title to save the task"
+                                    self.errorMessage = "pleace enter a title to save the task"
                                     self.showAlert = true
                                     return
                                 }
@@ -165,12 +162,15 @@ struct QuickAddTaskView: View {
                                 self.presentationMode.wrappedValue.dismiss()
                                 
                             }, label: {
-                                Image(systemName: "paperplane.fill")
+                                Image(systemName: "plus.square.fill")
                                     .foregroundColor(.accentColor)
                                     .font(.system(size: 25, weight: .bold))
                                 //                                .font(.title2)
                             })
                             .padding(.vertical, 5)
+                            .alert(isPresented: $showAlert) {
+                                Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
+                            }
                         }
                         .padding(.horizontal, 20)
                         .foregroundColor(.accentColor)
@@ -270,9 +270,6 @@ struct QuickAddTaskView: View {
                     }
                 }
             }
-        }
-        .alert(isPresented: $showAlert) {
-            Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
         }
         .onAppear {
             // default time currently at 10am

@@ -18,8 +18,8 @@ struct SettingsView: View {
     @State private var newThemeColor: String = "yellwo"
     @State private var newTaskOverdueLimit: String = "99"
     @State private var newTimerDuration: Int32 = 25
-    @State private var newTimerBreakDuration: Int16 = 5
-    @State private var newTimerRounds: Int16 = 5
+    @State private var newTimerBreakDuration: Int32 = 5
+    @State private var newTimerRounds: Int32 = 5
     
     var user = User(userName: "", taskOverdueLimit: 3, themeColor: "", profileImage: UIImage(named: "JokerCodeProfile")!, timerDuration: 25, timerBreakDuration: 5, timerRounds: 5)
     
@@ -34,7 +34,7 @@ struct SettingsView: View {
     //NOTIVICATION BANNER
     @State var showBanner = false
     let bannerViewOffset: CGFloat = -300.0
-    let bannerViewDefaultPos: CGFloat = -10.0
+    let bannerViewDefaultPos: CGFloat = -50.0
     let bannerSaveDataTitle = "💾 ✅ Saved Succesfully"
     let bannerSaveDataDescription = "your user settings have been updated"
     
@@ -134,11 +134,7 @@ struct SettingsView: View {
                             }
                             
                             // SAVE USER SETTINGS
-                            userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor, duration: Int32(newTimerDuration), breakDuration: Int16(newTimerBreakDuration), rounds: Int16(newTimerRounds))
-                            
-//                            self.errorTitle = "✅ Settings Saved"
-//                            self.errorMessage = "your data hase been updated"
-//                            self.showAlert = true
+                            userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor, duration: Int32(newTimerDuration), breakDuration: Int32(newTimerBreakDuration), rounds: Int32(newTimerRounds))
                             
                             withAnimation(.default) {
                                 self.showBanner = true
@@ -158,8 +154,11 @@ struct SettingsView: View {
                                         .stroke(Color.accentColor, lineWidth: 2))
                                 .cornerRadius(10)
                         })
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 25)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 25)
+                        .alert(isPresented: $showAlert) {
+                            Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
+                        }
                         
                         Spacer()
                     }
@@ -168,7 +167,7 @@ struct SettingsView: View {
                 
                 // BANNERVIEW
                 BannerView(title: bannerSaveDataTitle, description: bannerSaveDataDescription)
-                    .offset(x: 0, y: showBanner ? bannerViewDefaultPos : bannerViewOffset)
+                    .offset(x: 0, y: self.showBanner ? bannerViewDefaultPos : bannerViewOffset)
                 
             }
             .toolbar {
@@ -184,6 +183,17 @@ struct SettingsView: View {
                     }
                 }
             }
+            .onAppear {
+                if !userVM.savedUserData.isEmpty {
+                    let currentUser = userVM.savedUserData.first!
+                    newUserName = currentUser.wUserName
+                    newTaskOverdueLimit = String(currentUser.taskOverdueLimit)
+                    newThemeColor = currentUser.wThemeColor
+                    newTimerDuration = currentUser.timerDuration
+                    newTimerBreakDuration = currentUser.timerBreakDuration
+                    newTimerRounds = currentUser.timerRounds
+                }
+            }
             .navigationBarItems(leading:
                                     HStack {
                 Image(systemName: "gear")
@@ -191,25 +201,11 @@ struct SettingsView: View {
                 
                 Spacer()
             }
-                                    .font(.headline)
-                                    .foregroundColor(.accentColor)
-                                    .padding(.bottom, 10)
-                                    .padding(.horizontal, 10)
+                .font(.headline)
+                .foregroundColor(.accentColor)
+                .padding(.bottom, 10)
+                .padding(.horizontal, 10)
             )
-        }
-        .onAppear {
-            if !userVM.savedUserData.isEmpty {
-                let currentUser = userVM.savedUserData.first!
-                newUserName = currentUser.wUserName
-                newTaskOverdueLimit = String(currentUser.taskOverdueLimit)
-                newThemeColor = currentUser.wThemeColor
-                newTimerDuration = currentUser.timerDuration
-                newTimerBreakDuration = currentUser.timerBreakDuration
-                newTimerRounds = currentUser.timerRounds
-            }
-        }
-        .alert(isPresented: $showAlert) {
-            Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
         }
     }
     

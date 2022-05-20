@@ -39,6 +39,8 @@ struct EditView: View {
     @State private var errorTitle = ""
     @State private var errorMessage = ""
     
+    @State private var deletingTaskAlert = false
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -52,7 +54,7 @@ struct EditView: View {
                             Image(systemName: "square")
                                 .resizable()
                                 .frame(width: 26, height: 26)
-                                .foregroundColor(taskStatus ? .gray : taskVM.styleForPriority(taskPriority: taskPriority))
+                                .foregroundColor(taskStatus ? .green : taskVM.styleForPriority(taskPriority: taskPriority))
                                 .opacity(taskStatus ? 0.8 : 1)
                             
                             Image(systemName: "checkmark.square.fill")
@@ -146,20 +148,6 @@ struct EditView: View {
                                         }
                                     }
                                 Spacer()
-//                                Toggle("no label", isOn: $taskHasDetails)
-//                                    .tint(Color.accentColor)
-//                                    .labelsHidden()
-//                                    .onReceive([self.taskHasDetails].publisher.first()) { toggleStatus in
-//                                        // delete task details, when detials toggle is false
-//                                        if !toggleStatus {
-//                                            taskDetailsTextField = ""
-//                                            showDefaultDetailsText = false
-//                                        }
-//
-//                                        if toggleStatus && taskDetailsTextField == "" {
-//                                            showDefaultDetailsText = false
-//                                        }
-//                                    }
                             }
                             .padding(.horizontal, 20)
                             .foregroundColor(.accentColor)
@@ -264,41 +252,90 @@ struct EditView: View {
                                 .padding(.top, 15)
                             }
                             
-                            // SAVE BUTTON
-                            Button(action: {
-                                // check if input is valid
-                                guard !taskTitleTextField.isEmpty else {
-                                    self.errorTitle = "input error"
-                                    self.errorMessage = "pleace enter a title to save the task"
-                                    self.showAlert = true
-                                    return
+                            HStack {
+                                // SAVE BUTTON
+                                Button(action: {
+                                    // check if input is valid
+                                    guard !taskTitleTextField.isEmpty else {
+                                        errorTitle = "input error"
+                                        errorMessage = "pleace enter a title to save the task"
+                                        showAlert = true
+                                        return
+                                    }
+                                    
+                                    if taskDetailsTextField == "" {
+                                        taskHasDetails = false
+                                    }
+                                    
+                                    // SAVE CHANGES
+                                    taskVM.updateTaskEntity(taskEntity: task, newTitle: taskTitleTextField, newDetails: taskDetailsTextField, newCategory: taskCategory, newTaskEmoji: taskEmoji, newPriority: taskPriority, newDueDate: taskDueDate, newStatus: taskStatus, newHasDetails: taskHasDetails, newUIDelete: taskUIDeleted)
+                                    
+                                    taskTitleTextField = ""
+                                    focusedField = nil
+                                    self.presentationMode.wrappedValue.dismiss()
+                                    
+                                }, label: {
+                                    Text("Save")
+                                        .font(.headline)
+                                        .foregroundColor(.primary)
+                                        .frame(height: 55)
+                                        .frame(maxWidth: .infinity)
+                                        .background(Color.accentColor.opacity(0.2))
+                                        .cornerRadius(10)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                                .stroke(Color.accentColor, lineWidth: 4))
+                                        .cornerRadius(10)
+                                })
+                                .padding(.leading, 5)
+                                .padding(.trailing, 5)
+                                .alert(isPresented: $showAlert) {
+                                    Alert(
+                                        title: Text(errorTitle),
+                                        message: Text(errorMessage),
+                                        dismissButton: .default(Text("OK"))
+                                    )
                                 }
                                 
-                                if taskDetailsTextField == "" {
-                                    taskHasDetails = false
+                                // DELETE BUTTON
+                                Button(action: {
+                                    // ask user if he really wants to delete this task
+                                    errorTitle = "Deleting Task"
+                                    errorMessage = "do you really want to delete this task?"
+                                    self.deletingTaskAlert = true
+                                    
+                                    // DELETING TASK: is implementet in the Alert beneth
+                                    
+                                }, label: {
+                                    Text("Delete")
+                                        .font(.headline)
+                                        .foregroundColor(.red)
+                                        .frame(height: 55)
+                                        .frame(maxWidth: .infinity)
+                                        .background(Color.accentColor.opacity(0.2))
+                                        .cornerRadius(10)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                                .stroke(Color.accentColor, lineWidth: 4))
+                                        .cornerRadius(10)
+                                })
+                                .padding(.trailing, 5)
+                                .padding(.leading, 5)
+                                .alert(isPresented: $deletingTaskAlert) {
+                                    Alert(
+                                        title: Text(errorTitle),
+                                        message: Text(errorMessage),
+                                        primaryButton: .destructive(Text("Delete")) {
+                                            // DELETE TASK
+                                            taskVM.deleteTaskEntity(with: task.id)
+                                            self.presentationMode.wrappedValue.dismiss()
+                                        },
+                                        secondaryButton: .cancel()
+                                    )
                                 }
-                                
-                                // SAVE CHANGES
-                                taskVM.updateTaskEntity(taskEntity: task, newTitle: taskTitleTextField, newDetails: taskDetailsTextField, newCategory: taskCategory, newTaskEmoji: taskEmoji, newPriority: taskPriority, newDueDate: taskDueDate, newStatus: taskStatus, newHasDetails: taskHasDetails, newUIDelete: taskUIDeleted)
-                                
-                                taskTitleTextField = ""
-                                self.presentationMode.wrappedValue.dismiss()
-                                
-                            }, label: {
-                                Text("Save")
-                                    .font(.headline)
-                                    .foregroundColor(.primary)
-                                    .frame(height: 55)
-                                    .frame(maxWidth: .infinity)
-                                    .background(Color.accentColor.opacity(0.2))
-                                    .cornerRadius(10)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                            .stroke(Color.accentColor, lineWidth: 4))
-                                    .cornerRadius(10)
-                            })
-                            .padding(15)
-                            
+                            }
+                            .padding(.horizontal, 10)
+
                             Spacer()
                         }
                     }
@@ -335,9 +372,6 @@ struct EditView: View {
                     self.taskCountdown = taskVM.returnDaysAndHours(dueDate: taskDueDate)
                 }
             }
-        }
-        .alert(isPresented: $showAlert) {
-            Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
         }
     }
 }

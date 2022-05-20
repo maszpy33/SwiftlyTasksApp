@@ -68,9 +68,6 @@ final class TaskViewModel: DataClassViewModel {
     }
     
     func deleteTaskEntity(with taskID: ObjectIdentifier) {
-        print("______________")
-        print("DELETED TASK \(taskID)")
-        print("______________")
         guard let entity = savedTasks.first(where: { $0.id == taskID }) else { return }
 //        guard let index = savedTasks.firstIndex(where: { $0.id == taskID }) else { return }
 //        let entity = savedTasks[index]
@@ -184,7 +181,8 @@ final class TaskViewModel: DataClassViewModel {
         let hoursLeft = (diffs.hour ?? 0)
         
         // if days higher than 1 return days
-        guard daysUntil < 2 || daysUntil > -2 else {
+        guard daysUntil < 2 && daysUntil > -2 else {
+            print("Returned: \(daysUntil) Days")
             return (daysUntil, "Days")
         }
         
@@ -202,6 +200,7 @@ final class TaskViewModel: DataClassViewModel {
         return (hoursLeft + 1, "Hours")
     }
     
+    // function to call in details view for exact time till event (days, hours, minutes)
     func returnDaysAndHours(dueDate: Date) -> String {
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .medium

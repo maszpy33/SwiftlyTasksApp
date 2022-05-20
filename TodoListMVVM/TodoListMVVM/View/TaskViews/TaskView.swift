@@ -98,7 +98,8 @@ struct TaskView: View {
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 2)
-            .background(taskVM.styleForPriority(taskPriority: task.priority ?? "normal").opacity(0.2))
+//            .modifier(TransparentButton(themeColor: taskVM.styleForPriority(taskPriority: task.wPriority), taskIsDone: task.status))
+            .background(taskVM.styleForPriority(taskPriority: task.wPriority).opacity(0.2))
             .cornerRadius(10)
             .background(
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
@@ -107,11 +108,6 @@ struct TaskView: View {
         }
         .onAppear {
             (self.daysHoursLeft, self.daysHoursString) = taskVM.daysHoursLeft(dueDate: task.dueDate ?? Date(), hasTime: task.uiDeleted)
-//            if task.uiDeleted {
-//
-//            } else {
-//                (self.daysHoursLeft, self.daysHoursString) = taskVM.daysHoursLeft(dueDate: task.dueDate ?? Date(), hasTime: task.uiDeleted)
-//            }
             
             self.overdueLimit = userVM.savedUserData.first?.taskOverdueLimit ?? 100
             

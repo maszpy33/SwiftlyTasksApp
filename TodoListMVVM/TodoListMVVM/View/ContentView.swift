@@ -31,6 +31,12 @@ struct ContentView: View {
                     }
             }
             
+            ListsHomeView()
+                .tabItem {
+                    Image(systemName: "doc.text.fill")
+                    Text("ListView")
+                }
+            
             PomodoroView(userVM: userVM, taskVM: taskVM)
                 .tabItem {
                     Image(systemName: "timer.square")
@@ -42,12 +48,6 @@ struct ContentView: View {
                     Image(systemName: "gear")
                     Text("Settings")
                 }
-//
-//            PokedexView()
-//                .tabItem {
-//                    Image(systemName: "leaf")
-//                    Text("Pokedex")
-//                }
         }
         .onAppear {
             NotificationManager.instance.requestAuthorization()

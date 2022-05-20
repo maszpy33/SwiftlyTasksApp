@@ -16,8 +16,8 @@ struct TimerSettingsView: View {
     
     // TIMER VARIABLES
     @Binding var newDuration: Int32
-    @Binding var newBreakDuration: Int16
-    @Binding var newRounds: Int16
+    @Binding var newBreakDuration: Int32
+    @Binding var newRounds: Int32
     
     // SETTINGS VARIABLE
     @State var settingsTimerDuration = "25"
@@ -125,7 +125,7 @@ struct TimerSettingsView: View {
                                         .stroke(Color.accentColor, lineWidth: 2))
                                 .onReceive(Just(self.newBreakDuration)) { inputNumber in
                                     
-                                    newBreakDuration = Int16(String(inputNumber).filter {
+                                    newBreakDuration = Int32(String(inputNumber).filter {
                                         "0123456789".contains($0) }) ?? 1
                                     
                                     if inputNumber > 999 {
@@ -166,7 +166,7 @@ struct TimerSettingsView: View {
                                         .stroke(Color.accentColor, lineWidth: 2))
                                 .onReceive(Just(self.newRounds)) { inputNumber in
                                     
-                                    newRounds = Int16(String(inputNumber).filter {
+                                    newRounds = Int32(String(inputNumber).filter {
                                         "0123456789".contains($0) }) ?? 1
                                     print(newRounds)
                                     
@@ -286,17 +286,15 @@ struct TimerSettingsView: View {
                     }
                 }
             }
+            .onAppear {
+                let currentUser = userVM.savedUserData.first!
+                newUserName = currentUser.wUserName
+            }
             
         }
         .alert(isPresented: $showAlert) {
             Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
         }
-        //        .onAppear {
-        //            print("_______________________________")
-        //            print("ON APPEAR OF SHEET SETTINGSVIEW")
-        //            print("_______________________________")
-        //        }
-        
     }
     
     //Function to keep text length in limits
