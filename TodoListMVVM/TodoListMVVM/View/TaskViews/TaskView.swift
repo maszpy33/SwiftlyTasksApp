@@ -76,6 +76,15 @@ struct TaskView: View {
                     
                     VStack(alignment: .leading) {
                         HStack {
+                            // HAS REMINDER ACTIVATED
+                            if task.hasAlert {
+                                Image(systemName: "bell.square")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 22, height: 22)
+                                    .foregroundColor(.gray)
+                            }
+                            
                             // HAS DETAILS ICON
                             if task.hasDetails {
                                 Image(systemName: "text.alignleft")

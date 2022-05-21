@@ -295,7 +295,7 @@ struct PomodoroView: View {
                         
                         // User Notification when timer is up
                         //                        timerNotification(focusTime: Double(self.isBreak ? newDuration : newBreakDuration))
-                        notifyManager.createNotification(focusTime: Int(self.isBreak ? newDuration : newBreakDuration), title: notificationTitle, subtitle: notificationSubtitle, categoryIdentifier: "ACTION", inXSeconds: 1.0)
+                        notifyManager.createTimerNotification(focusTime: Int(self.isBreak ? newDuration : newBreakDuration), title: notificationTitle, subtitle: notificationSubtitle, categoryIdentifier: "ACTION", inXSeconds: 1.0)
                     }
                     // else stats back to start
                 } else {

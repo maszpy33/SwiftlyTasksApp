@@ -141,6 +141,8 @@ struct SettingsView: View {
                                 self.dismissBanner()
                             }
                             
+                            focusedField = nil
+                            
                         }, label: {
                             Text("Save")
                                 .font(.headline)
@@ -210,7 +212,7 @@ struct SettingsView: View {
     }
     
     private func dismissBanner() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             withAnimation(.default) {
                 showBanner = false
             }

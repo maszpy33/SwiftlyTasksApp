@@ -12,6 +12,7 @@ import Combine
 struct EditView: View {
     
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var notifiyManager: NotificationManager
     
     @ObservedObject var taskVM: TaskViewModel
     var task: TaskItemEntity
@@ -30,16 +31,22 @@ struct EditView: View {
     @State var taskStatus: Bool = false
     @State var taskHasDetails: Bool = false
     @State var taskUIDeleted: Bool = false
+    @State var taskHasAlert: Bool = false
     
     // DISMISS KEYBOARD VARIABLE
     @FocusState private var focusedField: Field?
     
     // ERROR VARIABLES
-    @State private var showAlert = false
-    @State private var errorTitle = ""
-    @State private var errorMessage = ""
+    @State private var showAlert: Bool = false
+    @State private var errorTitle: String = ""
+    @State private var errorMessage: String = ""
     
-    @State private var deletingTaskAlert = false
+    // NOTIFICATION VARIABLES
+    @State private var deletingTaskAlert: Bool = false
+    @State private var scheduleReminderAlert: Bool = false
+    @State var notificationInXSeconds: Int = 1
+    @State private var taskNotificationTitle: String = ""
+    @State private var taskNotificationSubtitle: String = ""
     
     var body: some View {
         NavigationView {
@@ -54,13 +61,13 @@ struct EditView: View {
                             Image(systemName: "square")
                                 .resizable()
                                 .frame(width: 26, height: 26)
-                                .foregroundColor(taskStatus ? .green : taskVM.styleForPriority(taskPriority: taskPriority))
+                                .foregroundColor(taskStatus ? .gray : taskVM.styleForPriority(taskPriority: taskPriority))
                                 .opacity(taskStatus ? 0.8 : 1)
                             
                             Image(systemName: "checkmark.square.fill")
                                 .resizable()
                                 .frame(width: 26, height: 26)
-                                .foregroundColor(.gray)
+                                .foregroundColor(.green)
                                 .font(.system(size: 22, weight: .bold, design: .default))
                                 .opacity(taskStatus ? 1 : 0)
                         }
@@ -130,7 +137,7 @@ struct EditView: View {
                                 Spacer()
                                 
                                 // SHOW DETAILS TOGGLE
-                                Label("Details", systemImage: "note")
+                                Label("Details", systemImage: "note.text")
                                     .font(.title3)
                                     .foregroundColor(taskHasDetails ? .accentColor : .gray)
                                     .opacity(taskHasDetails ? 1.0 : 0.7)
@@ -147,9 +154,65 @@ struct EditView: View {
                                             showDefaultDetailsText = true
                                         }
                                     }
+                                
+                                Spacer()
+                                
+                                // ACTIVATE TASK ALERT TOGGLE
+                                Label("Alert", systemImage: "bell.square")
+                                    .font(.title3)
+                                    .foregroundColor(taskHasAlert ? .accentColor : .gray)
+                                    .opacity(taskHasAlert ? 1.0 : 0.7)
+                                    .onTapGesture {
+                                        
+                                        guard !taskTitleTextField.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                                            self.errorTitle = "input error"
+                                            self.errorMessage = "pleace enter a title to save the task"
+                                            self.showAlert = true
+                                            return
+                                        }
+                                        
+                                        scheduleReminderAlert = true
+                                        
+                                        // get seconds till duedate of event
+                                        // use state variable so user do not have to press save before changing the
+                                        // dateTime and set a reminder
+//                                        notificationInXSeconds = taskVM.getSecondsTillDueDate(dueDate: task.wDueDate)
+                                        notificationInXSeconds = taskVM.getSecondsTillDueDate(dueDate: taskDueDate)
+                                        
+                                        self.errorTitle = taskHasAlert ? "🔕 Remove Notification: \(notificationInXSeconds)sec" : "🔔 Add Notification: \(notificationInXSeconds)sec"
+                                        self.errorMessage = taskHasAlert ? "Do you want to remove the reminded for \(taskVM.formatDate(dateToFormat: taskDueDate)) ? " : "Do you want to be reminded at \(taskVM.formatDate(dateToFormat: taskDueDate)) ? "
+                                        
+                                        taskNotificationTitle = "🔔 SwiftlyTasks Reminder"
+                                        taskNotificationSubtitle = "\(task.wTaskEmoji): " + task.wTitle
+                                    }
+                                    .alert(isPresented: $scheduleReminderAlert) {
+                                        Alert(
+                                            title: Text(errorTitle),
+                                            message: Text(errorMessage),
+                                            primaryButton: .default(Text("Set Alert")) {
+                                                // TOGGLE ALERT BOOL
+                                                withAnimation(.linear) {
+                                                    taskHasAlert.toggle()
+                                                }
+                                                
+                                                // CREATE NOTIFICATION FOR TASK
+                                                notifiyManager.createTaskNotification(inXSeconds: notificationInXSeconds, title: taskNotificationTitle, subtitle: taskNotificationSubtitle, categoryIdentifier: "ACTIONS")
+                                                
+                                                DispatchQueue.main.async {
+                                                    // if duedate has changes, save it
+                                                    if !(task.dueDate == taskDueDate) {
+                                                        // SAVE CHANGES
+                                                        taskVM.updateTaskEntity(taskEntity: task, newTitle: taskTitleTextField, newDetails: taskDetailsTextField, newCategory: taskCategory, newTaskEmoji: taskEmoji, newPriority: taskPriority, newDueDate: taskDueDate, newStatus: taskStatus, newHasDetails: taskHasDetails, newUIDelete: taskUIDeleted, newHasAlert: taskHasAlert)
+                                                    }
+                                                }
+                                            },
+                                            secondaryButton: .cancel()
+                                        )
+                                    }
+                                
                                 Spacer()
                             }
-                            .padding(.horizontal, 20)
+                            .padding(.horizontal, 15)
                             .foregroundColor(.accentColor)
                             
                             HStack {
@@ -268,11 +331,11 @@ struct EditView: View {
                                     }
                                     
                                     // SAVE CHANGES
-                                    taskVM.updateTaskEntity(taskEntity: task, newTitle: taskTitleTextField, newDetails: taskDetailsTextField, newCategory: taskCategory, newTaskEmoji: taskEmoji, newPriority: taskPriority, newDueDate: taskDueDate, newStatus: taskStatus, newHasDetails: taskHasDetails, newUIDelete: taskUIDeleted)
+                                    taskVM.updateTaskEntity(taskEntity: task, newTitle: taskTitleTextField, newDetails: taskDetailsTextField, newCategory: taskCategory, newTaskEmoji: taskEmoji, newPriority: taskPriority, newDueDate: taskDueDate, newStatus: taskStatus, newHasDetails: taskHasDetails, newUIDelete: taskUIDeleted, newHasAlert: taskHasAlert)
                                     
-                                    taskTitleTextField = ""
+//                                    taskTitleTextField = ""
                                     focusedField = nil
-                                    self.presentationMode.wrappedValue.dismiss()
+//                                    self.presentationMode.wrappedValue.dismiss()
                                     
                                 }, label: {
                                     Text("Save")
@@ -336,6 +399,7 @@ struct EditView: View {
                                 }
                             }
                             .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
 
                             Spacer()
                         }
@@ -365,6 +429,7 @@ struct EditView: View {
                     self.taskHasDetails = task.hasDetails
                     self.taskStatus = task.status
                     self.taskUIDeleted = task.uiDeleted
+                    self.taskHasAlert = task.hasAlert
                     
                     if self.taskDetailsTextField != "" {
                         self.taskHasDetails = true

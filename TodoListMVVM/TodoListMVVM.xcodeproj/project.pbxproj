@@ -16,10 +16,10 @@
 		9F30BE2D27CE58E200B749CD /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F30BE2C27CE58E200B749CD /* UserViewModel.swift */; };
 		9F30BE2F27CE593700B749CD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F30BE2E27CE593700B749CD /* User.swift */; };
 		9F328828282E624A0065B5D6 /* AddTaskButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F328827282E624A0065B5D6 /* AddTaskButtonView.swift */; };
+		9F516D79283983470005E39A /* TodoListModel_CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9F516D77283983470005E39A /* TodoListModel_CoreData.xcdatamodeld */; };
 		9F5C182E28381D1100BC3EE9 /* ListsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F5C182D28381D1100BC3EE9 /* ListsHomeView.swift */; };
 		9F5C18302838202200BC3EE9 /* ButtonModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F5C182F2838202200BC3EE9 /* ButtonModifier.swift */; };
 		9F5C18342838471800BC3EE9 /* TaskModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F5C18332838471800BC3EE9 /* TaskModifier.swift */; };
-		9F5C18372838530200BC3EE9 /* TodoListModel_CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9F5C18352838530200BC3EE9 /* TodoListModel_CoreData.xcdatamodeld */; };
 		9F6D04B027B7E52E00283669 /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6D04AF27B7E52E00283669 /* AddTaskView.swift */; };
 		9F77C8D42832A4180066EADF /* QuickEditTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F77C8D32832A4180066EADF /* QuickEditTimerView.swift */; };
 		9F7D05E827FE195600F9425D /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 9F7D05E727FE195600F9425D /* Introspect */; };
@@ -59,10 +59,10 @@
 		9F30BE2C27CE58E200B749CD /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		9F30BE2E27CE593700B749CD /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		9F328827282E624A0065B5D6 /* AddTaskButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskButtonView.swift; sourceTree = "<group>"; };
+		9F516D78283983470005E39A /* TodoListModel_CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TodoListModel_CoreData.xcdatamodel; sourceTree = "<group>"; };
 		9F5C182D28381D1100BC3EE9 /* ListsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsHomeView.swift; sourceTree = "<group>"; };
 		9F5C182F2838202200BC3EE9 /* ButtonModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonModifier.swift; sourceTree = "<group>"; };
 		9F5C18332838471800BC3EE9 /* TaskModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskModifier.swift; sourceTree = "<group>"; };
-		9F5C18362838530200BC3EE9 /* TodoListModel_CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TodoListModel_CoreData.xcdatamodel; sourceTree = "<group>"; };
 		9F6D04AF27B7E52E00283669 /* AddTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
 		9F77C8D32832A4180066EADF /* QuickEditTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickEditTimerView.swift; sourceTree = "<group>"; };
 		9F88A3DD27EBCB7B000F1BBC /* BannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
@@ -203,7 +203,7 @@
 		9FD984FD27B7E05C005BF23F /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				9F5C18352838530200BC3EE9 /* TodoListModel_CoreData.xcdatamodeld */,
+				9F516D77283983470005E39A /* TodoListModel_CoreData.xcdatamodeld */,
 				9FDD831427CE8794002ADC9F /* Task */,
 				9FDD831327CE878C002ADC9F /* User */,
 			);
@@ -371,7 +371,7 @@
 				9FDD831227CE86E8002ADC9F /* TaskItemEntity+CoreDataProperties.swift in Sources */,
 				9F5C18302838202200BC3EE9 /* ButtonModifier.swift in Sources */,
 				9FD984FF27B7E0B9005BF23F /* Task.swift in Sources */,
-				9F5C18372838530200BC3EE9 /* TodoListModel_CoreData.xcdatamodeld in Sources */,
+				9F516D79283983470005E39A /* TodoListModel_CoreData.xcdatamodeld in Sources */,
 				9FDD831C27CE8BA6002ADC9F /* SettingsView.swift in Sources */,
 				9FDD831A27CE8932002ADC9F /* PomodoroView.swift in Sources */,
 				9FDD831127CE86E8002ADC9F /* TaskItemEntity+CoreDataClass.swift in Sources */,
@@ -623,12 +623,12 @@
 /* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
-		9F5C18352838530200BC3EE9 /* TodoListModel_CoreData.xcdatamodeld */ = {
+		9F516D77283983470005E39A /* TodoListModel_CoreData.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				9F5C18362838530200BC3EE9 /* TodoListModel_CoreData.xcdatamodel */,
+				9F516D78283983470005E39A /* TodoListModel_CoreData.xcdatamodel */,
 			);
-			currentVersion = 9F5C18362838530200BC3EE9 /* TodoListModel_CoreData.xcdatamodel */;
+			currentVersion = 9F516D78283983470005E39A /* TodoListModel_CoreData.xcdatamodel */;
 			path = TodoListModel_CoreData.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

@@ -35,7 +35,7 @@ class NotificationManager: NSObject, ObservableObject, UNUserNotificationCenterD
         completionHandler()
     }
     
-    func createNotification(focusTime: Int, title: String, subtitle: String, categoryIdentifier: String, inXSeconds: Double) {
+    func createTimerNotification(focusTime: Int, title: String, subtitle: String, categoryIdentifier: String, inXSeconds: Double) {
         let content = UNMutableNotificationContent()
         content.title = title
         content.subtitle = subtitle
@@ -44,6 +44,27 @@ class NotificationManager: NSObject, ObservableObject, UNUserNotificationCenterD
         
         // trigger and request
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: inXSeconds, repeats: false)
+        let request = UNNotificationRequest(identifier: "IN-APP", content: content, trigger: trigger)
+        
+        // actions
+        let close = UNNotificationAction(identifier: "CLOSE", title: "Close", options: .destructive)
+        let reply = UNNotificationAction(identifier: "REPLY", title: "Reply", options: .foreground)
+        let category = UNNotificationCategory(identifier: "ACTIONS", actions: [close, reply], intentIdentifiers: [], options: [])
+        
+        UNUserNotificationCenter.current().setNotificationCategories([category])
+        
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+    }
+    
+    func createTaskNotification(inXSeconds: Int, title: String, subtitle: String, categoryIdentifier: String) {
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.subtitle = subtitle
+        // assigning to notification
+        content.categoryIdentifier = categoryIdentifier
+        
+        // trigger and request
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: Double(inXSeconds), repeats: false)
         let request = UNNotificationRequest(identifier: "IN-APP", content: content, trigger: trigger)
         
         // actions

@@ -4,6 +4,7 @@
         <attribute name="category" optional="YES" attributeType="String"/>
         <attribute name="details" optional="YES" attributeType="String"/>
         <attribute name="dueDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="hasAlert" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="hasDetails" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="priority" optional="YES" attributeType="String"/>
         <attribute name="status" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -25,7 +26,7 @@
         <attribute name="userName" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="TaskItemEntity" positionX="-63" positionY="-18" width="128" height="164"/>
+        <element name="TaskItemEntity" positionX="-63" positionY="-18" width="128" height="179"/>
         <element name="TestEntity" positionX="-54" positionY="45" width="128" height="44"/>
         <element name="TimerEntity" positionX="-54" positionY="45" width="128" height="29"/>
         <element name="UserEntity" positionX="-54" positionY="45" width="128" height="134"/>

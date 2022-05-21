@@ -20,6 +20,7 @@ struct TaskItem: Identifiable, Equatable {
     var status: Bool
     var hasDetails: Bool
     var uiDeleted: Bool
+    var hasAlert: Bool
 }
 
 //enum Priority: String {

@@ -13,6 +13,8 @@ struct QuickAddTaskView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @EnvironmentObject var taskVM: TaskViewModel
+    @EnvironmentObject var notifiyManager: NotificationManager
+    
     //    var task: TaskItemEntity
     @State private var addTime: Bool = false
     @State private var showDefaultDetailsText: Bool = true
@@ -29,14 +31,22 @@ struct QuickAddTaskView: View {
     @State var taskStatus: Bool = false
     @State var taskHasDetails: Bool = false
     @State var taskUIDeleted: Bool = false
+    @State var taskHasAlert: Bool = false
     
     // DISMISS KEYBOARD VARIABLE
     @FocusState private var focusedField: Field?
     
     // ERROR VARIABLES
     @State private var showAlert = false
-    @State private var errorTitle = ""
-    @State private var errorMessage = ""
+    @State private var errorTitle: String = ""
+    @State private var errorMessage: String = ""
+    
+    // NOTIFICATION VARIABLES
+    @State private var deletingTaskAlert: Bool = false
+    @State private var scheduleReminderAlert: Bool = false
+    @State var notificationInXSeconds: Int = 1
+    @State private var taskNotificationTitle: String = ""
+    @State private var taskNotificationSubtitle: String = ""
     
     var body: some View {
         NavigationView {
@@ -143,6 +153,59 @@ struct QuickAddTaskView: View {
                             
                             Spacer()
                             
+                            // ACTIVATE TASK ALERT TOGGLE
+                            Label("Alert", systemImage: "bell.square")
+                                .font(.title3)
+                                .foregroundColor(taskHasAlert ? .accentColor : .gray)
+                                .opacity(taskHasAlert ? 1.0 : 0.7)
+                                .onTapGesture {
+                                    
+                                    guard !taskTitleTextField.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                                        self.errorTitle = "input error"
+                                        self.errorMessage = "pleace enter a title to save the task"
+                                        self.showAlert = true
+                                        return
+                                    }
+                                    
+                                    withAnimation(.linear) {
+                                        taskHasAlert.toggle()
+                                    }
+                                    
+                                    // get seconds till duedate of event
+                                    // use state variable so user do not have to press save before changing the
+                                    // dateTime and set a reminder
+//                                        notificationInXSeconds = taskVM.getSecondsTillDueDate(dueDate: task.wDueDate)
+                                    notificationInXSeconds = taskVM.getSecondsTillDueDate(dueDate: taskDueDate)
+
+                                    self.errorTitle = taskHasAlert ? "🔕 Remove Notification: \(notificationInXSeconds)sec" : "🔔 Add Notification: \(notificationInXSeconds)sec"
+                                    self.errorMessage = taskHasAlert ? "Do you want to remove the reminded for \(taskVM.formatDate(dateToFormat: taskDueDate)) ? " : "Do you want to be reminded at \(taskVM.formatDate(dateToFormat: taskDueDate)) ? "
+
+                                    taskNotificationTitle = "🔔 SwiftlyTasks Reminder"
+                                    taskNotificationSubtitle = "\(taskEmoji): " + taskTitleTextField
+                                }
+//                                .alert(isPresented: $scheduleReminderAlert) {
+//                                    Alert(
+//                                        title: Text(errorTitle),
+//                                        message: Text(errorMessage),
+//                                        primaryButton: .default(Text("Set Alert")) {
+//                                            // TOGGLE ALERT BOOL
+//                                            withAnimation(.linear) {
+//                                                taskHasAlert.toggle()
+//                                            }
+//
+//                                            // CREATE NOTIFICATION FOR TASK
+//                                            notifiyManager.createTaskNotification(inXSeconds: notificationInXSeconds, title: taskNotificationTitle, subtitle: taskNotificationSubtitle, categoryIdentifier: "ACTIONS")
+//                                        },
+//                                        secondaryButton: .cancel()
+//                                    )
+//                                }
+                            
+                            Spacer()
+                            
+                            Text("|")
+                                .bold()
+                                .font(.title3)
+                            
                             // SAVE BUTTON
                             Button(action: {
                                 // check if input is valid
@@ -154,23 +217,50 @@ struct QuickAddTaskView: View {
                                 }
                                 
                                 // ADD NEW TASK
-                                taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted)
+                                taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert)
                                 
-                                taskTitleTextField = ""
-                                taskDetailsTextField = ""
-                                
-                                self.presentationMode.wrappedValue.dismiss()
+                                if taskHasAlert {
+                                    scheduleReminderAlert = true
+                                }
                                 
                             }, label: {
-                                Image(systemName: "plus.square.fill")
-                                    .foregroundColor(.accentColor)
-                                    .font(.system(size: 25, weight: .bold))
-                                //                                .font(.title2)
+                                HStack {
+                                    Image(systemName: "plus.square")
+                                        .foregroundColor(.accentColor)
+                                        .font(.system(size: 25, weight: .bold))
+                                    
+                                    Text("Add ")
+                                        .bold()
+                                        .font(.title3)
+                                }
                             })
                             .padding(.vertical, 5)
                             .disabled(taskTitleTextField.isEmpty)
                             .alert(isPresented: $showAlert) {
                                 Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
+                            }
+                            .alert(isPresented: $scheduleReminderAlert) {
+                                Alert(
+                                    title: Text(errorTitle),
+                                    message: Text(errorMessage),
+                                    primaryButton: .default(Text("Set Alert")) {
+                                        // TOGGLE ALERT BOOL
+//                                        withAnimation(.linear) {
+//                                            taskHasAlert.toggle()
+//                                        }
+                                        
+                                        // CREATE NOTIFICATION FOR TASK
+                                        notifiyManager.createTaskNotification(inXSeconds: notificationInXSeconds, title: taskNotificationTitle, subtitle: taskNotificationSubtitle, categoryIdentifier: "ACTIONS")
+                                        
+                                        taskTitleTextField = ""
+                                        taskDetailsTextField = ""
+                                        
+                                        self.presentationMode.wrappedValue.dismiss()
+                                    },
+                                    secondaryButton: .cancel() {
+                                        taskHasAlert.toggle()
+                                    }
+                                )
                             }
                         }
                         .padding(.horizontal, 20)

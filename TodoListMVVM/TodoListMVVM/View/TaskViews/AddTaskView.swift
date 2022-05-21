@@ -13,6 +13,8 @@ struct AddTaskView: View {
     
     @Environment(\.presentationMode) var presentationMode
     
+    @EnvironmentObject var notifyManager: NotificationManager
+    
     @ObservedObject var taskVM: TaskViewModel
     //    var task: TaskItemEntity
     @State private var addTime: Bool = false
@@ -30,6 +32,7 @@ struct AddTaskView: View {
     @State var taskStatus: Bool = false
     @State var taskHasDetails: Bool = false
     @State var taskUIDeleted: Bool = false
+    @State var taskHasAlert: Bool = false
     
     // DISMISS KEYBOARD VARIABLE
     @FocusState private var focusedField: Field?
@@ -38,6 +41,13 @@ struct AddTaskView: View {
     @State private var showAlert = false
     @State private var errorTitle = ""
     @State private var errorMessage = ""
+    
+    // NOTIFICATION VARIABLES
+    @State private var deletingTaskAlert: Bool = false
+    @State private var scheduleReminderAlert: Bool = false
+    @State var notificationInXSeconds: Int = 1
+    @State private var taskNotificationTitle: String = ""
+    @State private var taskNotificationSubtitle: String = ""
     
     var body: some View {
         NavigationView {
@@ -142,6 +152,54 @@ struct AddTaskView: View {
                                         showDefaultDetailsText = true
                                     }
                                 }
+                            
+                            Spacer()
+                            
+                            // ACTIVATE TASK ALERT TOGGLE
+                            Label("Alert", systemImage: "bell.square")
+                                .font(.title3)
+                                .foregroundColor(taskHasAlert ? .accentColor : .gray)
+                                .opacity(taskHasAlert ? 1.0 : 0.7)
+                                .onTapGesture {
+                                    
+                                    guard !taskTitleTextField.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                                        self.errorTitle = "input error"
+                                        self.errorMessage = "pleace enter a title to save the task"
+                                        self.showAlert = true
+                                        return
+                                    }
+                                    
+                                    scheduleReminderAlert = true
+                                    
+                                    // get seconds till duedate of event
+                                    // use state variable so user do not have to press save before changing the
+                                    // dateTime and set a reminder
+//                                        notificationInXSeconds = taskVM.getSecondsTillDueDate(dueDate: task.wDueDate)
+                                    notificationInXSeconds = taskVM.getSecondsTillDueDate(dueDate: taskDueDate)
+                                    
+                                    self.errorTitle = taskHasAlert ? "🔕 Remove Notification: \(notificationInXSeconds)sec" : "🔔 Add Notification: \(notificationInXSeconds)sec"
+                                    self.errorMessage = taskHasAlert ? "Do you want to remove the reminded for \(taskVM.formatDate(dateToFormat: taskDueDate)) ? " : "Do you want to be reminded at \(taskVM.formatDate(dateToFormat: taskDueDate)) ? "
+                                    
+                                    taskNotificationTitle = "🔔 SwiftlyTasks Reminder"
+                                    taskNotificationSubtitle = "\(taskEmoji): " + taskTitleTextField
+                                }
+                                .alert(isPresented: $scheduleReminderAlert) {
+                                    Alert(
+                                        title: Text(errorTitle),
+                                        message: Text(errorMessage),
+                                        primaryButton: .default(Text("Set Alert")) {
+                                            // TOGGLE ALERT BOOL
+                                            withAnimation(.linear) {
+                                                taskHasAlert.toggle()
+                                            }
+                                            
+                                            // CREATE NOTIFICATION FOR TASK
+                                            notifyManager.createTaskNotification(inXSeconds: notificationInXSeconds, title: taskNotificationTitle, subtitle: taskNotificationSubtitle, categoryIdentifier: "ACTIONS")
+                                        },
+                                        secondaryButton: .cancel()
+                                    )
+                                }
+                            
                             Spacer()
                         }
                         .padding(.horizontal, 20)
@@ -235,7 +293,7 @@ struct AddTaskView: View {
                             }
                             
                             // ADD NEW TASK
-                            taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted)
+                            taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert)
                             
                             taskTitleTextField = ""
                             taskDetailsTextField = ""

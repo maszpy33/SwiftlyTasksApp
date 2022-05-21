@@ -53,7 +53,7 @@ final class TaskViewModel: DataClassViewModel {
     }
     
     
-    func saveTaskEntitys(title: String, details: String, category: String, taskEmoji: String, priority: String, dueDate: Date, status: Bool, hasDetails: Bool, uiDeleted: Bool) {
+    func saveTaskEntitys(title: String, details: String, category: String, taskEmoji: String, priority: String, dueDate: Date, status: Bool, hasDetails: Bool, uiDeleted: Bool, hasAlert: Bool) {
         let newTask = TaskItemEntity(context: container.viewContext)
         newTask.title = title
         newTask.details = details
@@ -64,6 +64,7 @@ final class TaskViewModel: DataClassViewModel {
         newTask.status = status
         newTask.hasDetails = hasDetails
         newTask.uiDeleted = uiDeleted
+        newTask.hasAlert = hasAlert
         saveTaskData()
     }
     
@@ -75,7 +76,7 @@ final class TaskViewModel: DataClassViewModel {
         saveTaskData()
     }
     
-    func updateTaskEntity(taskEntity: TaskItemEntity, newTitle: String, newDetails: String, newCategory: String, newTaskEmoji: String, newPriority: String, newDueDate: Date, newStatus: Bool, newHasDetails: Bool, newUIDelete: Bool) {
+    func updateTaskEntity(taskEntity: TaskItemEntity, newTitle: String, newDetails: String, newCategory: String, newTaskEmoji: String, newPriority: String, newDueDate: Date, newStatus: Bool, newHasDetails: Bool, newUIDelete: Bool, newHasAlert: Bool) {
         taskEntity.title = newTitle
         taskEntity.details = newDetails
         taskEntity.category = newCategory
@@ -85,6 +86,7 @@ final class TaskViewModel: DataClassViewModel {
         taskEntity.status = newStatus
         taskEntity.hasDetails = newHasDetails
         taskEntity.uiDeleted = newUIDelete
+        taskEntity.hasAlert = newHasAlert
         saveTaskData()
     }
     
@@ -222,6 +224,24 @@ final class TaskViewModel: DataClassViewModel {
         return resultCountdown
     }
     
+    func getSecondsTillDueDate(dueDate: Date) -> Int {
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .medium
+        
+        let taskDueDate = Calendar.current.dateComponents([.minute, .hour, .day, .month, .year], from: dueDate)
+        let taskDueDateComponents = DateComponents(calendar: Calendar.current, year: taskDueDate.year!, month: taskDueDate.month!, day: taskDueDate.day!, hour: taskDueDate.hour!, minute: taskDueDate.minute!).date!
+        
+        let diffSeconds = Calendar.current.dateComponents([.second], from: Date(), to: taskDueDateComponents)
+        
+        return diffSeconds.second ?? 1
+    }
+    
+    func formatDate(dateToFormat: Date) -> String {
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .short
+        
+        return dateFormatter.string(from: dateToFormat)
+    }
     
     //    func styleForPriority(taskPriority: String) -> Color {
     //        let priority = Priority(rawValue: taskPriority)

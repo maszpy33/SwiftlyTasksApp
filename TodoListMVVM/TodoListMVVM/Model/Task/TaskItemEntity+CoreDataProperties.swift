@@ -26,7 +26,9 @@ extension TaskItemEntity {
     @NSManaged public var title: String?
     @NSManaged public var uiDeleted: Bool
     @NSManaged public var hasDetails: Bool
+    @NSManaged public var hasAlert: Bool
     @NSManaged public var profileImage: Data?
+    
 
     public var wTitle: String {
         title ?? "No Title"

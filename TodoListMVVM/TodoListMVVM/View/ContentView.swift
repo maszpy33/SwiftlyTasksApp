@@ -27,6 +27,7 @@ struct ContentView: View {
                     }
             } else {
                 ListView(taskVM: taskVM, userVM: userVM)
+                    .environmentObject(notifyManager)
                     .tabItem {
                         Image(systemName: "checkmark.square")
                         Text("Task List")

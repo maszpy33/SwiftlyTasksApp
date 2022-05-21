@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ListView: View {
     
+    @EnvironmentObject var notifiyManager: NotificationManager
+    
     @ObservedObject var taskVM: TaskViewModel
     @ObservedObject var userVM: UserViewModel
     
@@ -37,7 +39,7 @@ struct ListView: View {
                 //                    .edgesIgnoringSafeArea(.all)
                 List {
                     ForEach(taskVM.searchableTasks) { taskEntity in
-                        NavigationLink(destination: EditView(taskVM: taskVM, task: taskEntity), label: {
+                        NavigationLink(destination: EditView(taskVM: taskVM, task: taskEntity).environmentObject(notifiyManager), label: {
                             TaskView(userVM: userVM, taskVM: taskVM, task: taskEntity)
                         })
                         .padding(5)
@@ -124,6 +126,7 @@ struct ListView: View {
                             .padding(.horizontal, 10)
                         }
                         AddTaskView(taskVM: taskVM)
+                            .environmentObject(notifiyManager)
                     }
                     
                 }
@@ -161,6 +164,7 @@ struct ListView: View {
             .sheet(isPresented: $showQuickAddView) {
                 QuickAddTaskView()
                     .environmentObject(taskVM)
+                    .environmentObject(notifiyManager)
             }
         }
         .onAppear {
