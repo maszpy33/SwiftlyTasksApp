@@ -227,9 +227,9 @@ struct AddTaskView: View {
                         // SAVE BUTTON
                         Button(action: {
                             // check if input is valid
-                            guard !taskTitleTextField.isEmpty else {
-                                self.errorTitle = "input error"
-                                self.errorMessage = "Pleace enter a title to save the task"
+                            guard !taskTitleTextField.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                                self.errorTitle = "Input Error"
+                                self.errorMessage = "Pleace enter a title to save the task!"
                                 self.showAlert = true
                                 return
                             }
@@ -256,6 +256,7 @@ struct AddTaskView: View {
                                 .cornerRadius(10)
                         })
                         .padding(15)
+                        .disabled(taskTitleTextField.isEmpty)
                         
                         Spacer()
                     }

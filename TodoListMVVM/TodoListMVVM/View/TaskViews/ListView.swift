@@ -128,7 +128,7 @@ struct ListView: View {
                     
                 }
             }
-            .navigationTitle("SwiftlyTasks")
+            .navigationBarTitle("SwiftlyTasks", displayMode: .inline)
             .navigationBarItems(leading:
                                     HStack {
                 Button(action: {

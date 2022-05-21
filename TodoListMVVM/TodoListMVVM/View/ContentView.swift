@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import UserNotifications
 
 struct ContentView: View {
     
 //    @Environment(\.managedObjectContext) private var moc
     @StateObject var taskVM = TaskViewModel()
     @StateObject var userVM = UserViewModel()
+    @StateObject var notifyManager = NotificationManager()
     
     var body: some View {
         TabView {
@@ -31,13 +33,14 @@ struct ContentView: View {
                     }
             }
             
-            ListsHomeView()
-                .tabItem {
-                    Image(systemName: "doc.text.fill")
-                    Text("ListView")
-                }
+//            ListsHomeView()
+//                .tabItem {
+//                    Image(systemName: "doc.text.fill")
+//                    Text("ListView")
+//                }
             
             PomodoroView(userVM: userVM, taskVM: taskVM)
+                .environmentObject(notifyManager)
                 .tabItem {
                     Image(systemName: "timer.square")
                     Text("Pomodoro Timer")
@@ -49,17 +52,16 @@ struct ContentView: View {
                     Text("Settings")
                 }
         }
-        .onAppear {
-            NotificationManager.instance.requestAuthorization()
-            let options: UNAuthorizationOptions = [.alert, .sound, .badge]
-            UNUserNotificationCenter.current().requestAuthorization(options: options) { success, error in
+        .onAppear(perform: {
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (success, error) in
                 if let error = error {
                     print("ERROR \(error)")
                 } else {
                     print("NOTIFICATION PERMISSION SUCCESS")
                 }
             }
-        }
+            UNUserNotificationCenter.current().delegate = notifyManager
+        })
     }
 }
 

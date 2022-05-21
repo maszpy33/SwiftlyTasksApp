@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-//import Introspect
 import NotificationCenter
 
 struct DefaultButtonStyle: ButtonStyle {
@@ -26,10 +25,11 @@ struct DefaultButtonStyle: ButtonStyle {
 struct PomodoroView: View {
     
     @Environment(\.scenePhase) var scenePhase
+    @EnvironmentObject var notifyManager: NotificationManager
     
     @ObservedObject var userVM: UserViewModel
     @ObservedObject var taskVM: TaskViewModel
-//    @StateObject var nm = NotificationManager()
+    //    @StateObject var nm = NotificationManager()
     
     // SETTINGS TIMER VARIABLES
     @State var newDuration: Int32 = 25
@@ -58,6 +58,10 @@ struct PomodoroView: View {
     
     @State var showQuickEditView = false
     
+    // NOTIFICATION VARIABLES
+    @State private var notificationTitle: String = ""
+    @State private var notificationSubtitle: String = ""
+    
     // TIMER TEXT VARIABLES
     let bannerSaveDataTitle = "⏰ Timer is up"
     let bannerSaveDataDescription = "finished focus, take a break"
@@ -65,7 +69,7 @@ struct PomodoroView: View {
     var body: some View {
         NavigationView {
             ZStack {
-//                Color(red: 0.1, green: 0.1, blue: 0.1)
+                //                Color(red: 0.1, green: 0.1, blue: 0.1)
                 userVM.secondaryAccentColor
                     .edgesIgnoringSafeArea(.all)
                 
@@ -139,9 +143,10 @@ struct PomodoroView: View {
                                 // *** PAUSE BUTTON ***
                                 // ********************
                                 Button(action: {
-                                    withAnimation(Animation.easeInOut(duration: 0.7)) {
-                                        pausePressed = true
-                                    }
+//                                    withAnimation(Animation.easeInOut(duration: 0.7)) {
+//                                        pausePressed = true
+//                                    }
+                                    pausePressed = true
                                     
                                 }) {
                                     HStack(spacing: 15) {
@@ -161,10 +166,7 @@ struct PomodoroView: View {
                                 Button(action: {
                                     
                                     showingConfirmationAlert = true
-                                    isBreak = true
-                                    withAnimation(Animation.easeInOut(duration: 1)) {
-                                        pausePressed = true
-                                    }
+                                    pausePressed = true
                                     
                                 }) {
                                     HStack(spacing: 15) {
@@ -188,8 +190,9 @@ struct PomodoroView: View {
                         Button(action: {
                             
                             self.isTimerStarted = true
-//                            self.currentTimeDuration -= 57
-                            timerNotification(focusTime: Double(userTimerDuration))
+                            self.currentTimeDuration -= 50
+                            self.isBreak = true
+                            
                         }) {
                             HStack(spacing: 15) {
                                 Text("Start")
@@ -218,16 +221,22 @@ struct PomodoroView: View {
                 }
                 // ASK FOR PERMISSION TO TERMINATE AN RUNNING TIMER
                 .alert("Stop Current Timer", isPresented: $showingConfirmationAlert) {
-                    Button("Stop") { isTimerStarted = false }
-                                    Button("Continue", role: .cancel) { pausePressed = false }
-                                } message: {
-                                    Text("Really want to quit the\nrunning timer?")
-                                }
+                    Button("Stop") {
+                        isTimerStarted = false
+                        isBreak = true
+                        roundsCounter = 0
+                    }
+                    Button("Continue", role: .cancel) {
+                        pausePressed = false
+                    }
+                } message: {
+                        Text("Really want to quit the\nrunning timer?")
+                }
                 
                 // show QuickEditTimerView to change timer duration
                 if self.showQuickEditView {
                     Color.black
-                        .edgesIgnoringSafeArea(.all).opacity(0.2)
+                        .edgesIgnoringSafeArea(.all).opacity(0.35)
                         .onTapGesture {
                             self.showQuickEditView = false
                         }
@@ -261,14 +270,32 @@ struct PomodoroView: View {
                         if isBreak {
                             isBreak = false
                             currentTimeDuration = newBreakDuration * 60
-//                            currentTimeDuration -= 52
+                            currentTimeDuration -= 55
                             self.to = 0
+                            roundsCounter += 1
+                            if roundsCounter == newRounds {
+                                self.notificationTitle = "🥳 Yeah you finished your focus goal!"
+                                self.notificationSubtitle = "You have done \(roundsCounter) Rounds of a \(newRounds)min focus period"
+                                isTimerStarted = false
+                                isBreak = true
+                                roundsCounter = 0
+                            } else {
+                                self.notificationTitle = "☑️ \(roundsCounter).Round is done"
+                                self.notificationSubtitle = "Take a \(newBreakDuration)min break!"
+                            }
                         } else if !isBreak {
                             isBreak = true
                             currentTimeDuration = newDuration * 60
-//                            currentTimeDuration -= 57
+                            currentTimeDuration -= 50
                             self.to = 0
+                            
+                            self.notificationTitle = "🧠 Back to Work!"
+                            self.notificationSubtitle = "Focus for \(newDuration)min"
                         }
+                        
+                        // User Notification when timer is up
+                        //                        timerNotification(focusTime: Double(self.isBreak ? newDuration : newBreakDuration))
+                        notifyManager.createNotification(focusTime: Int(self.isBreak ? newDuration : newBreakDuration), title: notificationTitle, subtitle: notificationSubtitle, categoryIdentifier: "ACTION", inXSeconds: 1.0)
                     }
                     // else stats back to start
                 } else {
@@ -280,7 +307,7 @@ struct PomodoroView: View {
                     self.userTimerDuration = newDuration * 60
                 }
             })
-            .navigationTitle("Focus Timer")
+            .navigationTitle(self.isBreak ? "🧠 Focus Timer" : "⏸ Break Timer")
             .navigationBarItems(leading:
                                     Button(action: {
                 print("change profile picture")
@@ -295,14 +322,14 @@ struct PomodoroView: View {
                                     HStack {
                 NavigationLink(destination: TimerSettingsView(newDuration: $newDuration, newBreakDuration: $newBreakDuration, newRounds: $newRounds)
                     .environmentObject(userVM)) {
-                    HStack {
-                        Image(systemName: "gear")
-                            .foregroundColor(.accentColor)
-                        Text("Settings")
-                            .font(.title2)
-                            .bold()
+                        HStack {
+                            Image(systemName: "gear")
+                                .foregroundColor(.accentColor)
+                            Text("Settings")
+                                .font(.title2)
+                                .bold()
+                        }
                     }
-                }
             }
                                 
             )
@@ -378,36 +405,36 @@ struct PomodoroView: View {
     }
     
     
-    private func timerNotification(focusTime: Double) {
-        let content = UNMutableNotificationContent()
-        content.title = "☑️ \(Int(focusTime/60.0))min Timer is done"
-        content.subtitle = "Take a break!"
-        content.sound = UNNotificationSound.default
-        
-        // time trigger
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: focusTime, repeats: false)
-        
-        let request = UNNotificationRequest(identifier: UUID().uuidString,
-                                            content: content,
-                                            trigger: trigger)
-        
-        UNUserNotificationCenter.current().add(request)
-//
-//        NotificationManager.instance.scheduleNotification()
-//        let content = UNMutableNotificationContent()
-//        content.title = "☑️ Focus Done"
-//        content.subtitle = "finished your \(focusTime)min inteval"
-//        content.sound = UNNotificationSound.default
-//
-//        // time trigger
-//        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
-//
-//        let request = UNNotificationRequest(identifier: UUID().uuidString,
-//                                            content: content,
-//                                            trigger: trigger)
-//
-//        UNUserNotificationCenter.current().add(request)
-    }
+    //    private func timerNotification(focusTime: Double) {
+    //        let content = UNMutableNotificationContent()
+    //        content.title = "☑️ \(Int(focusTime/60.0))min Timer is done"
+    //        content.subtitle = "Take a break!"
+    //        content.sound = UNNotificationSound.default
+    //
+    //        // time trigger
+    //        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: focusTime, repeats: false)
+    //
+    //        let request = UNNotificationRequest(identifier: UUID().uuidString,
+    //                                            content: content,
+    //                                            trigger: trigger)
+    //
+    //        UNUserNotificationCenter.current().add(request)
+    ////
+    ////        NotificationManager.instance.scheduleNotification()
+    ////        let content = UNMutableNotificationContent()
+    ////        content.title = "☑️ Focus Done"
+    ////        content.subtitle = "finished your \(focusTime)min inteval"
+    ////        content.sound = UNNotificationSound.default
+    ////
+    ////        // time trigger
+    ////        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
+    ////
+    ////        let request = UNNotificationRequest(identifier: UUID().uuidString,
+    ////                                            content: content,
+    ////                                            trigger: trigger)
+    ////
+    ////        UNUserNotificationCenter.current().add(request)
+    //    }
 }
 
 struct PomodoroView_Previews: PreviewProvider {

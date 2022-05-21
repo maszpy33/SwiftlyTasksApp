@@ -146,9 +146,9 @@ struct QuickAddTaskView: View {
                             // SAVE BUTTON
                             Button(action: {
                                 // check if input is valid
-                                guard !taskTitleTextField.isEmpty else {
+                                guard !taskTitleTextField.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
                                     self.errorTitle = "input error"
-                                    self.errorMessage = "pleace enter a title to save the task"
+                                    self.errorMessage = "Pleace enter a title to save the task"
                                     self.showAlert = true
                                     return
                                 }
@@ -168,6 +168,7 @@ struct QuickAddTaskView: View {
                                 //                                .font(.title2)
                             })
                             .padding(.vertical, 5)
+                            .disabled(taskTitleTextField.isEmpty)
                             .alert(isPresented: $showAlert) {
                                 Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
                             }

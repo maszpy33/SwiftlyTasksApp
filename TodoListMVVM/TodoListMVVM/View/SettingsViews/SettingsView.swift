@@ -113,10 +113,10 @@ struct SettingsView: View {
                             .padding(.vertical, 5)
                             
                             Divider()
-                            
-                            NotificationCenterView()
-                            
-                            Divider()
+//
+//                            NotificationCenterView()
+//
+//                            Divider()
                         }
                         
                         // SAVE BUTTON

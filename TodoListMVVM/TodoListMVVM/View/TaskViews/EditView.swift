@@ -256,10 +256,10 @@ struct EditView: View {
                                 // SAVE BUTTON
                                 Button(action: {
                                     // check if input is valid
-                                    guard !taskTitleTextField.isEmpty else {
-                                        errorTitle = "input error"
-                                        errorMessage = "pleace enter a title to save the task"
-                                        showAlert = true
+                                    guard !taskTitleTextField.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                                        self.errorTitle = "Input Error"
+                                        self.errorMessage = "Pleace enter a title to save the task!"
+                                        self.showAlert = true
                                         return
                                     }
                                     
@@ -289,6 +289,7 @@ struct EditView: View {
                                 })
                                 .padding(.leading, 5)
                                 .padding(.trailing, 5)
+                                .disabled(taskTitleTextField.isEmpty)
                                 .alert(isPresented: $showAlert) {
                                     Alert(
                                         title: Text(errorTitle),
