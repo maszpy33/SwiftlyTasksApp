@@ -20,7 +20,7 @@ struct SettingsView: View {
     @State private var newTimerDuration: Int32 = 25
     @State private var newTimerBreakDuration: Int32 = 5
     @State private var newTimerRounds: Int32 = 5
-    @State private var newSwitchUITheme: Bool = false
+    @State var newSwitchUITheme: Bool = false
     
     var user = User(userName: "", taskOverdueLimit: 3, themeColor: "", profileImage: UIImage(named: "JokerCodeProfile")!, timerDuration: 25, timerBreakDuration: 5, timerRounds: 5, switchUITheme: false)
     
@@ -123,6 +123,12 @@ struct SettingsView: View {
                             }
                             .padding(.horizontal, 15)
                             
+                            Divider()
+                            
+                            HStack {
+                                Spacer()
+                                CustomToggleSwitch(newSwitchUITheme: $newSwitchUITheme)
+                            }
 //
 //                            NotificationCenterView()
 //

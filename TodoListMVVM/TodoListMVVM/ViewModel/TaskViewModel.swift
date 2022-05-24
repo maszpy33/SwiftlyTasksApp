@@ -194,11 +194,11 @@ final class TaskViewModel: DataClassViewModel {
         
         // if hours != 1 return hours with hour string
         guard hoursLeft < 0 || hoursLeft > -2 else {
-            return (hoursLeft + 1, "Hour")
+            return (hoursLeft, "Hour")
         }
         
         // else return hours left
-        return (hoursLeft + 1, "Hours")
+        return (hoursLeft, "Hours")
     }
     
     // function to call in details view for exact time till event (days, hours, minutes)
@@ -212,11 +212,15 @@ final class TaskViewModel: DataClassViewModel {
         
         let taskDueDateComponents = DateComponents(calendar: Calendar.current, year: taskDueDate.year!, month: taskDueDate.month!, day: taskDueDate.day!, hour: taskDueDate.hour!, minute: taskDueDate.minute!).date!
         
-        let diffs = Calendar.current.dateComponents([.day, .hour], from: Date(), to: taskDueDateComponents)
+        print("##################")
+        print(taskDueDateComponents)
+        print("##################")
         
-        let daysUntil = diffs.day ?? 0 + 1
-        let hoursLeft = diffs.hour ?? 0 + 1
-        let minutesLeft = diffs.minute ?? 0 + 1
+        let diffs = Calendar.current.dateComponents([.day, .hour, .minute], from: Date(), to: taskDueDateComponents)
+        
+        let daysUntil = diffs.day ?? 0
+        let hoursLeft = diffs.hour ?? 0
+        let minutesLeft = diffs.minute ?? 0
         
         let resultCountdown = "\(daysUntil)d \(hoursLeft)h \(minutesLeft)m"
         

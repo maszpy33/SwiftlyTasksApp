@@ -171,7 +171,7 @@ struct EditView: View {
                                             return
                                         }
                                         
-                                        scheduleReminderAlert = true
+                                        scheduleReminderAlert.toggle()
                                         
                                         // get seconds till duedate of event
                                         // use state variable so user do not have to press save before changing the
@@ -332,6 +332,8 @@ struct EditView: View {
                                     
                                     // SAVE CHANGES
                                     taskVM.updateTaskEntity(taskEntity: task, newTitle: taskTitleTextField, newDetails: taskDetailsTextField, newCategory: taskCategory, newTaskEmoji: taskEmoji, newPriority: taskPriority, newDueDate: taskDueDate, newStatus: taskStatus, newHasDetails: taskHasDetails, newUIDelete: taskUIDeleted, newHasAlert: taskHasAlert)
+                                    
+                                    self.taskCountdown = taskVM.returnDaysAndHours(dueDate: taskDueDate)
                                     
 //                                    taskTitleTextField = ""
                                     focusedField = nil
