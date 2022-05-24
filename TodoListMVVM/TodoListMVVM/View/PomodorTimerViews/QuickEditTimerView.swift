@@ -90,7 +90,7 @@ struct QuickEditTimerView: View {
                     //                    }
                     
                     // SAVE TIMER SETTINGS
-                    userVM.updateUserEntity(userName: userVM.savedUserData.first!.wUserName, taskOverdueLimit: userVM.savedUserData.first!.taskOverdueLimit, themeColor: userVM.savedUserData.first!.wThemeColor, duration: quickNewDuration, breakDuration: userVM.savedUserData.first!.timerBreakDuration , rounds: userVM.savedUserData.first!.timerRounds)
+                    userVM.updateUserEntity(userName: userVM.savedUserData.first!.wUserName, taskOverdueLimit: userVM.savedUserData.first!.taskOverdueLimit, themeColor: userVM.savedUserData.first!.wThemeColor, duration: quickNewDuration, breakDuration: userVM.savedUserData.first!.timerBreakDuration , rounds: userVM.savedUserData.first!.timerRounds, switchUITheme: userVM.savedUserData.first!.switchUITheme)
                     
                     self.newDuration = quickNewDuration
                     self.showQuickEditView = false

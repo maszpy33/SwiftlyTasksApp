@@ -28,6 +28,7 @@ struct TimerSettingsView: View {
     @State private var newUserName = "UserName"
     @State private var newTaskOverdueLimit = "14"
     @State private var newThemeColor = "blue"
+    @State private var newSwitchUITheme: Bool = false
     
     // DISMISS KEYBOARD VARIABLE
     @FocusState private var focusedField: Field?
@@ -197,7 +198,7 @@ struct TimerSettingsView: View {
                                 self.newRounds = 8
                                 
                                 // SAVE TIMER SETTINGS
-                                userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor, duration: newDuration, breakDuration: newBreakDuration , rounds: newRounds)
+                                userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor, duration: newDuration, breakDuration: newBreakDuration , rounds: newRounds, switchUITheme: newSwitchUITheme)
                                 
                                 self.presentationMode.wrappedValue.dismiss()
                             }, label: {
@@ -239,7 +240,7 @@ struct TimerSettingsView: View {
                                 }
                                 
                                 // SAVE TIMER SETTINGS
-                                userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor, duration: newDuration, breakDuration: newBreakDuration , rounds: newRounds)
+                                userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor, duration: newDuration, breakDuration: newBreakDuration , rounds: newRounds, switchUITheme: newSwitchUITheme)
                                 
                                 self.presentationMode.wrappedValue.dismiss()
                                 
@@ -326,8 +327,3 @@ struct TimerSettingsView: View {
 //        }
 //    }
 //}
-
-
-//@Binding var newDuration: String = "25"
-//@Binding var newBreakDuration: String = "10"
-//@Binding var newRounds: String = "5"

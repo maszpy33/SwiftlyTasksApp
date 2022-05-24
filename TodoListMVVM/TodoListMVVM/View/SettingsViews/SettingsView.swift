@@ -20,8 +20,9 @@ struct SettingsView: View {
     @State private var newTimerDuration: Int32 = 25
     @State private var newTimerBreakDuration: Int32 = 5
     @State private var newTimerRounds: Int32 = 5
+    @State private var newSwitchUITheme: Bool = false
     
-    var user = User(userName: "", taskOverdueLimit: 3, themeColor: "", profileImage: UIImage(named: "JokerCodeProfile")!, timerDuration: 25, timerBreakDuration: 5, timerRounds: 5)
+    var user = User(userName: "", taskOverdueLimit: 3, themeColor: "", profileImage: UIImage(named: "JokerCodeProfile")!, timerDuration: 25, timerBreakDuration: 5, timerRounds: 5, switchUITheme: false)
     
     // DISMISS KEYBOARD VARIABLE
     @FocusState private var focusedField: Field?
@@ -113,6 +114,15 @@ struct SettingsView: View {
                             .padding(.vertical, 5)
                             
                             Divider()
+                            
+                            HStack {
+                                Image(systemName: newSwitchUITheme ? "paintbrush.fill" : "paintbrush")
+                                    .foregroundColor(.accentColor)
+                                Toggle("Switch UI Theme: ", isOn: $newSwitchUITheme)
+                                    .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+                            }
+                            .padding(.horizontal, 15)
+                            
 //
 //                            NotificationCenterView()
 //
@@ -134,7 +144,7 @@ struct SettingsView: View {
                             }
                             
                             // SAVE USER SETTINGS
-                            userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor, duration: Int32(newTimerDuration), breakDuration: Int32(newTimerBreakDuration), rounds: Int32(newTimerRounds))
+                            userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor, duration: Int32(newTimerDuration), breakDuration: Int32(newTimerBreakDuration), rounds: Int32(newTimerRounds), switchUITheme: newSwitchUITheme)
                             
                             withAnimation(.default) {
                                 self.showBanner = true

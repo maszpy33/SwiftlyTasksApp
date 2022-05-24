@@ -133,7 +133,7 @@ struct QuickAddTaskView: View {
                             Spacer()
                             
                             // SHOW DETAILS TOGGLE
-                            Label("Details", systemImage: "note")
+                            Label("Details", systemImage: taskHasDetails ? "note.text" : "text")
                                 .font(.title3)
                                 .foregroundColor(taskHasDetails ? .accentColor : .gray)
                                 .opacity(taskHasDetails ? 1.0 : 0.7)
@@ -174,7 +174,6 @@ struct QuickAddTaskView: View {
                                     // get seconds till duedate of event
                                     // use state variable so user do not have to press save before changing the
                                     // dateTime and set a reminder
-//                                        notificationInXSeconds = taskVM.getSecondsTillDueDate(dueDate: task.wDueDate)
                                     notificationInXSeconds = taskVM.getSecondsTillDueDate(dueDate: taskDueDate)
 
                                     self.errorTitle = taskHasAlert ? "🔕 Remove Notification: \(notificationInXSeconds)sec" : "🔔 Add Notification: \(notificationInXSeconds)sec"
@@ -202,9 +201,9 @@ struct QuickAddTaskView: View {
                             
                             Spacer()
                             
-                            Text("|")
-                                .bold()
-                                .font(.title3)
+//                            Text("|")
+//                                .bold()
+//                                .font(.title3)
                             
                             // SAVE BUTTON
                             Button(action: {
@@ -221,6 +220,8 @@ struct QuickAddTaskView: View {
                                 
                                 if taskHasAlert {
                                     scheduleReminderAlert = true
+                                } else {
+                                    self.presentationMode.wrappedValue.dismiss()
                                 }
                                 
                             }, label: {
@@ -228,10 +229,10 @@ struct QuickAddTaskView: View {
                                     Image(systemName: "plus.square")
                                         .foregroundColor(.accentColor)
                                         .font(.system(size: 25, weight: .bold))
-                                    
-                                    Text("Add ")
-                                        .bold()
-                                        .font(.title3)
+//
+//                                    Text("Add ")
+//                                        .bold()
+//                                        .font(.title3)
                                 }
                             })
                             .padding(.vertical, 5)

@@ -18,6 +18,7 @@ struct User: Identifiable, Equatable {
     let timerDuration: Int32
     let timerBreakDuration: Int16
     let timerRounds: Int16
+    let switchUITheme: Bool
     
     // Timer
     

@@ -18,6 +18,7 @@
     <entity name="TimerEntity" representedClassName="TimerEntity" syncable="YES" codeGenerationType="class"/>
     <entity name="UserEntity" representedClassName="UserEntity" syncable="YES">
         <attribute name="profileImage" optional="YES" attributeType="Binary"/>
+        <attribute name="switchUITheme" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="taskOverdueLimit" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="themeColor" optional="YES" attributeType="String"/>
         <attribute name="timerBreakDuration" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
@@ -29,6 +30,6 @@
         <element name="TaskItemEntity" positionX="-63" positionY="-18" width="128" height="179"/>
         <element name="TestEntity" positionX="-54" positionY="45" width="128" height="44"/>
         <element name="TimerEntity" positionX="-54" positionY="45" width="128" height="29"/>
-        <element name="UserEntity" positionX="-54" positionY="45" width="128" height="134"/>
+        <element name="UserEntity" positionX="-54" positionY="45" width="128" height="149"/>
     </elements>
 </model>

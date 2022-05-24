@@ -40,6 +40,8 @@
 		9FD9850127B7E0E5005BF23F /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD9850027B7E0E5005BF23F /* TaskViewModel.swift */; };
 		9FD9850527B7E1FE005BF23F /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD9850427B7E1FE005BF23F /* TaskView.swift */; };
 		9FD9850727B7E2E4005BF23F /* SortPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD9850627B7E2E4005BF23F /* SortPickerView.swift */; };
+		9FDD6AB8283AF3C40035C7A8 /* HalfASheet in Frameworks */ = {isa = PBXBuildFile; productRef = 9FDD6AB7283AF3C40035C7A8 /* HalfASheet */; };
+		9FDD6ABA283C21410035C7A8 /* TaskViewAlternativ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDD6AB9283C21410035C7A8 /* TaskViewAlternativ.swift */; };
 		9FDD831127CE86E8002ADC9F /* TaskItemEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDD830F27CE86E8002ADC9F /* TaskItemEntity+CoreDataClass.swift */; };
 		9FDD831227CE86E8002ADC9F /* TaskItemEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDD831027CE86E8002ADC9F /* TaskItemEntity+CoreDataProperties.swift */; };
 		9FDD831727CE87BE002ADC9F /* UserEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDD831527CE87BE002ADC9F /* UserEntity+CoreDataClass.swift */; };
@@ -83,6 +85,7 @@
 		9FD9850027B7E0E5005BF23F /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
 		9FD9850427B7E1FE005BF23F /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
 		9FD9850627B7E2E4005BF23F /* SortPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortPickerView.swift; sourceTree = "<group>"; };
+		9FDD6AB9283C21410035C7A8 /* TaskViewAlternativ.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewAlternativ.swift; sourceTree = "<group>"; };
 		9FDD830F27CE86E8002ADC9F /* TaskItemEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskItemEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		9FDD831027CE86E8002ADC9F /* TaskItemEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskItemEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		9FDD831527CE87BE002ADC9F /* UserEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -100,6 +103,7 @@
 			files = (
 				9F169D1927CEBD7400BD6192 /* Introspect in Frameworks */,
 				9F7D05E827FE195600F9425D /* Introspect in Frameworks */,
+				9FDD6AB8283AF3C40035C7A8 /* HalfASheet in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,6 +253,7 @@
 				9F328827282E624A0065B5D6 /* AddTaskButtonView.swift */,
 				9FCC321627BC6E09006444C9 /* EditView.swift */,
 				9FD9850427B7E1FE005BF23F /* TaskView.swift */,
+				9FDD6AB9283C21410035C7A8 /* TaskViewAlternativ.swift */,
 				9F5C18332838471800BC3EE9 /* TaskModifier.swift */,
 			);
 			path = TaskViews;
@@ -291,6 +296,7 @@
 			packageProductDependencies = (
 				9F169D1827CEBD7400BD6192 /* Introspect */,
 				9F7D05E727FE195600F9425D /* Introspect */,
+				9FDD6AB7283AF3C40035C7A8 /* HalfASheet */,
 			);
 			productName = TodoListMVVM;
 			productReference = 9FD984EA27B7DFE9005BF23F /* TodoListMVVM.app */;
@@ -323,6 +329,7 @@
 			packageReferences = (
 				9F169D1727CEBD7400BD6192 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				9F7D05E627FE195600F9425D /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
+				9FDD6AB6283AF3C40035C7A8 /* XCRemoteSwiftPackageReference "HalfASheet" */,
 			);
 			productRefGroup = 9FD984EB27B7DFE9005BF23F /* Products */;
 			projectDirPath = "";
@@ -383,6 +390,7 @@
 				9F2CF69427D6BC290057FAD2 /* IsEmojiExtension.swift in Sources */,
 				9FD9850727B7E2E4005BF23F /* SortPickerView.swift in Sources */,
 				9FD9850127B7E0E5005BF23F /* TaskViewModel.swift in Sources */,
+				9FDD6ABA283C21410035C7A8 /* TaskViewAlternativ.swift in Sources */,
 				9F5C182E28381D1100BC3EE9 /* ListsHomeView.swift in Sources */,
 				9FD9850527B7E1FE005BF23F /* TaskView.swift in Sources */,
 				9FD984EE27B7DFE9005BF23F /* TodoListMVVMApp.swift in Sources */,
@@ -607,6 +615,14 @@
 				minimumVersion = 0.1.4;
 			};
 		};
+		9FDD6AB6283AF3C40035C7A8 /* XCRemoteSwiftPackageReference "HalfASheet" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/franklynw/HalfASheet";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -619,6 +635,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9F169D1727CEBD7400BD6192 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
 			productName = Introspect;
+		};
+		9FDD6AB7283AF3C40035C7A8 /* HalfASheet */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9FDD6AB6283AF3C40035C7A8 /* XCRemoteSwiftPackageReference "HalfASheet" */;
+			productName = HalfASheet;
 		};
 /* End XCSwiftPackageProductDependency section */
 

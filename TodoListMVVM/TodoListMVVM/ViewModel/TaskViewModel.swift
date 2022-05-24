@@ -33,7 +33,6 @@ final class TaskViewModel: DataClassViewModel {
     
     // SEARCHBAR savedTask wrapper
     var searchableTasks: [TaskItemEntity] {
-        print(searchText)
         return searchText == "" ? savedTasks : savedTasks.filter {
             $0.wTitle.lowercased().contains(searchText.lowercased())
         }
@@ -241,6 +240,18 @@ final class TaskViewModel: DataClassViewModel {
         dateFormatter.timeStyle = .short
         
         return dateFormatter.string(from: dateToFormat)
+    }
+    
+    func getShortDate(dueDate: Date) -> String {
+        // check if date is today
+        guard !Calendar.current.isDateInToday(dueDate) else {
+            return "Today"
+        }
+        
+        dateFormatter.dateFormat = "dd.MMMM"
+        let dayAndMonthStr = dateFormatter.string(from: dueDate)
+        
+        return dayAndMonthStr
     }
     
     //    func styleForPriority(taskPriority: String) -> Color {

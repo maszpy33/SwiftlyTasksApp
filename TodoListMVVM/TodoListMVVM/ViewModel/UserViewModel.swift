@@ -21,10 +21,9 @@ final class UserViewModel: DataClassViewModel {
     
     override init() {
         super.init()
-        
         // initUser when app is first started
         if savedUserData.isEmpty {
-            updateUserEntity(userName: "UserName", taskOverdueLimit: 14, themeColor: "blue", duration: 25, breakDuration: 5, rounds: 8)
+            updateUserEntity(userName: "UserName", taskOverdueLimit: 14, themeColor: "blue", duration: 25, breakDuration: 5, rounds: 8, switchUITheme: false)
         }
     }
     
@@ -41,7 +40,7 @@ final class UserViewModel: DataClassViewModel {
         }
     }
     
-    func updateUserEntity(userName: String, taskOverdueLimit: Int16, themeColor: String, duration: Int32, breakDuration: Int32, rounds: Int32) {
+    func updateUserEntity(userName: String, taskOverdueLimit: Int16, themeColor: String, duration: Int32, breakDuration: Int32, rounds: Int32, switchUITheme: Bool) {
 //        let pickedImage = profileImage.jpegData(compressionQuality: 0.70)
         
         if !savedUserData.isEmpty {
@@ -57,6 +56,7 @@ final class UserViewModel: DataClassViewModel {
         updatedUser.timerDuration = duration
         updatedUser.timerBreakDuration = breakDuration
         updatedUser.timerRounds = rounds
+        updatedUser.switchUITheme = switchUITheme
         
 //        updatedUser.profileImage = pickedImage
         saveUserData()

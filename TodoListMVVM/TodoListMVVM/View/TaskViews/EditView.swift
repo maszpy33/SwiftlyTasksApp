@@ -137,7 +137,7 @@ struct EditView: View {
                                 Spacer()
                                 
                                 // SHOW DETAILS TOGGLE
-                                Label("Details", systemImage: "note.text")
+                                Label("Details", systemImage: taskHasDetails ? "note.text" : "text")
                                     .font(.title3)
                                     .foregroundColor(taskHasDetails ? .accentColor : .gray)
                                     .opacity(taskHasDetails ? 1.0 : 0.7)

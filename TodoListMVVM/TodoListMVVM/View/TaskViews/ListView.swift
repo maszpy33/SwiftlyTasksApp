@@ -30,54 +30,145 @@ struct ListView: View {
     @State private var enabled = false
     @State private var scaleAmount: Double = 1.0
     
+    @State private var switchUIDesigen: Bool = false
+    
     var body: some View {
         NavigationView {
             ZStack {
-                
-                //                Color.green
-                //                userVM.secondaryAccentColor
-                //                    .edgesIgnoringSafeArea(.all)
-                List {
-                    ForEach(taskVM.searchableTasks) { taskEntity in
-                        NavigationLink(destination: EditView(taskVM: taskVM, task: taskEntity).environmentObject(notifiyManager), label: {
-                            TaskView(userVM: userVM, taskVM: taskVM, task: taskEntity)
-                        })
-                        .padding(5)
-                        .listRowInsets(EdgeInsets())
-                        .swipeActions(edge: .leading) {
-                            Button(action: {
-                                withAnimation(.linear(duration: 0.4)) {
-                                    taskVM.updateTaskStatus(taskEntity: taskEntity)
+                if switchUIDesigen {
+                    List {
+                        Section(content: {
+                            ForEach(taskVM.searchableTasks.filter {$0.status == false}) { taskEntity in
+                                NavigationLink {
+                                    EditView(taskVM: taskVM, task: taskEntity).environmentObject(notifiyManager)
+                                } label: {
+                                    TaskViewAlternativ(userVM: userVM, taskVM: taskVM, task: taskEntity)
                                 }
-                            }, label: {
-                                VStack {
-                                    Image(systemName: taskEntity.status ? "xmark.square" : "checkmark.square")
+                                .listRowInsets(EdgeInsets())
+                                .swipeActions(edge: .leading) {
+                                    Button(action: {
+                                        withAnimation(.linear(duration: 0.4)) {
+                                            taskVM.updateTaskStatus(taskEntity: taskEntity)
+                                        }
+                                    }, label: {
+                                        VStack {
+                                            Image(systemName: taskEntity.status ? "xmark.square" : "checkmark.square")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 25, height: 25)
+                                            Text("\(taskEntity.status ? "uncheck" : "check")")
+                                        }
+                                    })
+                                }
+                                .tint(taskEntity.status ? .gray : Color(red: 0.3, green: 0.65, blue: 0.0))
+                                .swipeActions(edge: .trailing) {
+                                    Button(role: .destructive) {
+                                        withAnimation(.linear(duration: 0.4)) {
+                                            taskVM.deleteTaskEntity(with: taskEntity.id)
+                                        }
+                                        
+                                    } label: {
+                                        Image(systemName: "trash")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 25, height: 25)
+                                    }
+                                }
+                                .tint(.red)
+                            }
+                        }, header: {
+                            Text("Upcomming Tasks:")
+                        })
+                        
+                        Section(content: {
+                            ForEach(taskVM.searchableTasks.filter {$0.status == true}) { taskEntity in
+                                NavigationLink {
+                                    EditView(taskVM: taskVM, task: taskEntity).environmentObject(notifiyManager)
+                                } label: {
+                                    TaskViewAlternativ(userVM: userVM, taskVM: taskVM, task: taskEntity)
+                                }
+                                .listRowInsets(EdgeInsets())
+                                .swipeActions(edge: .leading) {
+                                    Button(action: {
+                                        withAnimation(.linear(duration: 0.4)) {
+                                            taskVM.updateTaskStatus(taskEntity: taskEntity)
+                                        }
+                                    }, label: {
+                                        VStack {
+                                            Image(systemName: taskEntity.status ? "xmark.square" : "checkmark.square")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 25, height: 25)
+                                            Text("\(taskEntity.status ? "uncheck" : "check")")
+                                        }
+                                    })
+                                }
+                                .tint(taskEntity.status ? .gray : Color(red: 0.3, green: 0.65, blue: 0.0))
+                                .swipeActions(edge: .trailing) {
+                                    Button(role: .destructive) {
+                                        withAnimation(.linear(duration: 0.4)) {
+                                            taskVM.deleteTaskEntity(with: taskEntity.id)
+                                        }
+                                        
+                                    } label: {
+                                        Image(systemName: "trash")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 25, height: 25)
+                                    }
+                                }
+                                .tint(.red)
+                            }
+                        }, header: {
+                            Text("Done Tasks:")
+                        })
+                        
+                    }
+                    .searchable(text: $taskVM.searchText)
+                } else {
+                    List {
+                        ForEach(taskVM.searchableTasks) { taskEntity in
+                            NavigationLink(destination: EditView(taskVM: taskVM, task: taskEntity).environmentObject(notifiyManager), label: {
+                                TaskView(userVM: userVM, taskVM: taskVM, task: taskEntity)
+                            })
+                            .padding(5)
+                            .listRowInsets(EdgeInsets())
+                            .swipeActions(edge: .leading) {
+                                Button(action: {
+                                    withAnimation(.linear(duration: 0.4)) {
+                                        taskVM.updateTaskStatus(taskEntity: taskEntity)
+                                    }
+                                }, label: {
+                                    VStack {
+                                        Image(systemName: taskEntity.status ? "xmark.square" : "checkmark.square")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 25, height: 25)
+                                        Text("\(taskEntity.status ? "uncheck" : "check")")
+                                    }
+                                })
+                            }
+                            .tint(taskEntity.status ? .gray : Color(red: 0.3, green: 0.65, blue: 0.0))
+                            .swipeActions(edge: .trailing) {
+                                Button(role: .destructive) {
+                                    withAnimation(.linear(duration: 0.4)) {
+                                        taskVM.deleteTaskEntity(with: taskEntity.id)
+                                    }
+    
+                                } label: {
+                                    Image(systemName: "trash")
                                         .resizable()
                                         .scaledToFit()
                                         .frame(width: 25, height: 25)
-                                    Text("\(taskEntity.status ? "uncheck" : "check")")
                                 }
-                            })
-                        }
-                        .tint(taskEntity.status ? .gray : Color(red: 0.3, green: 0.65, blue: 0.0))
-                        .swipeActions(edge: .trailing) {
-                            Button(role: .destructive) {
-                                withAnimation(.linear(duration: 0.4)) {
-                                    taskVM.deleteTaskEntity(with: taskEntity.id)
-                                }
-                                
-                            } label: {
-                                Image(systemName: "trash")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 25, height: 25)
                             }
+                            .tint(.red)
                         }
-                        .tint(.red)
                     }
+                    .listStyle(PlainListStyle())
+                    .searchable(text: $taskVM.searchText)
                 }
-                .listStyle(PlainListStyle())
-                .searchable(text: $taskVM.searchText)
+
                 
                 // ADD TASK BUTTON
                 VStack {
@@ -133,6 +224,7 @@ struct ListView: View {
             }
             .navigationBarTitle("SwiftlyTasks", displayMode: .inline)
             .navigationBarItems(leading:
+                                    // NAVIGATION BAR ITEMS
                                     HStack {
                 Button(action: {
                     changeProfileImg()
@@ -146,10 +238,11 @@ struct ListView: View {
             },
                                 trailing:
                                     HStack {
+
                 Text("\(taskVM.savedTasks.filter({ $0.status == false }).count)")
                     .font(.title2)
                     .bold()
-                
+
                 Button(action: {
                     showAddView.toggle()
                 }) {
@@ -170,6 +263,7 @@ struct ListView: View {
         .onAppear {
             // update user name
             currentUserName = userVM.savedUserData.first?.wUserName ?? "NoName"
+            switchUIDesigen = userVM.savedUserData.first?.switchUITheme ?? false
         }
     }
     

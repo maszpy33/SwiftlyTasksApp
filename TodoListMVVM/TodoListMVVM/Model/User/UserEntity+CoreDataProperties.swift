@@ -22,6 +22,7 @@ extension UserEntity {
     @NSManaged public var timerDuration: Int32
     @NSManaged public var timerBreakDuration: Int32
     @NSManaged public var timerRounds: Int32
+    @NSManaged public var switchUITheme: Bool
     
     public var wUserName: String {
         userName ?? "UserName"
