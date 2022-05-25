@@ -28,7 +28,7 @@ struct NoTaskView: View {
                         .padding(.bottom, 20)
                     
                     NavigationLink(destination: AddTaskView(taskVM: taskVM), label: {
-                        Text("🃏 Add New Task")
+                        Text("🦆 Add New Task")
                             .foregroundColor(.black)
                             .font(.headline)
                             .frame(height: 55)

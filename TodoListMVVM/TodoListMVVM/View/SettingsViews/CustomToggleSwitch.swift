@@ -25,17 +25,15 @@ struct CustomToggleSwitch: View {
             
             ZStack {
                 HStack {
-                    Text("Alternative")
-                        .frame(width: width)
-                        .multilineTextAlignment(.center)
-                        .padding(.leading, 15)
-                    Spacer()
                     Text("Classic")
-                        .frame(width: width)
                         .multilineTextAlignment(.center)
-                        .padding(.trailing, 15)
+                        .frame(width: width)
+                    Spacer()
+                    Text("Alternative")
+                        .multilineTextAlignment(.center)
+                        .frame(width: width)
+                        .padding(.trailing, 10)
                 }
-    //            .padding(.horizontal, 15)
                 .font(.system(size: 20, weight: .semibold))
                 
                 HStack {
@@ -54,12 +52,13 @@ struct CustomToggleSwitch: View {
                             RoundedRectangle(cornerRadius: 10, style: .continuous)
                                 .stroke(Color.accentColor, lineWidth: 2))
                         .cornerRadius(10)
+                        .padding(.trailing, newSwitchUITheme ? 10 : 0)
                         
                     if !newSwitchUITheme {
                         Spacer()
                     }
                 }
-                .padding(.horizontal, 15)
+//                .padding(.horizontal, 15)
                 
 
             }

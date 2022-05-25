@@ -15,7 +15,7 @@ struct ListViewClassic: View {
     
     var body: some View {
         List {
-            ForEach(taskVM.searchableTasks) { taskEntity in
+            ForEach(taskVM.searchableTasks, id: \.self) { taskEntity in
                 NavigationLink(destination: EditView(taskVM: taskVM, task: taskEntity).environmentObject(notifyManager), label: {
                     TaskView(userVM: userVM, taskVM: taskVM, task: taskEntity)
                 })
@@ -55,6 +55,7 @@ struct ListViewClassic: View {
         }
         .listStyle(PlainListStyle())
         .searchable(text: $taskVM.searchText)
+
     }
 }
 

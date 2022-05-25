@@ -104,19 +104,9 @@ struct EditView: View {
                         
                         Spacer()
                         
-                        // PRIORITY
-                        Menu {
-                            Picker("", selection: $taskPriority) {
-                                ForEach(taskVM.taskPriorityOptions, id: \.self) {
-                                    Text($0.capitalized)
-                                }
-                            }
-                            .font(.headline)
-                        } label: {
-                            Image(systemName: "flag.fill")
-                                .font(.title2)
-                                .foregroundColor(taskVM.styleForPriority(taskPriority: taskPriority))
-                        }
+                        // PRIORITY PICKER VIEW
+                        TaskPriorityPicker(taskPriority: $taskPriority)
+                            .environmentObject(taskVM)
                     }
                     .padding(.horizontal, 15)
                     

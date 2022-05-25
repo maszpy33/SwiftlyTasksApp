@@ -1,20 +1,21 @@
 //
-//  QuickAddTaskView.swift
+//  AddTaskView.swift
 //  TodoListMVVM
 //
-//  Created by Andreas Zwikirsch on 15.05.22.
+//  Created by Andreas Zwikirsch on 12.02.22.
 //
 
 import SwiftUI
 import Combine
 
-struct QuickAddTaskView: View {
+
+struct AddTaskView: View {
     
     @Environment(\.presentationMode) var presentationMode
     
-    @EnvironmentObject var taskVM: TaskViewModel
-    @EnvironmentObject var notifiyManager: NotificationManager
+    @EnvironmentObject var notifyManager: NotificationManager
     
+    @ObservedObject var taskVM: TaskViewModel
     //    var task: TaskItemEntity
     @State private var addTime: Bool = false
     @State private var showDefaultDetailsText: Bool = true
@@ -38,8 +39,8 @@ struct QuickAddTaskView: View {
     
     // ERROR VARIABLES
     @State private var showAlert = false
-    @State private var errorTitle: String = ""
-    @State private var errorMessage: String = ""
+    @State private var errorTitle = ""
+    @State private var errorMessage = ""
     
     // NOTIFICATION VARIABLES
     @State private var deletingTaskAlert: Bool = false
@@ -50,9 +51,9 @@ struct QuickAddTaskView: View {
     
     var body: some View {
         NavigationView {
-            ZStack{
+            ScrollView {
                 VStack {
-                    Spacer()
+                    Spacer(minLength: 15)
                     
                     HStack {
                         // STATUS TOGGLE
@@ -87,7 +88,7 @@ struct QuickAddTaskView: View {
                                 .cornerRadius(10)
                                 .pickerStyle(.menu)
                                 .labelsHidden()
-                            // no specific time for task -> set to default
+                        // no specific time for task -> set to default
                         } else {
                             DatePicker("no label", selection: $taskDueDate, in: Date()..., displayedComponents: .date)
                                 .foregroundColor(.accentColor)
@@ -103,8 +104,8 @@ struct QuickAddTaskView: View {
                         // PRIORITY
                         Menu {
                             Picker("", selection: $taskPriority) {
-                                ForEach(taskVM.taskPriorityOptions, id: \.self) {
-                                    Text($0.capitalized)
+                                ForEach(taskVM.taskPriorityOptions, id: \.self) { prio in
+                                    Text(prio.capitalized)
                                 }
                             }
                             .font(.headline)
@@ -120,6 +121,7 @@ struct QuickAddTaskView: View {
                         
                         // DATE TIME TOGGLE
                         HStack{
+                            Spacer()
                             Label("Time", systemImage: "clock.fill")
                                 .font(.title3)
                                 .foregroundColor(taskUIDeleted ? .accentColor : .gray)
@@ -167,102 +169,37 @@ struct QuickAddTaskView: View {
                                         return
                                     }
                                     
-                                    withAnimation(.linear) {
-                                        taskHasAlert.toggle()
-                                    }
+                                    scheduleReminderAlert = true
                                     
                                     // get seconds till duedate of event
                                     // use state variable so user do not have to press save before changing the
                                     // dateTime and set a reminder
                                     notificationInXSeconds = taskVM.getSecondsTillDueDate(dueDate: taskDueDate)
-
+                                    
                                     self.errorTitle = taskHasAlert ? "🔕 Remove Notification: \(notificationInXSeconds)sec" : "🔔 Add Notification: \(notificationInXSeconds)sec"
                                     self.errorMessage = taskHasAlert ? "Do you want to remove the reminded for \(taskVM.formatDate(dateToFormat: taskDueDate)) ? " : "Do you want to be reminded at \(taskVM.formatDate(dateToFormat: taskDueDate)) ? "
-
+                                    
                                     taskNotificationTitle = "🔔 SwiftlyTasks Reminder"
                                     taskNotificationSubtitle = "\(taskEmoji): " + taskTitleTextField
                                 }
-//                                .alert(isPresented: $scheduleReminderAlert) {
-//                                    Alert(
-//                                        title: Text(errorTitle),
-//                                        message: Text(errorMessage),
-//                                        primaryButton: .default(Text("Set Alert")) {
-//                                            // TOGGLE ALERT BOOL
-//                                            withAnimation(.linear) {
-//                                                taskHasAlert.toggle()
-//                                            }
-//
-//                                            // CREATE NOTIFICATION FOR TASK
-//                                            notifiyManager.createTaskNotification(inXSeconds: notificationInXSeconds, title: taskNotificationTitle, subtitle: taskNotificationSubtitle, categoryIdentifier: "ACTIONS")
-//                                        },
-//                                        secondaryButton: .cancel()
-//                                    )
-//                                }
+                                .alert(isPresented: $scheduleReminderAlert) {
+                                    Alert(
+                                        title: Text(errorTitle),
+                                        message: Text(errorMessage),
+                                        primaryButton: .default(Text("Set Alert")) {
+                                            // TOGGLE ALERT BOOL
+                                            withAnimation(.linear) {
+                                                taskHasAlert.toggle()
+                                            }
+                                            
+                                            // CREATE NOTIFICATION FOR TASK
+                                            notifyManager.createTaskNotification(inXSeconds: notificationInXSeconds, title: taskNotificationTitle, subtitle: taskNotificationSubtitle, categoryIdentifier: "ACTIONS")
+                                        },
+                                        secondaryButton: .cancel()
+                                    )
+                                }
                             
                             Spacer()
-                            
-//                            Text("|")
-//                                .bold()
-//                                .font(.title3)
-                            
-                            // SAVE BUTTON
-                            Button(action: {
-                                // check if input is valid
-                                guard !taskTitleTextField.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-                                    self.errorTitle = "input error"
-                                    self.errorMessage = "Pleace enter a title to save the task"
-                                    self.showAlert = true
-                                    return
-                                }
-                                
-                                // ADD NEW TASK
-                                taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert)
-                                
-                                if taskHasAlert {
-                                    scheduleReminderAlert = true
-                                } else {
-                                    self.presentationMode.wrappedValue.dismiss()
-                                }
-                                
-                            }, label: {
-                                HStack {
-                                    Image(systemName: "plus.square")
-                                        .foregroundColor(.accentColor)
-                                        .font(.system(size: 25, weight: .bold))
-//
-//                                    Text("Add ")
-//                                        .bold()
-//                                        .font(.title3)
-                                }
-                            })
-                            .padding(.vertical, 5)
-                            .disabled(taskTitleTextField.isEmpty)
-                            .alert(isPresented: $showAlert) {
-                                Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
-                            }
-                            .alert(isPresented: $scheduleReminderAlert) {
-                                Alert(
-                                    title: Text(errorTitle),
-                                    message: Text(errorMessage),
-                                    primaryButton: .default(Text("Set Alert")) {
-                                        // TOGGLE ALERT BOOL
-//                                        withAnimation(.linear) {
-//                                            taskHasAlert.toggle()
-//                                        }
-                                        
-                                        // CREATE NOTIFICATION FOR TASK
-                                        notifiyManager.createTaskNotification(inXSeconds: notificationInXSeconds, title: taskNotificationTitle, subtitle: taskNotificationSubtitle, categoryIdentifier: "ACTIONS")
-                                        
-                                        taskTitleTextField = ""
-                                        taskDetailsTextField = ""
-                                        
-                                        self.presentationMode.wrappedValue.dismiss()
-                                    },
-                                    secondaryButton: .cancel() {
-                                        taskHasAlert.toggle()
-                                    }
-                                )
-                            }
                         }
                         .padding(.horizontal, 20)
                         .foregroundColor(.accentColor)
@@ -296,10 +233,9 @@ struct QuickAddTaskView: View {
                                 .focused($focusedField, equals: .taskTitleTextField)
                                 .onAppear {
                                     self.focusedField = .taskTitleTextField
-                                }
+                                        }
                                 .font(.headline)
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 5)
+                                .padding(10)
                                 .cornerRadius(10)
                             
                         }
@@ -328,7 +264,6 @@ struct QuickAddTaskView: View {
                                             showDefaultDetailsText = false
                                         }
                                 }
-                                .padding(.bottom, 5)
                                 
                                 VStack(alignment: .leading) {
                                     HStack(alignment: .top) {
@@ -343,25 +278,64 @@ struct QuickAddTaskView: View {
                             }
                             .frame(height: 200)
                             .padding(.horizontal, 15)
-                            .padding(.top, 5)
+                            .padding(.top, 15)
                         }
-                    }
-                }
-                .navigationBarHidden(true)
-                .toolbar {
-                    ToolbarItem(placement: .keyboard) {
-                        HStack {
-                            Spacer()
-                            Button(action: {
-                                focusedField = nil
-                            }) {
-                                Image(systemName: "keyboard.chevron.compact.down")
+                        
+                        // SAVE BUTTON
+                        Button(action: {
+                            // check if input is valid
+                            guard !taskTitleTextField.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                                self.errorTitle = "Input Error"
+                                self.errorMessage = "Pleace enter a title to save the task!"
+                                self.showAlert = true
+                                return
                             }
-                            .padding(.horizontal, 10)
-                        }
+                            
+                            // ADD NEW TASK
+                            taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert)
+                            
+                            taskTitleTextField = ""
+                            taskDetailsTextField = ""
+                            
+                            self.presentationMode.wrappedValue.dismiss()
+                            
+                        }, label: {
+                            Text("Save")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                                .frame(height: 55)
+                                .frame(maxWidth: .infinity)
+                                .background(Color.accentColor.opacity(0.2))
+                                .cornerRadius(10)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                        .stroke(Color.accentColor, lineWidth: 4))
+                                .cornerRadius(10)
+                        })
+                        .padding(15)
+                        .disabled(taskTitleTextField.isEmpty)
+                        
+                        Spacer()
                     }
                 }
             }
+            .navigationBarHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .keyboard) {
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            focusedField = nil
+                        }) {
+                            Image(systemName: "keyboard.chevron.compact.down")
+                        }
+                        .padding(.horizontal, 10)
+                    }
+                }
+            }
+        }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
         }
         .onAppear {
             // default time currently at 10am
@@ -375,11 +349,17 @@ struct QuickAddTaskView: View {
         }
         return true
     }
-    
 }
 
-//struct QuickAddTaskView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        QuickAddTaskView()
-//    }
-//}
+struct AddTaskView_Previews: PreviewProvider {
+    
+    @State static var defaultIsEditView = false
+    
+    static var previews: some View {
+        AddTaskView(taskVM: TaskViewModel())
+            .preferredColorScheme(.dark)
+    }
+}
+
+
+

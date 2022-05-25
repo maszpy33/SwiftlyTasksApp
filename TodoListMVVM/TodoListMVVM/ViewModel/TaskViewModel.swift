@@ -24,7 +24,7 @@ final class TaskViewModel: DataClassViewModel {
     let taskCategoryOptions = ["private","computer science", "university", "art", "sport", "other"]
     let taskCategorySymboleOptions = ["swift", "pencil", "clock", "alarm", "heart.circle", "brain.head.profile", "bed.double.circle", "star","keyboard", "laptopcomputer", "iphone", "ipad", "applewatch", "airpodspro", "gamecontroller.fill", "airplane", "car", "bus", "tram", "figure.walk", "person", "person.3", "globe.europe.africa.fill", "flame", "drop", "bolt", "pawprint", "leaf", "message", "quote.bubble", "cart", "giftcard.fill", "creditcard", "eurosign.circle", "x.squareroot", "number.square"]
     
-    let taskPriorityOptions = ["non", "low", "medium", "high", "special"]
+    let taskPriorityOptions = ["non", "! low", "!! medium", "!!! high", "★ special"]
     let taskOverdueLimit = -3
     let secondaryAccentColor = Color("SecondaryAccentColor")
     
@@ -106,15 +106,18 @@ final class TaskViewModel: DataClassViewModel {
     }
     
     func styleForPriority(taskPriority: String) -> Color {
-        //        let priority = Priority(rawValue: value)
-        switch taskPriority {
-        case "low":
+        
+        let processedTaskPriority = taskPriority.lowercased()
+
+        switch processedTaskPriority {
+        case "! low":
+            print("Lower task -> should be blue")
             return Color.blue
-        case "medium":
+        case "!! medium":
             return Color.orange
-        case "high":
+        case "!!! high":
             return Color.red
-        case "special":
+        case "★ special":
             return Color.accentColor
         default:
             return Color.gray

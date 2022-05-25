@@ -59,23 +59,14 @@ struct TaskView: View {
                 
                 HStack {
                     VStack(alignment: .leading) {
-                        // TASK DUE DATE
-                        Text("Due Date:")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
                         HStack {
-                            Text(task.dueDate ?? Date(), style: .date)
-                            Text(task.dueDate ?? Date(), style: .time)
-                                .opacity(task.uiDeleted ? 1 : 0)
-                            Text("uhr")
-                                .opacity(task.uiDeleted ? 1 : 0)
-                        }
-                    }
-                    
-                    Spacer()
-                    
-                    VStack(alignment: .leading) {
-                        HStack {
+                            // TASK STATUS
+                            Image(systemName: task.status ? "checkmark.square" : "xmark.square")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 22, height: 22)
+                                .foregroundColor(task.status ? .green : .gray)
+                            
                             // HAS REMINDER ACTIVATED
                             if task.hasAlert {
                                 Image(systemName: "bell.square")
@@ -93,16 +84,24 @@ struct TaskView: View {
                                     .frame(width: 22, height: 22)
                                     .foregroundColor(.gray)
                             }
-                            
-                            // TASK STATUS
-                            Image(systemName: task.status ? "checkmark.square" : "xmark.square")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 22, height: 22)
-                                .foregroundColor(task.status ? .green : .gray)
                         }
                     }
                     
+                    Spacer()
+                    
+                    VStack(alignment: .leading) {
+                        // TASK DUE DATE
+                        Text("Due Date:")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        HStack {
+                            Text(task.dueDate ?? Date(), style: .date)
+                            Text(task.dueDate ?? Date(), style: .time)
+                                .opacity(task.uiDeleted ? 1 : 0)
+                            Text("uhr")
+                                .opacity(task.uiDeleted ? 1 : 0)
+                        }
+                    }
                 }
             }
             .padding(.horizontal, 10)

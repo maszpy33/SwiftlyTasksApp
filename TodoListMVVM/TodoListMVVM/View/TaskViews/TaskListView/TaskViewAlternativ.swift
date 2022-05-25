@@ -28,8 +28,6 @@ struct TaskViewAlternativ: View {
                     // TASK EMOJI
                     Text("\(task.wTaskEmoji)")
                         .font(.system(size: 30))
-                        .shadow(color: .black, radius: 10)
-
                     
                     // TASK TITLE
                     VStack(alignment: .leading) {

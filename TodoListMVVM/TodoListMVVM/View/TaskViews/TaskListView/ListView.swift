@@ -177,7 +177,6 @@ struct ListView: View {
 //                    .searchable(text: $taskVM.searchText)
                 }
 
-                
                 // ADD TASK BUTTON
                 VStack {
                     Spacer()
@@ -189,6 +188,7 @@ struct ListView: View {
                             .offset(self.dragAmount)
                             .padding()
                             .onTapGesture {
+                                // ANIMATE BUTTON EFFECT WHILE MAINTING DRAG GESTURE
                                 DispatchQueue.main.async {
                                     withAnimation(.default) {
                                         scaleAmount = 0.7
@@ -204,7 +204,7 @@ struct ListView: View {
                             .gesture(DragGesture()
                                 .onChanged { self.dragAmount = $0.translation }
                                 .onEnded { _ in
-                                    withAnimation(.easeOut.delay(0.2)) {
+                                    withAnimation(.easeOut.delay(0.5)) {
                                         self.dragAmount = .zero
                                         self.enabled.toggle()
                                     }
@@ -212,24 +212,24 @@ struct ListView: View {
                     }
                 }
             }
-            .toolbar {
-                ToolbarItem(placement: .keyboard) {
-                    VStack {
-                        HStack {
-                            Spacer()
-                            Button(action: {
-                                focusStatus = nil
-                            }) {
-                                Image(systemName: "keyboard.chevron.compact.down")
-                            }
-                            .padding(.horizontal, 10)
-                        }
-                        AddTaskView(taskVM: taskVM)
-                            .environmentObject(notifyManager)
-                    }
-                    
-                }
-            }
+//            .toolbar {
+//                ToolbarItem(placement: .keyboard) {
+//                    VStack {
+//                        HStack {
+//                            Spacer()
+//                            Button(action: {
+//                                focusStatus = nil
+//                            }) {
+//                                Image(systemName: "keyboard.chevron.compact.down")
+//                            }
+//                            .padding(.horizontal, 10)
+//                        }
+////                        AddTaskView(taskVM: taskVM)
+////                            .environmentObject(notifyManager)
+//                    }
+//
+//                }
+//            }
             .navigationBarTitle("SwiftlyTasks", displayMode: .inline)
             .navigationBarItems(leading:
                                     // NAVIGATION BAR ITEMS
@@ -251,6 +251,7 @@ struct ListView: View {
                     .font(.title2)
                     .bold()
 
+                
                 Button(action: {
                     showAddView.toggle()
                 }) {
