@@ -113,6 +113,7 @@ struct QuickEditTimerView: View {
             }
             .padding(15)
         }
+        .accentColor(userVM.colorTheme(colorPick: userVM.savedUserData.first!.wThemeColor))
         .frame(width: 280, height: 160)
         .foregroundColor(.primary)
         .background(userVM.secondaryAccentColor)

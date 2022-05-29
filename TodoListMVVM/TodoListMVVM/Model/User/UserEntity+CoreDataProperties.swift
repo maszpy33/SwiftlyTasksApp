@@ -28,7 +28,7 @@ extension UserEntity {
         userName ?? "UserName"
     }
     public var wThemeColor: String {
-        themeColor ?? "blue"
+        themeColor ?? "purple"
     }
 }
 

@@ -272,6 +272,7 @@ struct TimerSettingsView: View {
                 
                 //                Spacer()
             }
+            .accentColor(userVM.colorTheme(colorPick: userVM.savedUserData.first!.wThemeColor))
             .navigationBarTitle("")
             .navigationBarHidden(true)
             .toolbar {

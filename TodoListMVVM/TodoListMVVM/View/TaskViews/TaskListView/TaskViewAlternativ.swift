@@ -52,7 +52,7 @@ struct TaskViewAlternativ: View {
                         .foregroundColor(taskVM.styleForPriority(taskPriority: task.wPriority))
                     
                     // TASK STATUS
-                    Image(systemName: task.status ? "checkmark.square" : "xmark.square")
+                    Image(systemName: task.status ? "checkmark.square" : "square")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 12, height: 12)

@@ -252,6 +252,7 @@ struct PomodoroView: View {
                     }
                 }
             }
+            .accentColor(userVM.colorTheme(colorPick: userVM.savedUserData.first!.wThemeColor))
             .onReceive(self.time, perform: { _ in
                 // CALCULATE THE REMAINING TIME OF THE TIMER
                 if self.isTimerStarted {

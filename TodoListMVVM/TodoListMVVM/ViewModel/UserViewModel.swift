@@ -12,9 +12,18 @@ import SwiftUI
 
 final class UserViewModel: DataClassViewModel {
     
-//    let initUserDefaults = User(userName: "DefaultName", taskOverdueLimit: 3, themeColor: "yellow", profileImage: UIImage(named: "JokerCodeProfile")!, timerDuration: 25, timerBreakDuration: 5, timerRounds: 5)
-    
+    // SECONDARY COLOR PLATE
     let secondaryAccentColor = Color("SecondaryAccentColor")
+    // ColorPlate MAIN COLOR
+    let accentColorOne = Color("AccentColorOne")
+    let accentColorTwo = Color("AccentColorTwo")
+//    let accentColorThree = Color("AccentColorThree")
+    let accentColorFour = Color("AccentColorFour")
+    let accentColorFive = Color("AccentColorFive")
+    let accentColorSix = Color("AccentColorSix")
+
+    // COLOR ARRAY
+    let colorPlate = ["purple", "blue", "green", "red", "yellow"]
     
     // FIXME: Make default time changable
     let defaultTime = Calendar.current.date(bySettingHour: 10, minute: 0, second: 0, of: Date())!
@@ -64,5 +73,23 @@ final class UserViewModel: DataClassViewModel {
     
     func updateTimerSettings(duration: Int32, breakDuration: Int32, rounds: Int32) {
         
+    }
+    
+    // return color function
+    func colorTheme(colorPick: String) -> Color {
+        switch colorPick {
+        case "purple":
+            return .accentColor
+        case "blue":
+            return accentColorTwo
+        case "green":
+            return accentColorSix
+        case "red":
+            return accentColorFour
+        case "yellow":
+            return accentColorFive
+        default:
+            return .accentColor
+        }
     }
 }

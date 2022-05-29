@@ -15,7 +15,7 @@ struct SettingsView: View {
     @ObservedObject var userVM: UserViewModel
     
     @State private var newUserName: String = "UserName"
-    @State private var newThemeColor: String = "yellwo"
+    @State private var newThemeColor: String = ""
     @State private var newTaskOverdueLimit: String = "99"
     @State private var newTimerDuration: Int32 = 25
     @State private var newTimerBreakDuration: Int32 = 5
@@ -132,7 +132,34 @@ struct SettingsView: View {
 //
 //                            NotificationCenterView()
 //
-//                            Divider()
+                            Divider()
+                            
+                            HStack {
+//                                Label("Color Theme: ", systemImage: "paintbrush.fill")
+                                Image(systemName: "paintbrush.fill")
+                                    .font(.title3)
+                                    .foregroundColor(.accentColor)
+                                
+                                Text("Color Theme: ")
+                                    .font(.title3)
+                                    .foregroundColor(.primary)
+                                
+                                
+                                ZStack {
+                                    Picker("ColorTheme", selection: $newThemeColor) {
+                                        ForEach(userVM.colorPlate, id: \.self) { colorPick in
+                                            Text(colorPick.capitalized)
+                                        }
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 40)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(Color.accentColor, lineWidth: 2))
+                                }
+                            }
+                            .padding(.horizontal, 15)
+                            .padding(.vertical, 5)
                         }
                         
                         // SAVE BUTTON
@@ -163,7 +190,7 @@ struct SettingsView: View {
                             Text("Save")
                                 .font(.headline)
                                 .foregroundColor(.primary)
-                                .frame(height: 55)
+                                .frame(width: 200, height: 55)
                                 .frame(maxWidth: .infinity)
                                 .background(Color.accentColor.opacity(0.2))
                                 .cornerRadius(10)
@@ -210,6 +237,7 @@ struct SettingsView: View {
                     newTimerDuration = currentUser.timerDuration
                     newTimerBreakDuration = currentUser.timerBreakDuration
                     newTimerRounds = currentUser.timerRounds
+                    newThemeColor = currentUser.wThemeColor
                 }
             }
             .navigationBarItems(leading:

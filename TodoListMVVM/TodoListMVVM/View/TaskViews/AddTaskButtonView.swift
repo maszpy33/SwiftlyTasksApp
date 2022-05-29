@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AddTaskButtonView: View {
+    @EnvironmentObject var userVM: UserViewModel
     let secondaryAccentColor = Color("SecondaryAccentColor")
 
     var body: some View {
@@ -26,6 +27,7 @@ struct AddTaskButtonView: View {
                 .padding(5)
         }
         .frame(width: 55, height: 55)
+        .accentColor(userVM.colorTheme(colorPick: userVM.savedUserData.first!.wThemeColor))
     }
 }
 

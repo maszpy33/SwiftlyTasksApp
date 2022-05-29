@@ -18,12 +18,13 @@ struct ContentView: View {
     var body: some View {
         TabView {
             if taskVM.savedTasks.isEmpty {
-                NoTaskView(taskVM: taskVM)
+                NoTaskView()
+                    .environmentObject(userVM)
+                    .environmentObject(taskVM)
                     .transition(AnyTransition.opacity.animation(.easeIn))
                     .tabItem {
                         Image(systemName: "checkmark.square")
                         Text("Task List")
-                        
                     }
             } else {
                 ListView(taskVM: taskVM, userVM: userVM)
@@ -53,6 +54,7 @@ struct ContentView: View {
                     Text("Settings")
                 }
         }
+        .accentColor(userVM.colorTheme(colorPick: userVM.savedUserData.first!.wThemeColor))
         .onAppear(perform: {
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (success, error) in
                 if let error = error {

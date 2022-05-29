@@ -27,6 +27,10 @@ final class TaskViewModel: DataClassViewModel {
     let taskPriorityOptions = ["non", "! low", "!! medium", "!!! high", "★ special"]
     let taskOverdueLimit = -3
     let secondaryAccentColor = Color("SecondaryAccentColor")
+    // COLOR PLATE
+//    let secondaryAccentColor = Color("SecondaryAccentColor")
+//    let accentColorTwo = Color("AccentColorTwo")
+//    let accentColorThree = Color("AccentColorThreee")
     
     // SEARCHBAR string variable
     @Published var searchText = ""

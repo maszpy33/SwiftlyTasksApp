@@ -14,8 +14,10 @@ struct AddTaskView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @EnvironmentObject var notifyManager: NotificationManager
+    @EnvironmentObject var userVM: UserViewModel
     
     @ObservedObject var taskVM: TaskViewModel
+    
     //    var task: TaskItemEntity
     @State private var addTime: Bool = false
     @State private var showDefaultDetailsText: Bool = true
@@ -169,34 +171,24 @@ struct AddTaskView: View {
                                         return
                                     }
                                     
-                                    scheduleReminderAlert = true
+                                    withAnimation(.linear) {
+                                        taskHasAlert.toggle()
+                                    }
                                     
                                     // get seconds till duedate of event
                                     // use state variable so user do not have to press save before changing the
                                     // dateTime and set a reminder
                                     notificationInXSeconds = taskVM.getSecondsTillDueDate(dueDate: taskDueDate)
-                                    
-                                    self.errorTitle = taskHasAlert ? "🔕 Remove Notification: \(notificationInXSeconds)sec" : "🔔 Add Notification: \(notificationInXSeconds)sec"
-                                    self.errorMessage = taskHasAlert ? "Do you want to remove the reminded for \(taskVM.formatDate(dateToFormat: taskDueDate)) ? " : "Do you want to be reminded at \(taskVM.formatDate(dateToFormat: taskDueDate)) ? "
-                                    
+                                    // if time is in the past, alert immediately
+                                    if notificationInXSeconds <= 0 {
+                                        notificationInXSeconds = 1
+                                    }
+
+                                    self.errorTitle = taskHasAlert ? "🔔 Add Notification: \nin \(notificationInXSeconds)sec" : "🔕 Cancel Notification: \nin \(notificationInXSeconds)sec"
+                                    self.errorMessage = taskHasAlert ? "Do you want to be reminded at \(taskVM.formatDate(dateToFormat: taskDueDate)) ? " : "Do you want to remove the reminded for \(taskVM.formatDate(dateToFormat: taskDueDate)) ? "
+
                                     taskNotificationTitle = "🔔 SwiftlyTasks Reminder"
                                     taskNotificationSubtitle = "\(taskEmoji): " + taskTitleTextField
-                                }
-                                .alert(isPresented: $scheduleReminderAlert) {
-                                    Alert(
-                                        title: Text(errorTitle),
-                                        message: Text(errorMessage),
-                                        primaryButton: .default(Text("Set Alert")) {
-                                            // TOGGLE ALERT BOOL
-                                            withAnimation(.linear) {
-                                                taskHasAlert.toggle()
-                                            }
-                                            
-                                            // CREATE NOTIFICATION FOR TASK
-                                            notifyManager.createTaskNotification(inXSeconds: notificationInXSeconds, title: taskNotificationTitle, subtitle: taskNotificationSubtitle, categoryIdentifier: "ACTIONS")
-                                        },
-                                        secondaryButton: .cancel()
-                                    )
                                 }
                             
                             Spacer()
@@ -314,11 +306,28 @@ struct AddTaskView: View {
                         })
                         .padding(15)
                         .disabled(taskTitleTextField.isEmpty)
+                        .alert(isPresented: $scheduleReminderAlert) {
+                            Alert(
+                                title: Text(errorTitle),
+                                message: Text(errorMessage),
+                                primaryButton: .default(Text("Set Alert")) {
+                                    // ADD TASK
+                                    taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert)
+                                    
+                                    // CREATE NOTIFICATION FOR TASK
+                                    notifyManager.createTaskNotification(inXSeconds: notificationInXSeconds, title: taskNotificationTitle, subtitle: taskNotificationSubtitle, categoryIdentifier: "ACTIONS")
+                                },
+                                secondaryButton: .cancel() {
+                                    taskHasAlert = false
+                                }
+                            )
+                        }
                         
                         Spacer()
                     }
                 }
             }
+            .accentColor(userVM.colorTheme(colorPick: userVM.savedUserData.first!.wThemeColor))
             .navigationBarHidden(true)
             .toolbar {
                 ToolbarItem(placement: .keyboard) {

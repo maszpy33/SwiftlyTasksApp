@@ -13,7 +13,8 @@ struct QuickAddTaskView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @EnvironmentObject var taskVM: TaskViewModel
-    @EnvironmentObject var notifiyManager: NotificationManager
+    @EnvironmentObject var userVM: UserViewModel
+    @EnvironmentObject var notifyManager: NotificationManager
     
     //    var task: TaskItemEntity
     @State private var addTime: Bool = false
@@ -51,7 +52,7 @@ struct QuickAddTaskView: View {
     
     var body: some View {
         NavigationView {
-            ZStack{
+            ZStack {
                 VStack {
                     Spacer()
                     
@@ -166,6 +167,10 @@ struct QuickAddTaskView: View {
                                     // use state variable so user do not have to press save before changing the
                                     // dateTime and set a reminder
                                     notificationInXSeconds = taskVM.getSecondsTillDueDate(dueDate: taskDueDate)
+                                    // if time is in the past, alert immediately
+                                    if notificationInXSeconds <= 0 {
+                                        notificationInXSeconds = 1
+                                    }
 
                                     self.errorTitle = taskHasAlert ? "🔔 Add Notification: \nin \(notificationInXSeconds)sec" : "🔕 Cancel Notification: \nin \(notificationInXSeconds)sec"
                                     self.errorMessage = taskHasAlert ? "Do you want to be reminded at \(taskVM.formatDate(dateToFormat: taskDueDate)) ? " : "Do you want to remove the reminded for \(taskVM.formatDate(dateToFormat: taskDueDate)) ? "
@@ -206,9 +211,7 @@ struct QuickAddTaskView: View {
                                 // if taskHasAlert add task else ask for permission
                                 if !taskHasAlert {
                                     // ADD NEW TASK
-                                    DispatchQueue.main.async {
-                                        taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert)
-                                    }
+                                    taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert)
                                     
                                     self.presentationMode.wrappedValue.dismiss()
                                     
@@ -217,15 +220,9 @@ struct QuickAddTaskView: View {
                                 }
 
                             }, label: {
-                                HStack {
-                                    Image(systemName: "plus.square")
-                                        .foregroundColor(.accentColor)
-                                        .font(.system(size: 25, weight: .bold))
-//
-//                                    Text("Add ")
-//                                        .bold()
-//                                        .font(.title3)
-                                }
+                                Image(systemName: "plus.square")
+                                    .foregroundColor(.accentColor)
+                                    .font(.system(size: 25, weight: .bold))
                             })
                             .padding(.vertical, 5)
                             .disabled(taskTitleTextField.isEmpty)
@@ -238,12 +235,10 @@ struct QuickAddTaskView: View {
                                     message: Text(errorMessage),
                                     primaryButton: .default(Text("Set Alert")) {
                                         // ADD TASK
-                                        DispatchQueue.main.async {
-                                            taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert)
-                                        }
+                                        taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert)
                                         
                                         // CREATE NOTIFICATION FOR TASK
-                                        notifiyManager.createTaskNotification(inXSeconds: notificationInXSeconds, title: taskNotificationTitle, subtitle: taskNotificationSubtitle, categoryIdentifier: "ACTIONS")
+                                        notifyManager.createTaskNotification(inXSeconds: notificationInXSeconds, title: taskNotificationTitle, subtitle: taskNotificationSubtitle, categoryIdentifier: "ACTIONS")
                                         
                                         taskTitleTextField = ""
                                         taskDetailsTextField = ""
@@ -354,6 +349,7 @@ struct QuickAddTaskView: View {
                     }
                 }
             }
+            .accentColor(userVM.colorTheme(colorPick: userVM.savedUserData.first!.wThemeColor))
         }
         .onAppear {
             // default time currently at 10am

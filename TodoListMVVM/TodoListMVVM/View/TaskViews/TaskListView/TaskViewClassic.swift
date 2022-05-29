@@ -61,7 +61,7 @@ struct TaskView: View {
                     VStack(alignment: .leading) {
                         HStack {
                             // TASK STATUS
-                            Image(systemName: task.status ? "checkmark.square" : "xmark.square")
+                            Image(systemName: task.status ? "checkmark.square" : "square")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 22, height: 22)

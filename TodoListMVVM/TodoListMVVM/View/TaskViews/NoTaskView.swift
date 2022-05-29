@@ -9,8 +9,12 @@ import SwiftUI
 
 struct NoTaskView: View {
     
-    @ObservedObject var taskVM: TaskViewModel
+    @EnvironmentObject var userVM: UserViewModel
+    @EnvironmentObject var taskVM: TaskViewModel
+//    @ObservedObject var taskVM: TaskViewModel
     @State private var showAddView: Bool = false
+    
+    @State var colorTheme: Color = .accentColor
     
     @State private var animate: Bool = false
     let secondaryAccentColor = Color("SecondaryAccentColor")
@@ -27,7 +31,7 @@ struct NoTaskView: View {
                     Text("Are you a productive person? I think you should click the add button and add a bunch of items to your todo list!")
                         .padding(.bottom, 20)
                     
-                    NavigationLink(destination: AddTaskView(taskVM: taskVM), label: {
+                    NavigationLink(destination: AddTaskView(taskVM: taskVM).environmentObject(userVM), label: {
                         Text("🦆 Add New Task")
                             .foregroundColor(.black)
                             .font(.headline)
@@ -49,6 +53,7 @@ struct NoTaskView: View {
                 .padding(40)
                 .onAppear(perform: addAnimation)
             }
+            .accentColor(userVM.colorTheme(colorPick: userVM.savedUserData.first!.wThemeColor))
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
@@ -71,7 +76,7 @@ struct NoTaskView: View {
 struct NoTaskView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            NoTaskView(taskVM: TaskViewModel())
+            NoTaskView()
         }
         .navigationTitle("Title")
     }
