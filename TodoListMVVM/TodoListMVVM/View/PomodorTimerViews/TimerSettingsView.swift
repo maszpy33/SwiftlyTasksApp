@@ -27,7 +27,7 @@ struct TimerSettingsView: View {
     // USER VARIABLES
     @State private var newUserName = "UserName"
     @State private var newTaskOverdueLimit = "14"
-    @State private var newThemeColor = "blue"
+    @State private var newThemeColor = "someColor"
     @State private var newSwitchUITheme: Bool = false
     
     // DISMISS KEYBOARD VARIABLE
@@ -291,6 +291,7 @@ struct TimerSettingsView: View {
             .onAppear {
                 let currentUser = userVM.savedUserData.first!
                 newUserName = currentUser.wUserName
+                newThemeColor = currentUser.wThemeColor
             }
             
         }

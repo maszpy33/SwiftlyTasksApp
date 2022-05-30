@@ -113,7 +113,8 @@ struct QuickEditTimerView: View {
             }
             .padding(15)
         }
-        .accentColor(userVM.colorTheme(colorPick: userVM.savedUserData.first!.wThemeColor))
+        // FIXME: App crashs when ! operator is used instead of ?
+        .accentColor(userVM.colorTheme(colorPick: userVM.savedUserData.first?.wThemeColor ?? "purple"))
         .frame(width: 280, height: 160)
         .foregroundColor(.primary)
         .background(userVM.secondaryAccentColor)

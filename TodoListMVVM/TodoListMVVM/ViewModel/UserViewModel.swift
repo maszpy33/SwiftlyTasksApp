@@ -21,9 +21,10 @@ final class UserViewModel: DataClassViewModel {
     let accentColorFour = Color("AccentColorFour")
     let accentColorFive = Color("AccentColorFive")
     let accentColorSix = Color("AccentColorSix")
+    let accentColorSeven = Color("AccentColorSeven")
 
     // COLOR ARRAY
-    let colorPlate = ["purple", "blue", "green", "red", "yellow"]
+    let colorPlate = ["purple", "blue", "green", "red", "yellow", "orange"]
     
     // FIXME: Make default time changable
     let defaultTime = Calendar.current.date(bySettingHour: 10, minute: 0, second: 0, of: Date())!
@@ -79,7 +80,7 @@ final class UserViewModel: DataClassViewModel {
     func colorTheme(colorPick: String) -> Color {
         switch colorPick {
         case "purple":
-            return .accentColor
+            return accentColorOne
         case "blue":
             return accentColorTwo
         case "green":
@@ -88,6 +89,8 @@ final class UserViewModel: DataClassViewModel {
             return accentColorFour
         case "yellow":
             return accentColorFive
+        case "orange":
+            return accentColorSeven
         default:
             return .accentColor
         }
