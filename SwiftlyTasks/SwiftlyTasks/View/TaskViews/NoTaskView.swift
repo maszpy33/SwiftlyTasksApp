@@ -11,7 +11,7 @@ struct NoTaskView: View {
     
     @EnvironmentObject var userVM: UserViewModel
     @EnvironmentObject var taskVM: TaskViewModel
-//    @ObservedObject var taskVM: TaskViewModel
+
     @State private var showAddView: Bool = false
     
     @State var colorTheme: Color = .accentColor

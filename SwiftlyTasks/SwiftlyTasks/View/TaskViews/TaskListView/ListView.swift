@@ -9,10 +9,9 @@ import SwiftUI
 
 struct ListView: View {
     
+    @EnvironmentObject var userVM: UserViewModel
+    @EnvironmentObject var taskVM: TaskViewModel
     @EnvironmentObject var notifyManager: NotificationManager
-    
-    @ObservedObject var taskVM: TaskViewModel
-    @ObservedObject var userVM: UserViewModel
     
     @State var searched = ""
     
@@ -153,7 +152,7 @@ struct ListView: View {
 
 struct ListView_Previews: PreviewProvider {
     static var previews: some View {
-        ListView(taskVM: TaskViewModel(), userVM: UserViewModel())
+        ListView()
             .preferredColorScheme(.dark)
     }
 }

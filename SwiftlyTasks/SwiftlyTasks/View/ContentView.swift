@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  TodoListMVVM
+//  SwiftlyTasksApp
 //
 //  Created by Andreas Zwikirsch on 17.02.22.
 //
@@ -27,7 +27,9 @@ struct ContentView: View {
                         Text("Task List")
                     }
             } else {
-                ListView(taskVM: taskVM, userVM: userVM)
+                ListView()
+                    .environmentObject(userVM)
+                    .environmentObject(taskVM)
                     .environmentObject(notifyManager)
                     .tabItem {
                         Image(systemName: "checkmark.square")

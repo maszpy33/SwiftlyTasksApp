@@ -173,11 +173,11 @@ struct SettingsView: View {
                             }
                             
                             if newTaskOverdueLimit == "" {
-                                self.newTaskOverdueLimit = "99"
+                                self.newTaskOverdueLimit = "100"
                             }
                             
                             // SAVE USER SETTINGS
-                            userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 99, themeColor: newThemeColor, duration: Int32(newTimerDuration), breakDuration: Int32(newTimerBreakDuration), rounds: Int32(newTimerRounds), switchUITheme: newSwitchUITheme)
+                            userVM.updateUserEntity(userName: newUserName, taskOverdueLimit: Int16(newTaskOverdueLimit) ?? 100, themeColor: newThemeColor, duration: Int32(newTimerDuration), breakDuration: Int32(newTimerBreakDuration), rounds: Int32(newTimerRounds), switchUITheme: newSwitchUITheme)
                             
                             withAnimation(.default) {
                                 self.showBanner = true

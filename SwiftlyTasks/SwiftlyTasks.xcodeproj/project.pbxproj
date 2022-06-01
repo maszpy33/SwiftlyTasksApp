@@ -27,14 +27,14 @@
 		9F7D05E827FE195600F9425D /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 9F7D05E727FE195600F9425D /* Introspect */; };
 		9F88A3DE27EBCB7B000F1BBC /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F88A3DD27EBCB7B000F1BBC /* BannerView.swift */; };
 		9F93034927D1862400E71979 /* TimerSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93034827D1862400E71979 /* TimerSettingsView.swift */; };
+		9F99EC0728469230005EFCEF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99EC0628469230005EFCEF /* ContentView.swift */; };
 		9F9DE91F27B86FB1009418E3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9DE91E27B86FB1009418E3 /* DataManager.swift */; };
-		9FA2E38027BEEF7E009E570D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA2E37F27BEEF7E009E570D /* ContentView.swift */; };
 		9FA2E38227BEF1B5009E570D /* NoTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA2E38127BEF1B5009E570D /* NoTaskView.swift */; };
 		9FB7FE2427EDDE58000B30C8 /* DataClassViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB7FE2327EDDE58000B30C8 /* DataClassViewModel.swift */; };
 		9FCC321727BC6E09006444C9 /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCC321627BC6E09006444C9 /* EditView.swift */; };
 		9FCD970927BD6F510079FEA0 /* ToggleCheckExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCD970827BD6F510079FEA0 /* ToggleCheckExtension.swift */; };
 		9FCEA39527C105FE002482D3 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCEA39427C105FE002482D3 /* ProfileView.swift */; };
-		9FD984EE27B7DFE9005BF23F /* TodoListMVVMApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD984ED27B7DFE9005BF23F /* TodoListMVVMApp.swift */; };
+		9FD984EE27B7DFE9005BF23F /* SwiftlyTasksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD984ED27B7DFE9005BF23F /* SwiftlyTasksApp.swift */; };
 		9FD984F027B7DFE9005BF23F /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD984EF27B7DFE9005BF23F /* ListView.swift */; };
 		9FD984F227B7DFF2005BF23F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9FD984F127B7DFF2005BF23F /* Assets.xcassets */; };
 		9FD984F527B7DFF2005BF23F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9FD984F427B7DFF2005BF23F /* Preview Assets.xcassets */; };
@@ -75,15 +75,15 @@
 		9F77C8D32832A4180066EADF /* QuickEditTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickEditTimerView.swift; sourceTree = "<group>"; };
 		9F88A3DD27EBCB7B000F1BBC /* BannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
 		9F93034827D1862400E71979 /* TimerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSettingsView.swift; sourceTree = "<group>"; };
+		9F99EC0628469230005EFCEF /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		9F9DE91E27B86FB1009418E3 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
-		9FA2E37F27BEEF7E009E570D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		9FA2E38127BEF1B5009E570D /* NoTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoTaskView.swift; sourceTree = "<group>"; };
 		9FB7FE2327EDDE58000B30C8 /* DataClassViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataClassViewModel.swift; sourceTree = "<group>"; };
 		9FCC321627BC6E09006444C9 /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
 		9FCD970827BD6F510079FEA0 /* ToggleCheckExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleCheckExtension.swift; sourceTree = "<group>"; };
 		9FCEA39427C105FE002482D3 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
-		9FD984EA27B7DFE9005BF23F /* TodoListMVVM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodoListMVVM.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9FD984ED27B7DFE9005BF23F /* TodoListMVVMApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListMVVMApp.swift; sourceTree = "<group>"; };
+		9FD984EA27B7DFE9005BF23F /* SwiftlyTasks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftlyTasks.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9FD984ED27B7DFE9005BF23F /* SwiftlyTasksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftlyTasksApp.swift; sourceTree = "<group>"; };
 		9FD984EF27B7DFE9005BF23F /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		9FD984F127B7DFF2005BF23F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9FD984F427B7DFF2005BF23F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -160,7 +160,7 @@
 		9FD984E127B7DFE9005BF23F = {
 			isa = PBXGroup;
 			children = (
-				9FD984EC27B7DFE9005BF23F /* TodoListMVVM */,
+				9FD984EC27B7DFE9005BF23F /* SwiftlyTasks */,
 				9FD984EB27B7DFE9005BF23F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -168,15 +168,15 @@
 		9FD984EB27B7DFE9005BF23F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9FD984EA27B7DFE9005BF23F /* TodoListMVVM.app */,
+				9FD984EA27B7DFE9005BF23F /* SwiftlyTasks.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9FD984EC27B7DFE9005BF23F /* TodoListMVVM */ = {
+		9FD984EC27B7DFE9005BF23F /* SwiftlyTasks */ = {
 			isa = PBXGroup;
 			children = (
-				9FD984ED27B7DFE9005BF23F /* TodoListMVVMApp.swift */,
+				9FD984ED27B7DFE9005BF23F /* SwiftlyTasksApp.swift */,
 				9FD984FD27B7E05C005BF23F /* Model */,
 				9FD984FC27B7E057005BF23F /* ViewModel */,
 				9FD984FB27B7E052005BF23F /* View */,
@@ -186,7 +186,7 @@
 				9FD984F127B7DFF2005BF23F /* Assets.xcassets */,
 				9FD984F327B7DFF2005BF23F /* Preview Content */,
 			);
-			path = TodoListMVVM;
+			path = SwiftlyTasks;
 			sourceTree = "<group>";
 		};
 		9FD984F327B7DFF2005BF23F /* Preview Content */ = {
@@ -200,13 +200,13 @@
 		9FD984FB27B7E052005BF23F /* View */ = {
 			isa = PBXGroup;
 			children = (
-				9FA2E37F27BEEF7E009E570D /* ContentView.swift */,
+				9F99EC0628469230005EFCEF /* ContentView.swift */,
 				9FCEA39427C105FE002482D3 /* ProfileView.swift */,
 				9F30BE2A27CE532600B749CD /* ImagePicker.swift */,
-				9FF2581D27D14E0600507FBE /* SettingsViews */,
-				9FF2581C27D14DFB00507FBE /* PomodorTimerViews */,
 				9FF2581B27D14DF100507FBE /* TaskViews */,
 				9F5C182C28381CF200BC3EE9 /* ListsView */,
+				9FF2581D27D14E0600507FBE /* SettingsViews */,
+				9FF2581C27D14DFB00507FBE /* PomodorTimerViews */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -308,9 +308,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9FD984E927B7DFE9005BF23F /* TodoListMVVM */ = {
+		9FD984E927B7DFE9005BF23F /* SwiftlyTasks */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9FD984F827B7DFF2005BF23F /* Build configuration list for PBXNativeTarget "TodoListMVVM" */;
+			buildConfigurationList = 9FD984F827B7DFF2005BF23F /* Build configuration list for PBXNativeTarget "SwiftlyTasks" */;
 			buildPhases = (
 				9FD984E627B7DFE9005BF23F /* Sources */,
 				9FD984E727B7DFE9005BF23F /* Frameworks */,
@@ -320,14 +320,14 @@
 			);
 			dependencies = (
 			);
-			name = TodoListMVVM;
+			name = SwiftlyTasks;
 			packageProductDependencies = (
 				9F169D1827CEBD7400BD6192 /* Introspect */,
 				9F7D05E727FE195600F9425D /* Introspect */,
 				9FDD6AB7283AF3C40035C7A8 /* HalfASheet */,
 			);
 			productName = TodoListMVVM;
-			productReference = 9FD984EA27B7DFE9005BF23F /* TodoListMVVM.app */;
+			productReference = 9FD984EA27B7DFE9005BF23F /* SwiftlyTasks.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -345,7 +345,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 9FD984E527B7DFE9005BF23F /* Build configuration list for PBXProject "TodoListMVVM" */;
+			buildConfigurationList = 9FD984E527B7DFE9005BF23F /* Build configuration list for PBXProject "SwiftlyTasks" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -363,7 +363,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9FD984E927B7DFE9005BF23F /* TodoListMVVM */,
+				9FD984E927B7DFE9005BF23F /* SwiftlyTasks */,
 			);
 		};
 /* End PBXProject section */
@@ -387,6 +387,7 @@
 			files = (
 				9F9DE91F27B86FB1009418E3 /* DataManager.swift in Sources */,
 				9F23769227E7DA8C00C87161 /* NotificationManager.swift in Sources */,
+				9F99EC0728469230005EFCEF /* ContentView.swift in Sources */,
 				9FDD6ABD283D01640035C7A8 /* ListViewClassic.swift in Sources */,
 				9FCEA39527C105FE002482D3 /* ProfileView.swift in Sources */,
 				9F30BE2B27CE532700B749CD /* ImagePicker.swift in Sources */,
@@ -395,7 +396,6 @@
 				9F169D1627CEBC2E00BD6192 /* NavigaitonBarColorModifier.swift in Sources */,
 				9F5C18342838471800BC3EE9 /* TaskModifier.swift in Sources */,
 				9FE47D0D28310F6000A84537 /* QuickAddTaskView.swift in Sources */,
-				9FA2E38027BEEF7E009E570D /* ContentView.swift in Sources */,
 				9FDD831827CE87BE002ADC9F /* UserEntity+CoreDataProperties.swift in Sources */,
 				9FDD831727CE87BE002ADC9F /* UserEntity+CoreDataClass.swift in Sources */,
 				9FCD970927BD6F510079FEA0 /* ToggleCheckExtension.swift in Sources */,
@@ -425,7 +425,7 @@
 				9FDD6ABA283C21410035C7A8 /* TaskViewAlternativ.swift in Sources */,
 				9F5C182E28381D1100BC3EE9 /* ListsHomeView.swift in Sources */,
 				9FD9850527B7E1FE005BF23F /* TaskViewClassic.swift in Sources */,
-				9FD984EE27B7DFE9005BF23F /* TodoListMVVMApp.swift in Sources */,
+				9FD984EE27B7DFE9005BF23F /* SwiftlyTasksApp.swift in Sources */,
 				9F30BE2F27CE593700B749CD /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -556,7 +556,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"TodoListMVVM/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"SwiftlyTasks/Preview Content\"";
 				DEVELOPMENT_TEAM = J9T7CX8U3Q;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -570,7 +570,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zwitschki.TodoListMVVM;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zwitschki.SwiftlyTasks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -585,7 +585,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"TodoListMVVM/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"SwiftlyTasks/Preview Content\"";
 				DEVELOPMENT_TEAM = J9T7CX8U3Q;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -599,7 +599,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zwitschki.TodoListMVVM;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zwitschki.SwiftlyTasks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -610,7 +610,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		9FD984E527B7DFE9005BF23F /* Build configuration list for PBXProject "TodoListMVVM" */ = {
+		9FD984E527B7DFE9005BF23F /* Build configuration list for PBXProject "SwiftlyTasks" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9FD984F627B7DFF2005BF23F /* Debug */,
@@ -619,7 +619,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9FD984F827B7DFF2005BF23F /* Build configuration list for PBXNativeTarget "TodoListMVVM" */ = {
+		9FD984F827B7DFF2005BF23F /* Build configuration list for PBXNativeTarget "SwiftlyTasks" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9FD984F927B7DFF2005BF23F /* Debug */,

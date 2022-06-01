@@ -67,4 +67,5 @@ class DataClassViewModel: Identifiable, ObservableObject {
             print("Error fetching. \(error)")
         }
     }
+
 }

@@ -1,6 +1,6 @@
 //
-//  TodoListMVVMApp.swift
-//  TodoListMVVM
+//  SwiftlyTasksApp.swift
+//  SwiftlyTasksApp
 //
 //  Created by Andreas Zwikirsch on 12.02.22.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct TodoListMVVMApp: App {
+struct SwiftlyTasksApp: App {
     
     let persistentContainer = DataManager.shared.persistentContainer
     
