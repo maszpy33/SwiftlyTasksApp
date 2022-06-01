@@ -13,10 +13,9 @@ struct AddTaskView: View {
     
     @Environment(\.presentationMode) var presentationMode
     
-    @EnvironmentObject var notifyManager: NotificationManager
+    @EnvironmentObject var taskVM: TaskViewModel
     @EnvironmentObject var userVM: UserViewModel
-    
-    @ObservedObject var taskVM: TaskViewModel
+    @EnvironmentObject var notifyManager: NotificationManager
     
     //    var task: TaskItemEntity
     @State private var addTime: Bool = false
@@ -137,7 +136,7 @@ struct AddTaskView: View {
                             Spacer()
                             
                             // SHOW DETAILS TOGGLE
-                            Label("Details", systemImage: taskHasDetails ? "note.text" : "text")
+                            Label("Details", systemImage: taskHasDetails ? "note.text" : "note")
                                 .font(.title3)
                                 .foregroundColor(taskHasDetails ? .accentColor : .gray)
                                 .opacity(taskHasDetails ? 1.0 : 0.7)
@@ -284,12 +283,13 @@ struct AddTaskView: View {
                             }
                             
                             // ADD NEW TASK
-                            taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert)
-                            
-                            taskTitleTextField = ""
-                            taskDetailsTextField = ""
-                            
-                            self.presentationMode.wrappedValue.dismiss()
+                            if !taskHasAlert {
+                                taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert)
+                                
+                                self.presentationMode.wrappedValue.dismiss()
+                            } else if taskHasAlert {
+                                scheduleReminderAlert = true
+                            }
                             
                         }, label: {
                             Text("Save")
@@ -316,6 +316,11 @@ struct AddTaskView: View {
                                     
                                     // CREATE NOTIFICATION FOR TASK
                                     notifyManager.createTaskNotification(inXSeconds: notificationInXSeconds, title: taskNotificationTitle, subtitle: taskNotificationSubtitle, categoryIdentifier: "ACTIONS")
+                                    
+                                    taskTitleTextField = ""
+                                    taskDetailsTextField = ""
+                                    
+                                    self.presentationMode.wrappedValue.dismiss()
                                 },
                                 secondaryButton: .cancel() {
                                     taskHasAlert = false
@@ -365,7 +370,7 @@ struct AddTaskView_Previews: PreviewProvider {
     @State static var defaultIsEditView = false
     
     static var previews: some View {
-        AddTaskView(taskVM: TaskViewModel())
+        AddTaskView()
             .preferredColorScheme(.dark)
     }
 }

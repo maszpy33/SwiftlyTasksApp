@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NoTaskView: View {
     
+    @EnvironmentObject var notifyManager: NotificationManager
     @EnvironmentObject var userVM: UserViewModel
     @EnvironmentObject var taskVM: TaskViewModel
 
@@ -31,7 +32,11 @@ struct NoTaskView: View {
                     Text("Are you a productive person? I think you should click the add button and add a bunch of items to your todo list!")
                         .padding(.bottom, 20)
                     
-                    NavigationLink(destination: AddTaskView(taskVM: taskVM).environmentObject(userVM), label: {
+                    NavigationLink(destination: AddTaskView()
+                        .environmentObject(taskVM)
+                        .environmentObject(userVM)
+                        .environmentObject(notifyManager)
+                                   , label: {
                         Text("🦆 Add New Task")
                             .foregroundColor(.black)
                             .font(.headline)

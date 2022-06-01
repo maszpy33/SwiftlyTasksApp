@@ -128,8 +128,10 @@ struct ListView: View {
                 .foregroundColor(userVM.colorTheme(colorPick: userVM.savedUserData.first!.wThemeColor))
             )
             .sheet(isPresented: $showAddView) {
-                AddTaskView(taskVM: taskVM)
+                AddTaskView()
+                    .environmentObject(taskVM)
                     .environmentObject(userVM)
+                    .environmentObject(notifyManager)
             }
             .sheet(isPresented: $showQuickAddView) {
                 QuickAddTaskView()

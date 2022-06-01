@@ -125,7 +125,7 @@ struct QuickAddTaskView: View {
                             Spacer()
                             
                             // SHOW DETAILS TOGGLE
-                            Label("Details", systemImage: taskHasDetails ? "note.text" : "text")
+                            Label("Details", systemImage: taskHasDetails ? "note.text" : "note")
                                 .font(.title3)
                                 .foregroundColor(taskHasDetails ? .accentColor : .gray)
                                 .opacity(taskHasDetails ? 1.0 : 0.7)

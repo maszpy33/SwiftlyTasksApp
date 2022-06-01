@@ -21,6 +21,7 @@ struct ContentView: View {
                 NoTaskView()
                     .environmentObject(userVM)
                     .environmentObject(taskVM)
+                    .environmentObject(notifyManager)
                     .transition(AnyTransition.opacity.animation(.easeIn))
                     .tabItem {
                         Image(systemName: "checkmark.square")
