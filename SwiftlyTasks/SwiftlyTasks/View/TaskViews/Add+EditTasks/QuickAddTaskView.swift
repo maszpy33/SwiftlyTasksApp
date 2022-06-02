@@ -53,8 +53,10 @@ struct QuickAddTaskView: View {
     var body: some View {
         NavigationView {
             ZStack {
+                taskVM.secondaryAccentColor
+                    .edgesIgnoringSafeArea(.all)
                 VStack {
-                    Spacer()
+//                    Spacer()
                     
                     HStack {
                         // STATUS TOGGLE
@@ -111,7 +113,7 @@ struct QuickAddTaskView: View {
                     VStack {
                         
                         // DATE TIME TOGGLE
-                        HStack{
+                        HStack {
                             Label("Time", systemImage: "clock.fill")
                                 .font(.title3)
                                 .foregroundColor(taskUIDeleted ? .accentColor : .gray)
@@ -122,28 +124,28 @@ struct QuickAddTaskView: View {
                                     }
                                 }
                             
-                            Spacer()
-                            
-                            // SHOW DETAILS TOGGLE
-                            Label("Details", systemImage: taskHasDetails ? "note.text" : "note")
-                                .font(.title3)
-                                .foregroundColor(taskHasDetails ? .accentColor : .gray)
-                                .opacity(taskHasDetails ? 1.0 : 0.7)
-                                .onTapGesture {
-                                    withAnimation(.linear) {
-                                        taskHasDetails.toggle()
-                                    }
-                                }
-                                .onChange(of: taskHasDetails) { taskDetailsStatus in
-                                    
-                                    // delete task details, when detials toggle is false
-                                    if !taskDetailsStatus {
-                                        taskDetailsTextField = ""
-                                        showDefaultDetailsText = true
-                                    }
-                                }
-                            
-                            Spacer()
+                            Spacer(minLength: 15)
+                            // Removed details option for better UI experience when using quick addd button
+//                            // SHOW DETAILS TOGGLE
+//                            Label("Details", systemImage: taskHasDetails ? "note.text" : "note")
+//                                .font(.title3)
+//                                .foregroundColor(taskHasDetails ? .accentColor : .gray)
+//                                .opacity(taskHasDetails ? 1.0 : 0.7)
+//                                .onTapGesture {
+//                                    withAnimation(.linear) {
+//                                        taskHasDetails.toggle()
+//                                    }
+//                                }
+//                                .onChange(of: taskHasDetails) { taskDetailsStatus in
+//
+//                                    // delete task details, when detials toggle is false
+//                                    if !taskDetailsStatus {
+//                                        taskDetailsTextField = ""
+//                                        showDefaultDetailsText = true
+//                                    }
+//                                }
+//
+//                            Spacer()
                             
                             // ACTIVATE TASK ALERT TOGGLE
                             Label("Alert", systemImage: "bell.square")
@@ -179,22 +181,6 @@ struct QuickAddTaskView: View {
                                     taskNotificationSubtitle = "\(taskEmoji): " + taskTitleTextField
                                     
                                 }
-//                                .alert(isPresented: $scheduleReminderAlert) {
-//                                    Alert(
-//                                        title: Text(errorTitle),
-//                                        message: Text(errorMessage),
-//                                        primaryButton: .default(Text("Set Alert")) {
-//                                            // TOGGLE ALERT BOOL
-//                                            withAnimation(.linear) {
-//                                                taskHasAlert.toggle()
-//                                            }
-//
-//                                            // CREATE NOTIFICATION FOR TASK
-//                                            notifiyManager.createTaskNotification(inXSeconds: notificationInXSeconds, title: taskNotificationTitle, subtitle: taskNotificationSubtitle, categoryIdentifier: "ACTIONS")
-//                                        },
-//                                        secondaryButton: .cancel()
-//                                    )
-//                                }
                             
                             Spacer()
                             
@@ -212,6 +198,9 @@ struct QuickAddTaskView: View {
                                 if !taskHasAlert {
                                     // ADD NEW TASK
                                     taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert)
+                                    
+                                    taskTitleTextField = ""
+                                    taskDetailsTextField = ""
                                     
                                     self.presentationMode.wrappedValue.dismiss()
                                     
@@ -363,7 +352,6 @@ struct QuickAddTaskView: View {
         }
         return true
     }
-    
 }
 
 //struct QuickAddTaskView_Previews: PreviewProvider {

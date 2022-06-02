@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import HalfASheet
 
 struct ListView: View {
     
@@ -17,7 +18,8 @@ struct ListView: View {
     
     @State private var showAddView: Bool = false
     @State private var showEditView: Bool = false
-    @State private var showQuickAddView: Bool = false
+    @State private var showQuickAddView: Bool = false // currently disabled
+    @State private var showQuickAddHalfASheet: Bool = false
     
     @State private var currentUserName: String = "UserName"
     
@@ -43,7 +45,7 @@ struct ListView: View {
                         .environmentObject(userVM)
                         .environmentObject(notifyManager)
                 }
-
+                
                 // ADD TASK BUTTON
                 VStack {
                     Spacer()
@@ -65,7 +67,8 @@ struct ListView: View {
                                     }
                                 }
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                                    showQuickAddView = true
+//                                    showQuickAddView = true
+                                    showQuickAddHalfASheet = true
                                 }
                             }
                             .gesture(DragGesture()
@@ -78,30 +81,42 @@ struct ListView: View {
                                 })
                     }
                 }
+                
+                // HALF A SHEET
+                HalfASheet(isPresented: $showQuickAddHalfASheet, title: "Quick Add Task View") {
+                    QuickAddTaskView()
+                        .environmentObject(taskVM)
+                        .environmentObject(userVM)
+                        .environmentObject(notifyManager)
+                }
+                .height(.proportional(0.75))
+                .backgroundColor(UIColor(taskVM.secondaryAccentColor))
+                .closeButtonColor(UIColor(red: 0.8, green: 0.2, blue: 0.1, alpha: 0.7))
+                .contentInsets(EdgeInsets(top: 5, leading: 5, bottom: 0, trailing: 5))
             }
             .accentColor(userVM.colorTheme(colorPick: userVM.savedUserData.first!.wThemeColor))
-//            .toolbar {
-//                ToolbarItem(placement: .keyboard) {
-//                    VStack {
-//                        HStack {
-//                            Spacer()
-//                            Button(action: {
-//                                focusStatus = nil
-//                            }) {
-//                                Image(systemName: "keyboard.chevron.compact.down")
-//                            }
-//                            .padding(.horizontal, 10)
-//                        }
-////                        AddTaskView(taskVM: taskVM)
-////                            .environmentObject(notifyManager)
-//                    }
-//
-//                }
-//            }
-            .navigationBarTitle("SwiftlyTasks", displayMode: .inline)
+            //            .toolbar {
+            //                ToolbarItem(placement: .keyboard) {
+            //                    VStack {
+            //                        HStack {
+            //                            Spacer()
+            //                            Button(action: {
+            //                                focusStatus = nil
+            //                            }) {
+            //                                Image(systemName: "keyboard.chevron.compact.down")
+            //                            }
+            //                            .padding(.horizontal, 10)
+            //                        }
+            ////                        AddTaskView(taskVM: taskVM)
+            ////                            .environmentObject(notifyManager)
+            //                    }
+            //
+            //                }
+            //            }
+            .navigationBarTitle("", displayMode: .inline)
             .navigationBarItems(leading:
                                     // NAVIGATION BAR ITEMS
-                                    HStack {
+                                HStack {
                 Button(action: {
                     changeProfileImg()
                 }) {
@@ -114,11 +129,10 @@ struct ListView: View {
             },
                                 trailing:
                                     HStack {
-
                 Text("\(taskVM.savedTasks.filter({ $0.status == false }).count)")
                     .font(.title2)
                     .bold()
-
+                
                 Button(action: {
                     showAddView.toggle()
                 }) {
@@ -133,6 +147,7 @@ struct ListView: View {
                     .environmentObject(userVM)
                     .environmentObject(notifyManager)
             }
+            // showQuickAddView sheet is currently disabeld in favour of HalfASheet
             .sheet(isPresented: $showQuickAddView) {
                 QuickAddTaskView()
                     .environmentObject(taskVM)
