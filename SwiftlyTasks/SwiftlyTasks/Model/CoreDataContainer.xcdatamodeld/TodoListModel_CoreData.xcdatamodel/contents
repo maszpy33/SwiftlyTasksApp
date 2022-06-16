@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="ListItemEntity" representedClassName="ListItemEntity" syncable="YES">
+        <attribute name="listColor" optional="YES" attributeType="String"/>
+        <attribute name="listIcon" optional="YES" attributeType="String"/>
+        <attribute name="listTitle" attributeType="String"/>
+        <relationship name="taskItem" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TaskItemEntity" inverseName="ofList" inverseEntity="TaskItemEntity"/>
+    </entity>
     <entity name="TaskItemEntity" representedClassName="TaskItemEntity" syncable="YES">
         <attribute name="category" optional="YES" attributeType="String"/>
         <attribute name="details" optional="YES" attributeType="String"/>
@@ -11,11 +17,8 @@
         <attribute name="taskEmoji" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="uiDeleted" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="ofList" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ListItemEntity" inverseName="taskItem" inverseEntity="ListItemEntity"/>
     </entity>
-    <entity name="TestEntity" representedClassName="TestEntity" syncable="YES">
-        <attribute name="testImage" optional="YES" attributeType="Binary"/>
-    </entity>
-    <entity name="TimerEntity" representedClassName="TimerEntity" syncable="YES" codeGenerationType="class"/>
     <entity name="UserEntity" representedClassName="UserEntity" syncable="YES">
         <attribute name="profileImage" optional="YES" attributeType="Binary"/>
         <attribute name="switchUITheme" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -27,9 +30,8 @@
         <attribute name="userName" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="TaskItemEntity" positionX="-63" positionY="-18" width="128" height="179"/>
-        <element name="TestEntity" positionX="-54" positionY="45" width="128" height="44"/>
-        <element name="TimerEntity" positionX="-54" positionY="45" width="128" height="29"/>
+        <element name="ListItemEntity" positionX="-54" positionY="81" width="128" height="89"/>
+        <element name="TaskItemEntity" positionX="-63" positionY="-18" width="128" height="194"/>
         <element name="UserEntity" positionX="-54" positionY="45" width="128" height="149"/>
     </elements>
 </model>

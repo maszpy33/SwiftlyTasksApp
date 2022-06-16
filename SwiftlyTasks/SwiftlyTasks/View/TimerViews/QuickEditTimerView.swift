@@ -15,7 +15,7 @@ struct QuickEditTimerView: View {
     @Binding var showQuickEditView: Bool
     
     @Binding var newDuration: Int32
-    @State private var quickNewDuration: Int32 = 25
+    @State private var quickNewDuration: String = "25"
     //    @Binding var newBreakDuration: Int16
     //    @Binding var newRounds: Int16
     
@@ -33,25 +33,27 @@ struct QuickEditTimerView: View {
             VStack {
                 HStack {
                     Spacer()
-                    TextField("", value: $quickNewDuration, format: .number)
+                    TextField("", text: $quickNewDuration)
                         .focused($focusedField, equals: .quickNewDuration)
                         .multilineTextAlignment(.center)
                         .font(.system(size: 25, weight: .semibold))
                         .frame(width: 50)
                         .onReceive(Just(quickNewDuration)) { inputNumber in
                             //                                String(self.newDuration) = String(inputNumber).filter { "0123456789".contains($0) }
-                            quickNewDuration = Int32(String(inputNumber).filter {
-                                "0123456789".contains($0) }) ?? 1
+                            quickNewDuration = String(inputNumber).filter {
+                                "0123456789".contains($0) }
+//                            displayedDuration = String(inputNumber).filter {
+//                                "0123456789".contains($0) }
                             
-                            if inputNumber > 500 {
-                                quickNewDuration = 500
+                            if Int32(quickNewDuration) ?? 25 > 500 {
+                                quickNewDuration = "500"
                                 errorTitle = "Timer input error"
                                 errorMessage = "Timer maximum 500min"
                                 showAlert = true
                             }
                             
-                            if inputNumber <= 0 {
-                                quickNewDuration = 1
+                            if Int32(quickNewDuration) ?? 25 <= 0 {
+                                quickNewDuration = "1"
                                 errorTitle = "Timer input error"
                                 errorMessage = "please provide a positiv number"
                                 showAlert = true
@@ -76,23 +78,11 @@ struct QuickEditTimerView: View {
                         self.showAlert = true
                         return
                     }
-                    //                    guard !settingsPauseDuration.isEmpty else {
-                    //                        self.errorTitle = "input error"
-                    //                        self.errorMessage = "pleace enter a break duration"
-                    //                        self.showAlert = true
-                    //                        return
-                    //                    }
-                    //                    guard !settingsRound.isEmpty else {
-                    //                        self.errorTitle = "input error"
-                    //                        self.errorMessage = "pleace enter how many rounds\ntill long break"
-                    //                        self.showAlert = true
-                    //                        return
-                    //                    }
                     
                     // SAVE TIMER SETTINGS
-                    userVM.updateUserEntity(userName: userVM.savedUserData.first!.wUserName, taskOverdueLimit: userVM.savedUserData.first!.taskOverdueLimit, themeColor: userVM.savedUserData.first!.wThemeColor, duration: quickNewDuration, breakDuration: userVM.savedUserData.first!.timerBreakDuration , rounds: userVM.savedUserData.first!.timerRounds, switchUITheme: userVM.savedUserData.first!.switchUITheme)
+                    userVM.updateUserEntity(userName: userVM.savedUserData.first!.wUserName, taskOverdueLimit: userVM.savedUserData.first!.taskOverdueLimit, themeColor: userVM.savedUserData.first!.wThemeColor, duration: Int32(quickNewDuration) ?? 25, breakDuration: userVM.savedUserData.first!.timerBreakDuration , rounds: userVM.savedUserData.first!.timerRounds, switchUITheme: userVM.savedUserData.first!.switchUITheme)
                     
-                    self.newDuration = quickNewDuration
+                    self.newDuration = Int32(quickNewDuration) ?? 25
                     self.showQuickEditView = false
                     
                 }, label: {
@@ -109,7 +99,7 @@ struct QuickEditTimerView: View {
                         .cornerRadius(10)
                 })
                 .padding(.horizontal, 5)
-//                .padding(.vertical, 10)
+                .disabled(quickNewDuration.isEmpty)
             }
             .padding(15)
         }
@@ -124,7 +114,7 @@ struct QuickEditTimerView: View {
                 .stroke(Color.accentColor, lineWidth: 6)
         )
         .onAppear {
-            quickNewDuration = newDuration
+            quickNewDuration = String(newDuration)
         }
         .toolbar {
             ToolbarItem(placement: .keyboard) {

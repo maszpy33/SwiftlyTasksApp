@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 
-struct TaskItem: Identifiable, Equatable {
+struct TaskItem: Identifiable, Equatable, Hashable {
     var id: String = UUID().uuidString
     var title: String
     var details: String

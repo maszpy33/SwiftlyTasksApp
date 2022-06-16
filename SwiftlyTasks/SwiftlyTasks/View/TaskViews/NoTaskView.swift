@@ -9,9 +9,10 @@ import SwiftUI
 
 struct NoTaskView: View {
     
-    @EnvironmentObject var notifyManager: NotificationManager
+    @EnvironmentObject var listVM: ListViewModel
     @EnvironmentObject var userVM: UserViewModel
     @EnvironmentObject var taskVM: TaskViewModel
+    @EnvironmentObject var notifyManager: NotificationManager
 
     @State private var showAddView: Bool = false
     
@@ -32,7 +33,7 @@ struct NoTaskView: View {
                     Text("Are you a productive person? I think you should click the add button and add a bunch of items to your todo list!")
                         .padding(.bottom, 20)
                     
-                    NavigationLink(destination: AddTaskView()
+                    NavigationLink(destination: AddTaskView(listOfTask: listVM.savedLists.first!)
                         .environmentObject(taskVM)
                         .environmentObject(userVM)
                         .environmentObject(notifyManager)

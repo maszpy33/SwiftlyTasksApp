@@ -9,9 +9,12 @@ import SwiftUI
 
 struct ListViewClassic: View {
     
+    @EnvironmentObject var listVM: ListViewModel
     @EnvironmentObject var taskVM: TaskViewModel
     @EnvironmentObject var userVM: UserViewModel
     @EnvironmentObject var notifyManager: NotificationManager
+    
+    @State var taskList: ListItemEntity
     
     @State private var showDoneTasks: Bool = false
     
@@ -69,15 +72,15 @@ struct ListViewClassic: View {
                         .foregroundColor(showDoneTasks ? Color.green : Color.gray)
                         .opacity(0.7)
                 }
+                
                 Toggle(isOn: $showDoneTasks.animation(.linear)) {
                     Text("Show Done Tasks")
                         .font(.system(size: 20, weight: .bold))
                         .foregroundColor(.accentColor)
                         .opacity(0.7)
                 }
-//                    .padding(.leading, 15)
-                    .padding(.trailing, 65)
-                    .tint(Color.accentColor)
+                .padding(.trailing, 65)
+                .tint(Color.accentColor)
             }
             .padding(.top, 15)
             
@@ -129,8 +132,8 @@ struct ListViewClassic: View {
     }
 }
 
-struct ListViewClassic_Previews: PreviewProvider {
-    static var previews: some View {
-        ListViewClassic()
-    }
-}
+//struct ListViewClassic_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ListViewClassic()
+//    }
+//}

@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import SimpleToast
+
 
 
 struct BannerData {
@@ -37,44 +39,68 @@ struct BannerView: View {
     
     let secondaryAccentColor = Color("SecondaryAccentColor")
     
+    @State var showToast: Bool = false
+    
+    private let toastOptions = SimpleToastOptions(
+        hideAfter: 5
+    )
+    
     var body: some View {
-        VStack {
-            HStack {
-                Spacer(minLength: 15)
-                
-                VStack(alignment: .center) {
-                    Text(title)
-                        .font(.title3)
-                        .bold()
-                        .foregroundColor(.primary)
-                    Divider()
-                    Text(description)
-                        .font(.headline)
-                        .bold()
-                        .foregroundColor(.primary)
+        VStack(spacing: 20) {
+            Button("Show toast") {
+                withAnimation {
+                    showToast.toggle()
                 }
-                
-                Spacer()
             }
-            .frame(maxWidth: .infinity)
-            .frame(height: 85)
-            .background(secondaryAccentColor)
-            .foregroundColor(Color.primary)
-            .clipShape(RoundedRectangle(cornerRadius: 20))
-            .cornerRadius(20)
-            .background(
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color.accentColor, lineWidth: 3))
-            .padding(.horizontal)
-            .shadow(
-                color: Color.black.opacity(0.7),
-                radius: 30,
-                x: 0,
-                y: 30)
-            .offset(y: -5)
-            
-            Spacer()
         }
+        .simpleToast(isPresented: $showToast, options: toastOptions) {
+            HStack {
+                Image(systemName: "exclamationmark.triangle")
+                Text("This is some simple toast message.")
+            }
+            .padding()
+            .background(Color.red.opacity(0.8))
+            .foregroundColor(Color.white)
+            .cornerRadius(10)
+        }
+        
+        //        VStack {
+        //            HStack {
+        //                Spacer(minLength: 15)
+        //
+        //                VStack(alignment: .center) {
+        //                    Text(title)
+        //                        .font(.title3)
+        //                        .bold()
+        //                        .foregroundColor(.primary)
+        //                    Divider()
+        //                    Text(description)
+        //                        .font(.headline)
+        //                        .bold()
+        //                        .foregroundColor(.primary)
+        //                }
+        //
+        //                Spacer()
+        //            }
+        //            .frame(maxWidth: .infinity)
+        //            .frame(height: 85)
+        //            .background(secondaryAccentColor)
+        //            .foregroundColor(Color.primary)
+        //            .clipShape(RoundedRectangle(cornerRadius: 20))
+        //            .cornerRadius(20)
+        //            .background(
+        //                RoundedRectangle(cornerRadius: 20)
+        //                    .stroke(Color.accentColor, lineWidth: 3))
+        //            .padding(.horizontal)
+        //            .shadow(
+        //                color: Color.black.opacity(0.7),
+        //                radius: 30,
+        //                x: 0,
+        //                y: 30)
+        //            .offset(y: -5)
+        //
+        //            Spacer()
+        //        }
     }
     
     //    private func dismissBanner() {

@@ -16,6 +16,7 @@ class DataClassViewModel: Identifiable, ObservableObject {
     // ***** SHAREDVIEWMODEL *****
     // ***************************
     
+    @Published var savedLists: [ListItemEntity] = []
     @Published var savedTasks: [TaskItemEntity] = []
     @Published var savedUserData: [UserEntity] = []
     
@@ -23,7 +24,7 @@ class DataClassViewModel: Identifiable, ObservableObject {
     let container: NSPersistentContainer
     
     init() {
-        container = NSPersistentContainer(name: "TodoListModel_CoreData")
+        container = NSPersistentContainer(name: "CoreDataContainer")
         container.loadPersistentStores { description, error in
             if let error = error {
                 fatalError("Unable to initialize Core Data \(error)")
@@ -33,6 +34,23 @@ class DataClassViewModel: Identifiable, ObservableObject {
         }
         fetchTaskData()
         fetchUserData()
+        fetchListsData()
+    }
+    
+    // *************************
+    // ***** LISTVIEWMODEL *****
+    // *************************
+    
+    func fetchListsData() {
+        let request = NSFetchRequest<ListItemEntity>(entityName: "ListItemEntity")
+        let sortTitle = NSSortDescriptor(key: "listTitle", ascending: true)
+        request.sortDescriptors = [sortTitle]
+        
+        do {
+            savedLists = try container.viewContext.fetch(request)
+        } catch {
+            print("Error fetching lists. \(error)")
+        }
     }
     
     // *************************
@@ -50,7 +68,7 @@ class DataClassViewModel: Identifiable, ObservableObject {
         do {
             savedTasks = try container.viewContext.fetch(request)
         } catch {
-            print("Error fetching. \(error)")
+            print("Error fetching tasks. \(error)")
         }
     }
     

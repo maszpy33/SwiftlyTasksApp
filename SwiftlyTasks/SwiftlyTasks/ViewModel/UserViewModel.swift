@@ -10,7 +10,7 @@ import CoreData
 import SwiftUI
 
 
-final class UserViewModel: DataClassViewModel {
+class UserViewModel: DataClassViewModel {
     
     // SECONDARY COLOR PLATE
     let secondaryAccentColor = Color("SecondaryAccentColor")
@@ -33,7 +33,7 @@ final class UserViewModel: DataClassViewModel {
         super.init()
         // initUser when app is first started
         if savedUserData.isEmpty {
-            updateUserEntity(userName: "UserName", taskOverdueLimit: 14, themeColor: "blue", duration: 25, breakDuration: 5, rounds: 8, switchUITheme: false)
+            updateUserEntity(userName: "UserName", taskOverdueLimit: 14, themeColor: "purple", duration: 25, breakDuration: 5, rounds: 8, switchUITheme: false)
         }
     }
     
@@ -72,9 +72,9 @@ final class UserViewModel: DataClassViewModel {
         saveUserData()
     }
     
-    func updateTimerSettings(duration: Int32, breakDuration: Int32, rounds: Int32) {
-        
-    }
+//    func updateTimerSettings(duration: Int32, breakDuration: Int32, rounds: Int32) {
+//
+//    }
     
     // return color function
     func colorTheme(colorPick: String) -> Color {

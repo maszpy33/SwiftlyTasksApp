@@ -11,14 +11,16 @@ import UserNotifications
 struct ContentView: View {
     
 //    @Environment(\.managedObjectContext) private var moc
+    @StateObject var listVM = ListViewModel()
     @StateObject var taskVM = TaskViewModel()
     @StateObject var userVM = UserViewModel()
     @StateObject var notifyManager = NotificationManager()
     
     var body: some View {
         TabView {
-            if taskVM.savedTasks.isEmpty {
+            if listVM.savedLists.isEmpty {
                 NoTaskView()
+                    .environmentObject(listVM)
                     .environmentObject(userVM)
                     .environmentObject(taskVM)
                     .environmentObject(notifyManager)
@@ -28,13 +30,17 @@ struct ContentView: View {
                         Text("Task List")
                     }
             } else {
-                ListView()
+//                ListView()
+                ListsHomeView()
+                    .environmentObject(listVM)
                     .environmentObject(userVM)
                     .environmentObject(taskVM)
                     .environmentObject(notifyManager)
                     .tabItem {
-                        Image(systemName: "checkmark.square")
-                        Text("Task List")
+//                        Image(systemName: "checkmark.square")
+//                        Text("Task List")
+                        Image(systemName: "checklist")
+                        Text("Lists")
                     }
             }
             
@@ -52,12 +58,13 @@ struct ContentView: View {
                 }
             
             SettingsView(userVM: userVM)
+                .environmentObject(listVM)
                 .tabItem {
                     Image(systemName: "gear")
                     Text("Settings")
                 }
         }
-        .accentColor(userVM.colorTheme(colorPick: userVM.savedUserData.first!.wThemeColor))
+        .accentColor(userVM.colorTheme(colorPick: userVM.savedUserData.first?.wThemeColor ?? "noColorFoud"))
         .onAppear(perform: {
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (success, error) in
                 if let error = error {

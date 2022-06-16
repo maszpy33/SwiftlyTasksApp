@@ -8,19 +8,6 @@
 import SwiftUI
 import NotificationCenter
 
-struct DefaultButtonStyle: ButtonStyle {
-    func makeBody(configuration: Self.Configuration) -> some View {
-        return configuration.label
-            .foregroundColor(.primary)
-            .background(Color.accentColor.opacity(0.2))
-            .cornerRadius(10)
-            .background(
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .stroke(Color.accentColor, lineWidth: 0.7)
-            )
-    }
-}
-
 
 struct PomodoroView: View {
     
@@ -38,8 +25,12 @@ struct PomodoroView: View {
     
     // RUNNING TIMER VARIABLE
     @State var userTimerDuration: Int32 = 1500
+    @State var userBreakDuration: Int32 = 300
     @State private var isBreak: Bool = true
-    @State private var roundsCounter: Int = 0
+    @State private var roundsCounter: Int32 = 0
+    @State private var overallSecondsCounter: Int32 = 0
+    @State private var passedFocusTime: Double = 0
+    
     
     // TIMER PROPERTIES
     @State var isTimerStarted = false
@@ -65,6 +56,10 @@ struct PomodoroView: View {
     // TIMER TEXT VARIABLES
     let bannerSaveDataTitle = "⏰ Timer is up"
     let bannerSaveDataDescription = "finished focus, take a break"
+    
+    // DEVELOPMENT VARIABLES
+    let subTimerDuration: Int32 = 0
+    let subBreakDuration: Int32 = 0
     
     var body: some View {
         NavigationView {
@@ -143,9 +138,7 @@ struct PomodoroView: View {
                                 // *** PAUSE BUTTON ***
                                 // ********************
                                 Button(action: {
-//                                    withAnimation(Animation.easeInOut(duration: 0.7)) {
-//                                        pausePressed = true
-//                                    }
+                                    
                                     pausePressed = true
                                     
                                 }) {
@@ -165,7 +158,10 @@ struct PomodoroView: View {
                                 // ********************
                                 Button(action: {
                                     
-                                    showingConfirmationAlert = true
+                                    withAnimation(.linear) {
+                                        showingConfirmationAlert = true
+                                    }
+                                    
                                     pausePressed = true
                                     
                                 }) {
@@ -190,8 +186,9 @@ struct PomodoroView: View {
                         Button(action: {
                             
                             self.isTimerStarted = true
-                            self.currentTimeDuration -= 50
-                            self.isBreak = true
+                            // FOR DEVELOPMENT ONLY
+                            self.currentTimeDuration -= subTimerDuration
+//                            self.isBreak = true
                             
                         }) {
                             HStack(spacing: 15) {
@@ -212,7 +209,7 @@ struct PomodoroView: View {
                     
                     // SUMMARY OF TIMER SETTINGS [Duration, Break, Rounds]
                     HStack {
-                        Text("Focus: \(newDuration)min | Break: \(newBreakDuration)min | Rounds: \(newRounds)")
+                        Text("Focus: \(newDuration)min | Break: \(newBreakDuration)min | Rounds: \(roundsCounter)/\(newRounds)")
                             .font(.headline)
                             .foregroundColor(.accentColor)
                             .opacity(0.8)
@@ -252,7 +249,7 @@ struct PomodoroView: View {
                     }
                 }
             }
-            .accentColor(userVM.colorTheme(colorPick: userVM.savedUserData.first!.wThemeColor))
+            .accentColor(userVM.colorTheme(colorPick: userVM.savedUserData.first?.wThemeColor ?? "purple"))
             .onReceive(self.time, perform: { _ in
                 // CALCULATE THE REMAINING TIME OF THE TIMER
                 if self.isTimerStarted {
@@ -261,8 +258,13 @@ struct PomodoroView: View {
                         // if pause is NOT pressed, reduce currentTimerDuration by 1
                         if !self.pausePressed {
                             self.currentTimeDuration -= 1
+                            self.overallSecondsCounter += 1
+                            
+                            print("overalltime: \(overallSecondsCounter)")
+                            print("curentUserTime: \(currentTimeDuration)")
+                            
                             withAnimation(.default) {
-                                self.to = 1 - CGFloat(self.currentTimeDuration) / CGFloat(self.userTimerDuration)
+                                self.to = 1 - CGFloat(self.currentTimeDuration) / CGFloat(self.isBreak ? self.userBreakDuration : self.userTimerDuration)
                             }
                         }
                         // else do nothing
@@ -270,9 +272,11 @@ struct PomodoroView: View {
                         // if timer = 0 and isBreak==false assign duration to breakDuration
                         if isBreak {
                             isBreak = false
-                            currentTimeDuration = newBreakDuration * 60
-                            currentTimeDuration -= 55
+                            currentTimeDuration = userBreakDuration
+                            // FOR DEVELOPMENT ONLY
+//                            currentTimeDuration -= subBreakDuration
                             self.to = 0
+                            
                             roundsCounter += 1
                             if roundsCounter == newRounds {
                                 self.notificationTitle = "🥳 Yeah you finished your focus goal!"
@@ -286,8 +290,9 @@ struct PomodoroView: View {
                             }
                         } else if !isBreak {
                             isBreak = true
-                            currentTimeDuration = newDuration * 60
-                            currentTimeDuration -= 50
+                            currentTimeDuration = userTimerDuration
+                            // FOR DEVELOPMENT ONLY
+//                            currentTimeDuration -= subTimerDuration
                             self.to = 0
                             
                             self.notificationTitle = "🧠 Back to Work!"
@@ -306,6 +311,7 @@ struct PomodoroView: View {
                     self.pausePressed = false
                     // newDuration is saved in minutes
                     self.userTimerDuration = newDuration * 60
+                    self.overallSecondsCounter = 0
                 }
             })
             .navigationTitle(self.isBreak ? "🧠 Focus Timer" : "⏸ Break Timer")
@@ -348,9 +354,10 @@ struct PomodoroView: View {
             if !userVM.savedUserData.isEmpty {
                 let currentUser = userVM.savedUserData.first!
                 self.userTimerDuration = currentUser.timerDuration * 60
+                self.userBreakDuration = currentUser.timerBreakDuration * 60
+                // newDuration and newBreakDuration is saved in minutes
                 self.newBreakDuration = currentUser.timerBreakDuration
                 self.newRounds = currentUser.timerRounds
-                // newDuration is saved in minutes
                 self.newDuration = currentUser.timerDuration
             }
         }
@@ -359,7 +366,7 @@ struct PomodoroView: View {
             if newPhase == .active {
                 if isTimerStarted && !pausePressed {
                     print("Previous Time: \(self.currentTimeDuration)")
-                    self.calculatePassedTime()
+                    calculatePassedTime()
                     print("Time Now: \(self.currentTimeDuration)")
                 }
                 print("Active Main View")
@@ -368,34 +375,124 @@ struct PomodoroView: View {
                 print("Inactive Main View")
                 
             } else if newPhase == .background {
-                self.saveCurrentTime = DispatchTime.now()
+                saveCurrentTime = DispatchTime.now()
                 print("Background Main View")
             }
         }
     }
     
+//    private func calculatePassedTimeOLD() {
+//        // if app moves to background the remaining time is and current time are saved
+//        // when usere opens app again, the new current time is subtracted by the saved time, when
+//        // the app whent to the background -> subtract differens from time remaining
+//        let start = saveCurrentTime
+//
+//        let end = DispatchTime.now()
+//        let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
+//        let passedSeconds = Double(nanoTime) / 1_000_000_000
+//
+//        guard passedSeconds > 0 else {
+//            currentTimeDuration = 0
+//            return
+//        }
+//
+//        self.currentTimeDuration = self.currentTimeDuration - Int32(passedSeconds)
+//
+//        // check if time is below 0
+//        guard currentTimeDuration > 0 else {
+//            isTimerStarted = false
+//            return
+//        }
+//    }
+    
     private func calculatePassedTime() {
-        // if app moves to background the remaining time is and current time are saved
-        // when usere opens app again, the new current time is subtracted by the saved time, when
-        // the app whent to the background -> subtract differens from time remaining
-        let start = self.saveCurrentTime
+        // if pause is pressed just return
+        guard !pausePressed else {
+            return
+        }
         
+        // else calculate passed time
+        let start = saveCurrentTime
         let end = DispatchTime.now()
         let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
         let passedSeconds = Double(nanoTime) / 1_000_000_000
+//        print("passedSeconds: \(passedSeconds)")
+//
+//        print("overalltime: \(passedSecondsOverall)")
+//        print("curentUserTime: \(currentTimeDuration)")
         
-        guard passedSeconds > 0 else {
-            self.currentTimeDuration = 0
+        passedFocusTime = passedSeconds + Double(overallSecondsCounter)
+        
+        let sumTimeSession = Double((userTimerDuration + userBreakDuration) * newRounds)
+//        print("sumTimeSession: \(sumTimeSession)")
+        
+        let remainingTime = sumTimeSession - passedFocusTime
+//        print("remainingTime: \(remainingTime)")
+        
+        guard remainingTime > 0 else {
+            isTimerStarted = false
+            currentTimeDuration = 0
+            roundsCounter = newRounds
+            overallSecondsCounter = 0
             return
         }
         
-        self.currentTimeDuration = self.currentTimeDuration - Int32(passedSeconds)
-        
-        // check if time is below 0
-        guard currentTimeDuration > 0 else {
-            self.isTimerStarted = false
+        // if in first focus duration
+        guard passedFocusTime > Double(userTimerDuration) else {
+            currentTimeDuration = userTimerDuration - Int32(passedFocusTime)
+            overallSecondsCounter = overallSecondsCounter + Int32(passedSeconds)
             return
         }
+        // if in first break break
+        guard passedFocusTime > Double(userTimerDuration + userBreakDuration) else {
+            currentTimeDuration = userTimerDuration + userBreakDuration - Int32(passedFocusTime)
+            roundsCounter += 1
+            overallSecondsCounter = overallSecondsCounter + Int32(passedSeconds)
+            isBreak = false
+            return
+        }
+        
+        // PASSED TIME IS LESS THAN ALL AND MORE THAN ON ROUND INCLUDING BREAK
+        
+        var passedRounds = (passedFocusTime / Double(userTimerDuration + userBreakDuration)).rounded(.down)
+        print("passedRounds: \(passedRounds)")
+        
+        overallSecondsCounter = overallSecondsCounter + Int32(passedSeconds)
+        
+        // check if in break or in focus
+        var userTimerDurationDoubleValue: Double = 0
+        
+        let timeLeftChecksum = Int32(passedFocusTime) % (userTimerDuration + userBreakDuration)
+        print("TIME LEFT CHECKSUM: \(timeLeftChecksum)")
+
+        // FIXME: Works up to this part, when timer duration is over the first round??????????
+        
+        // if in break duraiton
+        if timeLeftChecksum > userTimerDuration {
+            isBreak = false
+            userTimerDurationDoubleValue = passedFocusTime - passedRounds * Double(userTimerDuration) - (passedRounds - 1.0) * Double(userBreakDuration)
+            print("userTimerDurationDoubleValue: \(userTimerDurationDoubleValue)")
+            self.currentTimeDuration = userBreakDuration - Int32(userTimerDurationDoubleValue)
+            print("currentTimerDuration: \(currentTimeDuration)")
+//            roundsCounter = Int32(passedRounds)
+            
+            self.to = 1 - CGFloat(self.currentTimeDuration) / CGFloat(self.isBreak ? self.userBreakDuration : self.userTimerDuration)
+            
+            passedRounds -= 1
+        // if in focus duration
+        } else {
+            userTimerDurationDoubleValue = passedFocusTime - passedRounds * Double((userTimerDuration + userBreakDuration))
+            print("userTimerDurationDoubleValue: \(userTimerDurationDoubleValue)")
+            self.currentTimeDuration = userTimerDuration - Int32(userTimerDurationDoubleValue)
+            print("currentTimerDuration: \(currentTimeDuration)")
+//            roundsCounter = Int32(passedRounds)
+            
+            isBreak = true
+            self.to = 1 - CGFloat(self.currentTimeDuration) / CGFloat(self.isBreak ? self.userBreakDuration : self.userTimerDuration)
+        }
+        
+        roundsCounter = Int32(passedRounds)
+        overallSecondsCounter = Int32(passedFocusTime)
     }
     
     private func formatTime() -> String {

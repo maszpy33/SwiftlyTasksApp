@@ -51,12 +51,12 @@ final class TaskViewModel: DataClassViewModel {
             try container.viewContext.save()
             fetchTaskData()
         } catch {
-            print("Error saving. \(error)")
-        }
+            print("Error saving task. \(error)")
+        } 
     }
     
     
-    func saveTaskEntitys(title: String, details: String, category: String, taskEmoji: String, priority: String, dueDate: Date, status: Bool, hasDetails: Bool, uiDeleted: Bool, hasAlert: Bool) {
+    func saveTaskEntitys(title: String, details: String, category: String, taskEmoji: String, priority: String, dueDate: Date, status: Bool, hasDetails: Bool, uiDeleted: Bool, hasAlert: Bool, providedList: ListItemEntity) {
         let newTask = TaskItemEntity(context: container.viewContext)
         newTask.title = title
         newTask.details = details
@@ -68,6 +68,9 @@ final class TaskViewModel: DataClassViewModel {
         newTask.hasDetails = hasDetails
         newTask.uiDeleted = uiDeleted
         newTask.hasAlert = hasAlert
+        
+        newTask.ofList = providedList
+        
         saveTaskData()
     }
     
@@ -90,6 +93,9 @@ final class TaskViewModel: DataClassViewModel {
         taskEntity.hasDetails = newHasDetails
         taskEntity.uiDeleted = newUIDelete
         taskEntity.hasAlert = newHasAlert
+        
+//        taskEntity.ofList = newTaskList
+        
         saveTaskData()
     }
     
@@ -128,32 +134,6 @@ final class TaskViewModel: DataClassViewModel {
         }
     }
     
-//    func daysLeft(dueDate: Date) -> (Int, String) {
-//        dateFormatter.dateStyle = .medium
-//        dateFormatter.timeStyle = .short
-//        let today = dateFormatter.string(from: Date())
-//        let dueDateFormatted = dateFormatter.string(from: dueDate)
-//
-//        print(dueDateFormatted)
-//
-//        guard dueDateFormatted != today else {
-//            return (0, "Days")
-//        }
-//
-//        let taskDueDate = Calendar.current.dateComponents([.day, .month, .year], from: dueDate)
-//
-//        let taskDueDateComponents = DateComponents(calendar: Calendar.current, year: taskDueDate.year!, month: taskDueDate.month!, day: taskDueDate.day!).date!
-//
-//        let diffs = Calendar.current.dateComponents([.day], from: Date(), to: taskDueDateComponents)
-//
-//        let daysUntil = diffs.day ?? 0 + 1
-//
-//        guard daysUntil != 1 else {
-//            return (daysUntil, "Day")
-//        }
-//
-//        return (daysUntil, "Days")
-//    }
     
     // calculate how many days or hours are left till task
     func daysHoursLeft(dueDate: Date, hasTime: Bool) -> (Int, String) {
@@ -190,7 +170,6 @@ final class TaskViewModel: DataClassViewModel {
         
         // if days higher than 1 return days
         guard daysUntil < 2 && daysUntil > -2 else {
-            print("Returned: \(daysUntil) Days")
             return (daysUntil, "Days")
         }
         
@@ -212,16 +191,10 @@ final class TaskViewModel: DataClassViewModel {
     func returnDaysAndHours(dueDate: Date) -> String {
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .medium
-//        let today = dateFormatter.string(from: Date())
-//        let dueDateFormatted = dateFormatter.string(from: dueDate)
         
         let taskDueDate = Calendar.current.dateComponents([.minute, .hour, .day, .month, .year], from: dueDate)
         
         let taskDueDateComponents = DateComponents(calendar: Calendar.current, year: taskDueDate.year!, month: taskDueDate.month!, day: taskDueDate.day!, hour: taskDueDate.hour!, minute: taskDueDate.minute!).date!
-        
-        print("##################")
-        print(taskDueDateComponents)
-        print("##################")
         
         let diffs = Calendar.current.dateComponents([.day, .hour, .minute], from: Date(), to: taskDueDateComponents)
         
@@ -263,6 +236,24 @@ final class TaskViewModel: DataClassViewModel {
         let dayAndMonthStr = dateFormatter.string(from: dueDate)
         
         return dayAndMonthStr
+    }
+    
+    // FIXME: task check as done dose not work
+    func taskVMUserNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler:
+                                      @escaping () -> Void) {
+        let userInfo = response.notification.request.content.userInfo
+        
+        if response.notification.request.content.categoryIdentifier ==
+            "MARK_AS_DONE" {
+            print("TASK IS DONE")
+            
+            // Retrieve the meeting details.
+            let taskID = userInfo["MARK_AS_DONE"] as! String
+            
+            // makeTaskDone(taskID: taskID)
+        } else if response.notification.request.content.categoryIdentifier == "POSTPONE_ONE_HOUR" {
+            print("postpone task for an hour")
+        }
     }
     
     //    func styleForPriority(taskPriority: String) -> Color {

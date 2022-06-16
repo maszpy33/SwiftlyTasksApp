@@ -9,9 +9,12 @@ import SwiftUI
 
 struct ListViewAlternativ: View {
     
+    @EnvironmentObject var listVM: ListViewModel
     @EnvironmentObject var taskVM: TaskViewModel
     @EnvironmentObject var userVM: UserViewModel
     @EnvironmentObject var notifyManager: NotificationManager
+    
+    @State var taskList: ListItemEntity
     
     var body: some View {
         List {
@@ -105,9 +108,9 @@ struct ListViewAlternativ: View {
         .searchable(text: $taskVM.searchText)
     }
 }
-
-struct ListViewAlternativ_Previews: PreviewProvider {
-    static var previews: some View {
-        ListViewAlternativ()
-    }
-}
+//
+//struct ListViewAlternativ_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ListViewAlternativ()
+//    }
+//}

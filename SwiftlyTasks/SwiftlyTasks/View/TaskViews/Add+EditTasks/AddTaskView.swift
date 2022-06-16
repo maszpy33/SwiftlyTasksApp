@@ -13,6 +13,7 @@ struct AddTaskView: View {
     
     @Environment(\.presentationMode) var presentationMode
     
+    @EnvironmentObject var listVM: ListViewModel
     @EnvironmentObject var taskVM: TaskViewModel
     @EnvironmentObject var userVM: UserViewModel
     @EnvironmentObject var notifyManager: NotificationManager
@@ -35,6 +36,8 @@ struct AddTaskView: View {
     @State var taskUIDeleted: Bool = false
     @State var taskHasAlert: Bool = false
     
+    @State var listOfTask: ListItemEntity
+    
     // DISMISS KEYBOARD VARIABLE
     @FocusState private var focusedField: Field?
     
@@ -49,6 +52,11 @@ struct AddTaskView: View {
     @State var notificationInXSeconds: Int = 1
     @State private var taskNotificationTitle: String = ""
     @State private var taskNotificationSubtitle: String = ""
+    
+    // LIST VARIABLES
+    @State private var selectedList: ListItem = ListItem(listTitle: "untitled", listIcon: "iconName", listColor: "noColor")
+    
+    @State private var listIcon: String = "checklist"
     
     var body: some View {
         NavigationView {
@@ -195,6 +203,35 @@ struct AddTaskView: View {
                         .padding(.horizontal, 20)
                         .foregroundColor(.accentColor)
                         
+                        // SELECT LIST TO ADD TASK
+                        HStack {
+                            Image(systemName: listIcon)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.accentColor)
+                            
+                            Spacer()
+                            
+                            ZStack {
+                                Picker("", selection: $selectedList) {
+                                    ForEach(listVM.savedLists, id: \.self) { list in
+                                        HStack {
+                                            Text(list.wListTitle.capitalized)
+                                            Image(systemName: list.wListIcon)
+                                        }
+                                    }
+                                }
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 40)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.accentColor, lineWidth: 2))
+                            }
+                        }
+                        .padding(.horizontal, 15)
+                        .padding(.vertical, 5)
+                        
                         HStack {
                             // EMOJI INPUT
                             TextField("🤷🏻‍♂️", text: $taskEmoji)
@@ -284,7 +321,7 @@ struct AddTaskView: View {
                             
                             // ADD NEW TASK
                             if !taskHasAlert {
-                                taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert)
+                                taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert, providedList: listOfTask)
                                 
                                 self.presentationMode.wrappedValue.dismiss()
                             } else if taskHasAlert {
@@ -312,11 +349,12 @@ struct AddTaskView: View {
                                 message: Text(errorMessage),
                                 primaryButton: .default(Text("Set Alert")) {
                                     // ADD TASK
-                                    taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert)
+                                    taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert, providedList: listOfTask)
                                     
                                     // CREATE NOTIFICATION FOR TASK
                                     notifyManager.createTaskNotification(inXSeconds: notificationInXSeconds, title: taskNotificationTitle, subtitle: taskNotificationSubtitle, categoryIdentifier: "ACTIONS")
                                     
+                                    // clear textFields
                                     taskTitleTextField = ""
                                     taskDetailsTextField = ""
                                     
@@ -365,15 +403,15 @@ struct AddTaskView: View {
     }
 }
 
-struct AddTaskView_Previews: PreviewProvider {
-    
-    @State static var defaultIsEditView = false
-    
-    static var previews: some View {
-        AddTaskView()
-            .preferredColorScheme(.dark)
-    }
-}
+//struct AddTaskView_Previews: PreviewProvider {
+//    
+//    @State static var defaultIsEditView = false
+//    
+//    static var previews: some View {
+//        AddTaskView(listOfTask: taskList)
+//            .preferredColorScheme(.dark)
+//    }
+//}
 
 
 

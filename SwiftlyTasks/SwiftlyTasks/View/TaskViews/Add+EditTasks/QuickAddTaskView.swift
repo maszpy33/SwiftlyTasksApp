@@ -12,6 +12,7 @@ struct QuickAddTaskView: View {
     
     @Environment(\.presentationMode) var presentationMode
     
+    @EnvironmentObject var listVM: ListViewModel
     @EnvironmentObject var taskVM: TaskViewModel
     @EnvironmentObject var userVM: UserViewModel
     @EnvironmentObject var notifyManager: NotificationManager
@@ -33,6 +34,8 @@ struct QuickAddTaskView: View {
     @State var taskHasDetails: Bool = false
     @State var taskUIDeleted: Bool = false
     @State var taskHasAlert: Bool = false
+    
+    @State var listOfTask: ListItemEntity
     
     // DISMISS KEYBOARD VARIABLE
     @FocusState private var focusedField: Field?
@@ -197,7 +200,7 @@ struct QuickAddTaskView: View {
                                 // if taskHasAlert add task else ask for permission
                                 if !taskHasAlert {
                                     // ADD NEW TASK
-                                    taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert)
+                                    taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert, providedList: listOfTask)
                                     
                                     taskTitleTextField = ""
                                     taskDetailsTextField = ""
@@ -224,7 +227,7 @@ struct QuickAddTaskView: View {
                                     message: Text(errorMessage),
                                     primaryButton: .default(Text("Set Alert")) {
                                         // ADD TASK
-                                        taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert)
+                                        taskVM.saveTaskEntitys(title: taskTitleTextField, details: taskDetailsTextField, category: taskCategory, taskEmoji: taskEmoji, priority: taskPriority, dueDate: taskDueDate, status: taskStatus, hasDetails: taskHasDetails, uiDeleted: taskUIDeleted, hasAlert: taskHasAlert, providedList: listOfTask)
                                         
                                         // CREATE NOTIFICATION FOR TASK
                                         notifyManager.createTaskNotification(inXSeconds: notificationInXSeconds, title: taskNotificationTitle, subtitle: taskNotificationSubtitle, categoryIdentifier: "ACTIONS")

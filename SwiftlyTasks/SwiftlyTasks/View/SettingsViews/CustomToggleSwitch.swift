@@ -17,6 +17,8 @@ struct CustomToggleSwitch: View {
     var body: some View {
         VStack {
             HStack {
+                Image(systemName: newSwitchUITheme ? "paintbrush.fill" : "paintbrush")
+                    .foregroundColor(.accentColor)
                 Text("Switch Theme:")
                     .font(.title3)
                 Spacer()

@@ -12,6 +12,7 @@ import UserNotifications
 
 struct SettingsView: View {
     
+    @EnvironmentObject var listVM: ListViewModel
     @ObservedObject var userVM: UserViewModel
     
     @State private var newUserName: String = "UserName"
@@ -34,11 +35,12 @@ struct SettingsView: View {
     
     //NOTIVICATION BANNER
     @State var showBanner = false
-    let bannerViewOffset: CGFloat = -300.0
-    let bannerViewDefaultPos: CGFloat = -50.0
-    let bannerSaveDataTitle = "💾 ✅ Saved Succesfully"
-    let bannerSaveDataDescription = "your user settings have been updated"
+//    let bannerViewOffset: CGFloat = -300.0
+//    let bannerViewDefaultPos: CGFloat = -50.0
+    let bannerTitle = "💾 ✅ Saved Succesfully"
+    let bannerDescription = "your user settings have been updated"
     
+    let lotOfText = "jlfkdsjaöfdjsalfjdslakfjdslakföjdlöskjfkyour user settings have been updatedyour user settings have been updatedyour user settings have been updatedyour user settings have been updatedlj"
     
     var body: some View {
         NavigationView {
@@ -115,13 +117,13 @@ struct SettingsView: View {
                             
                             Divider()
                             
-                            HStack {
-                                Image(systemName: newSwitchUITheme ? "paintbrush.fill" : "paintbrush")
-                                    .foregroundColor(.accentColor)
-                                Toggle("Switch UI Theme: ", isOn: $newSwitchUITheme)
-                                    .toggleStyle(SwitchToggleStyle(tint: .accentColor))
-                            }
-                            .padding(.horizontal, 15)
+//                            HStack {
+//                                Image(systemName: newSwitchUITheme ? "paintbrush.fill" : "paintbrush")
+//                                    .foregroundColor(.accentColor)
+//                                Toggle("Switch UI Theme: ", isOn: $newSwitchUITheme)
+//                                    .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+//                            }
+//                            .padding(.horizontal, 15)
                             
                             Divider()
                             
@@ -210,9 +212,9 @@ struct SettingsView: View {
                 }
                 .padding(.horizontal, 15)
                 
-                // BANNERVIEW
-                BannerView(title: bannerSaveDataTitle, description: bannerSaveDataDescription)
-                    .offset(x: 0, y: self.showBanner ? bannerViewDefaultPos : bannerViewOffset)
+//                // BANNERVIEW
+//                BannerView(title: bannerTitle, description: bannerDescription)
+//                    .offset(x: 0, y: self.showBanner ? bannerViewDefaultPos : bannerViewOffset)
                 
             }
             .toolbar {
@@ -253,6 +255,9 @@ struct SettingsView: View {
                 .padding(.horizontal, 10)
             )
         }
+        // ToastBannerModifier is placed here, because it respectes the frame of the view
+        // which it is attached to. In this case the NavigationView, to it appears on top of the screen
+        .modifier(ToastBannerView(showToast: $showBanner, title: bannerTitle, description: bannerDescription, imageName: "info.circle"))
     }
     
     private func dismissBanner() {

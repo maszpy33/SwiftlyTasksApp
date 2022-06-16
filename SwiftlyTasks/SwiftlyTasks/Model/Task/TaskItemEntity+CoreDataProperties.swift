@@ -1,14 +1,13 @@
 //
 //  TaskItemEntity+CoreDataProperties.swift
-//  TodoListMVVM
+//  SwiftlyTasks
 //
-//  Created by Andreas Zwikirsch on 01.03.22.
+//  Created by Andreas Zwikirsch on 13.06.22.
 //
 //
 
 import Foundation
 import CoreData
-import SwiftUI
 
 
 extension TaskItemEntity {
@@ -18,18 +17,18 @@ extension TaskItemEntity {
     }
 
     @NSManaged public var category: String?
-    @NSManaged public var taskEmoji: String?
     @NSManaged public var details: String?
     @NSManaged public var dueDate: Date?
+    @NSManaged public var hasAlert: Bool
+    @NSManaged public var hasDetails: Bool
     @NSManaged public var priority: String?
     @NSManaged public var status: Bool
+    @NSManaged public var taskEmoji: String?
     @NSManaged public var title: String?
     @NSManaged public var uiDeleted: Bool
-    @NSManaged public var hasDetails: Bool
-    @NSManaged public var hasAlert: Bool
-    @NSManaged public var profileImage: Data?
-    
+    @NSManaged public var ofList: ListItemEntity?
 
+    
     public var wTitle: String {
         title ?? "No Title"
     }

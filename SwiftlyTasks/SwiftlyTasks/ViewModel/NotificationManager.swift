@@ -20,16 +20,19 @@ class NotificationManager: NSObject, ObservableObject, UNUserNotificationCenterD
 //    var reminderSubTitle: String = ""
     
     @Published var alert = false
+    @Published var completeTask = false
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.badge, .banner, .sound])
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        
         if response.actionIdentifier == "REPLY" {
             print("reply the comment or do anything")
-            self.alert.toggle()
+            alert.toggle()
+        } else if response.actionIdentifier == "MARK_AS_DONE" {
+            print("ckeck task")
+            completeTask.toggle()
         }
         
         completionHandler()
@@ -49,11 +52,16 @@ class NotificationManager: NSObject, ObservableObject, UNUserNotificationCenterD
         // actions
         let close = UNNotificationAction(identifier: "CLOSE", title: "Close", options: .destructive)
         let reply = UNNotificationAction(identifier: "REPLY", title: "Reply", options: .foreground)
-        let category = UNNotificationCategory(identifier: "ACTIONS", actions: [close, reply], intentIdentifiers: [], options: [])
+        let done = UNNotificationAction(identifier: "MARK_AS_DONE", title: "Complete", options: .foreground)
+        
+        let postponeOneHour = UNNotificationAction(identifier: "POSTPONE_ONE_HOUR", title: "Remind me in one hour", options: .foreground)
+
+        let category = UNNotificationCategory(identifier: "ACTIONS", actions: [close, reply, done], intentIdentifiers: [], options: [])
         
         UNUserNotificationCenter.current().setNotificationCategories([category])
         
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+        
     }
     
     func createTaskNotification(inXSeconds: Int, title: String, subtitle: String, categoryIdentifier: String) {
@@ -70,7 +78,8 @@ class NotificationManager: NSObject, ObservableObject, UNUserNotificationCenterD
         // actions
         let close = UNNotificationAction(identifier: "CLOSE", title: "Close", options: .destructive)
         let reply = UNNotificationAction(identifier: "REPLY", title: "Reply", options: .foreground)
-        let category = UNNotificationCategory(identifier: "ACTIONS", actions: [close, reply], intentIdentifiers: [], options: [])
+        let done = UNNotificationAction(identifier: "MARK_AS_DONE", title: "Complete", options: .destructive)
+        let category = UNNotificationCategory(identifier: "ACTIONS", actions: [close, reply, done], intentIdentifiers: [], options: [])
         
         UNUserNotificationCenter.current().setNotificationCategories([category])
         

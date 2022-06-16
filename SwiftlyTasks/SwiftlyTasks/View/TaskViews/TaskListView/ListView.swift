@@ -10,9 +10,12 @@ import HalfASheet
 
 struct ListView: View {
     
+    @EnvironmentObject var listVM: ListViewModel
     @EnvironmentObject var userVM: UserViewModel
     @EnvironmentObject var taskVM: TaskViewModel
     @EnvironmentObject var notifyManager: NotificationManager
+    
+    @State var taskList: ListItemEntity
     
     @State var searched = ""
     
@@ -35,12 +38,14 @@ struct ListView: View {
         NavigationView {
             ZStack {
                 if switchUIDesigen {
-                    ListViewAlternativ()
+                    ListViewAlternativ(taskList: taskList)
+                        .environmentObject(listVM)
                         .environmentObject(taskVM)
                         .environmentObject(userVM)
                         .environmentObject(notifyManager)
                 } else {
-                    ListViewClassic()
+                    ListViewClassic(taskList: taskList)
+                        .environmentObject(listVM)
                         .environmentObject(taskVM)
                         .environmentObject(userVM)
                         .environmentObject(notifyManager)
@@ -84,7 +89,7 @@ struct ListView: View {
                 
                 // HALF A SHEET
                 HalfASheet(isPresented: $showQuickAddHalfASheet, title: "Quick Add Task View") {
-                    QuickAddTaskView()
+                    QuickAddTaskView(listOfTask: taskList)
                         .environmentObject(taskVM)
                         .environmentObject(userVM)
                         .environmentObject(notifyManager)
@@ -94,25 +99,7 @@ struct ListView: View {
                 .closeButtonColor(UIColor(red: 0.8, green: 0.2, blue: 0.1, alpha: 0.7))
                 .contentInsets(EdgeInsets(top: 5, leading: 5, bottom: 0, trailing: 5))
             }
-            .accentColor(userVM.colorTheme(colorPick: userVM.savedUserData.first!.wThemeColor))
-            //            .toolbar {
-            //                ToolbarItem(placement: .keyboard) {
-            //                    VStack {
-            //                        HStack {
-            //                            Spacer()
-            //                            Button(action: {
-            //                                focusStatus = nil
-            //                            }) {
-            //                                Image(systemName: "keyboard.chevron.compact.down")
-            //                            }
-            //                            .padding(.horizontal, 10)
-            //                        }
-            ////                        AddTaskView(taskVM: taskVM)
-            ////                            .environmentObject(notifyManager)
-            //                    }
-            //
-            //                }
-            //            }
+            .accentColor(userVM.colorTheme(colorPick: userVM.savedUserData.first?.wThemeColor ?? "purple"))
             .navigationBarTitle("", displayMode: .inline)
             .navigationBarItems(leading:
                                     // NAVIGATION BAR ITEMS
@@ -139,17 +126,17 @@ struct ListView: View {
                     Image(systemName: "plus.square")
                 }
             }
-                .foregroundColor(userVM.colorTheme(colorPick: userVM.savedUserData.first!.wThemeColor))
+                .foregroundColor(userVM.colorTheme(colorPick: userVM.savedUserData.first?.wThemeColor ?? "purple"))
             )
             .sheet(isPresented: $showAddView) {
-                AddTaskView()
+                AddTaskView(listOfTask: taskList)
                     .environmentObject(taskVM)
                     .environmentObject(userVM)
                     .environmentObject(notifyManager)
             }
             // showQuickAddView sheet is currently disabeld in favour of HalfASheet
             .sheet(isPresented: $showQuickAddView) {
-                QuickAddTaskView()
+                QuickAddTaskView(listOfTask: taskList)
                     .environmentObject(taskVM)
                     .environmentObject(userVM)
                     .environmentObject(notifyManager)
@@ -159,6 +146,10 @@ struct ListView: View {
             // update user name
             currentUserName = userVM.savedUserData.first?.wUserName ?? "NoName"
             switchUIDesigen = userVM.savedUserData.first?.switchUITheme ?? false
+            
+            print("\n******************")
+            print("****\(taskList.wListTitle)****")
+            print("******************\n")
         }
     }
     
@@ -167,9 +158,9 @@ struct ListView: View {
     }
 }
 
-struct ListView_Previews: PreviewProvider {
-    static var previews: some View {
-        ListView()
-            .preferredColorScheme(.dark)
-    }
-}
+//struct ListView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ListView()
+//            .preferredColorScheme(.dark)
+//    }
+//}

@@ -48,6 +48,9 @@ struct EditView: View {
     @State private var taskNotificationTitle: String = ""
     @State private var taskNotificationSubtitle: String = ""
     
+    // LIST VARIABLES
+//    @State private var selectedList: ListItemEntity
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -422,6 +425,7 @@ struct EditView: View {
                     self.taskStatus = task.status
                     self.taskUIDeleted = task.uiDeleted
                     self.taskHasAlert = task.hasAlert
+//                    self.selectedList = task.ofList ?? <#default value#>
                     
                     if self.taskDetailsTextField != "" {
                         self.taskHasDetails = true
@@ -434,12 +438,12 @@ struct EditView: View {
     }
 }
 
-struct EditView_Previews: PreviewProvider {
-    
-    @State static var defaultIsEditView = false
-    
-    static var previews: some View {
-        EditView(taskVM: TaskViewModel(), task: TaskItemEntity())
-            .preferredColorScheme(.dark)
-    }
-}
+//struct EditView_Previews: PreviewProvider {
+//
+//    @State static var defaultIsEditView = false
+//
+//    static var previews: some View {
+//        EditView(taskVM: TaskViewModel(), task: TaskItemEntity())
+//            .preferredColorScheme(.dark)
+//    }
+//}

@@ -27,7 +27,7 @@ struct AddTaskButtonView: View {
                 .padding(5)
         }
         .frame(width: 55, height: 55)
-        .accentColor(userVM.colorTheme(colorPick: userVM.savedUserData.first!.wThemeColor))
+        .accentColor(userVM.colorTheme(colorPick: userVM.savedUserData.first?.wThemeColor ?? "purple"))
     }
 }
 
