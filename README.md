@@ -1,7 +1,4 @@
 # SwiftlyTasksApp
-![SwiftlyTaskTaskView](https://github.com/maszpy33/SwiftlyTasksApp/assets/77498718/beb149c3-141c-4b5b-b40c-a310bb16f12a)
-![SwiftlyTaskPomodorView](https://github.com/maszpy33/SwiftlyTasksApp/assets/77498718/16bd5c53-df30-43fc-8e7a-dd126c660dfd)
-![SwiftlyTaskAddTaskView](https://github.com/maszpy33/SwiftlyTasksApp/assets/77498718/a9ea1ccf-8e5b-47a3-ba22-126910515361)
 
 ## Description
 
